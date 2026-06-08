@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 15 23 42;
+    
+    --bg-glow: radial-gradient(circle at 10% 20%, #F3EEFF 0%, #FFFFFF 90%);
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --card-border: rgba(15, 23, 42, 0.06);
+    --card-border-hover: rgba(139, 92, 246, 0.35);
+    
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
+    
+    --accent-purple: #8b5cf6;
+    --accent-purple-glow: rgba(139, 92, 246, 0.15);
+    --accent-cyan: #06b6d4;
+    --accent-cyan-glow: rgba(6, 182, 212, 0.15);
+    
+    --color-success: #10b981;
+    --color-danger: #f43f5e;
+    --color-warning: #d97706;
+  }
+
+  .dark {
+    --background: 9 9 14;
+    --foreground: 248 250 252;
+    
+    --bg-glow: radial-gradient(circle at 10% 20%, #171030 0%, #09090e 90%);
+    --card-bg: rgba(17, 17, 28, 0.6);
+    --card-border: rgba(255, 255, 255, 0.05);
+    --card-border-hover: rgba(167, 139, 250, 0.45);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    
+    --accent-purple: #c084fc;
+    --accent-purple-glow: rgba(192, 132, 252, 0.25);
+    --accent-cyan: #22d3ee;
+    --accent-cyan-glow: rgba(34, 211, 238, 0.25);
+    
+    --color-success: #34d399;
+    --color-danger: #fb7185;
+    --color-warning: #fbbf24;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.4);
+}
+
+/* Base Body Style */
+body {
+  background: rgb(var(--background));
+  background-image: var(--bg-glow);
+  background-attachment: fixed;
+  color: rgb(var(--foreground));
+  min-height: 100vh;
+}
+
+/* Subtle Grid Background Pattern */
+.bg-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+}
+.dark .bg-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+}
+
+/* Keyframe Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.04); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0) scale(1.04); }
+  50% { transform: translateY(20px) scale(1); }
+}
+
+.animate-float-1 {
+  animation: float 18s infinite alternate ease-in-out;
+}
+
+.animate-float-2 {
+  animation: float-reverse 22s infinite alternate ease-in-out;
+}
+
+/* Entry Animation for cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Audio visualizer bar animations */
+.audio-bar {
+  transition: height 0.1s ease;
+  min-height: 4px;
+}
