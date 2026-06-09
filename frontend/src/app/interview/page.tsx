@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense, use } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, HelpCircle, Check, Award, AlertCircle } from "lucide-react";
 import VideoRecorder from "@/components/VideoRecorder";
+import { API_BASE_URL } from "@/utils/config";
 
 interface Question {
   id: number;
@@ -31,7 +32,7 @@ function InterviewRoomContent() {
   useEffect(() => {
     async function initializeSession() {
       try {
-        const sessionRes = await fetch("http://localhost:8000/api/interviews", {
+        const sessionRes = await fetch(`${API_BASE_URL}/api/interviews`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ role: role })
@@ -41,7 +42,7 @@ function InterviewRoomContent() {
         const sessionData = await sessionRes.json();
         setInterviewId(sessionData.id);
 
-        const qRes = await fetch(`http://localhost:8000/api/questions?role=${encodeURIComponent(role)}`);
+        const qRes = await fetch(`${API_BASE_URL}/api/questions?role=${encodeURIComponent(role)}`);
         if (!qRes.ok) throw new Error("Failed to load role questions.");
         const qData = await qRes.json();
         
@@ -70,7 +71,7 @@ function InterviewRoomContent() {
     formData.append("video", videoBlob, "video.webm");
 
     try {
-      const uploadUrl = `http://localhost:8000/api/interviews/${interviewId}/questions/${question.id}/respond`;
+      const uploadUrl = `${API_BASE_URL}/api/interviews/${interviewId}/questions/${question.id}/respond`;
       const res = await fetch(uploadUrl, {
         method: "POST",
         body: formData
@@ -91,7 +92,7 @@ function InterviewRoomContent() {
   const handleFinishInterview = async () => {
     if (!interviewId) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/interviews/${interviewId}/complete`, {
+      const res = await fetch(`${API_BASE_URL}/api/interviews/${interviewId}/complete`, {
         method: "POST"
       });
       if (res.ok) {

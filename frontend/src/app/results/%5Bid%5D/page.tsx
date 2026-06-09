@@ -3,6 +3,7 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Play, FileText, CheckCircle2, MessageSquare, Clock, ShieldAlert, Award, Star } from "lucide-react";
+import { API_BASE_URL } from "@/utils/config";
 
 interface Metric {
   words_per_minute: number;
@@ -51,12 +52,12 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await fetch(`http://localhost:8000/api/interviews/${interviewId}`);
+        const res = await fetch(`${API_BASE_URL}/api/interviews/${interviewId}`);
         if (!res.ok) throw new Error("Failed to load interview report.");
         const data = await res.json();
         setInterview(data);
 
-        const qRes = await fetch("http://localhost:8000/api/questions");
+        const qRes = await fetch(`${API_BASE_URL}/api/questions`);
         if (qRes.ok) {
           const qData = await qRes.json();
           const qMap: Record<number, Question> = {};
@@ -199,7 +200,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
                 <Play size={13} className="text-violet-600 dark:text-violet-400" /> Play Back Video Response
               </h4>
               <video
-                src={`http://localhost:8000${activeResponse.video_url}`}
+                src={`${API_BASE_URL}${activeResponse.video_url}`}
                 controls
                 className="w-full aspect-[4/3] rounded-lg bg-black border border-slate-200/30 dark:border-zinc-800/40 shadow-inner"
               />

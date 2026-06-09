@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Terminal, Users, BarChart3, HelpCircle, Activity, Trophy, AlertTriangle, ArrowRight, Play, CheckCircle } from "lucide-react";
+import { API_BASE_URL } from "@/utils/config";
 
 interface StatsData {
   total_interviews: number;
@@ -22,7 +23,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await fetch("http://localhost:8000/api/dashboard-stats");
+        const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`);
         if (res.ok) {
           const data = await res.json();
           setStats(data);
