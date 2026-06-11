@@ -44,7 +44,7 @@ export default function Navbar() {
             <Sparkles size={16} className="text-white" />
           </div>
           
-          <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-600 dark:from-white dark:via-purple-100 dark:to-violet-400 bg-clip-text text-transparent transition-all duration-300">
+          <span className="text-lg font-extrabold tracking-tight font-display bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-600 dark:from-white dark:via-purple-100 dark:to-violet-400 bg-clip-text text-transparent transition-all duration-300">
             CognitiveCoach
           </span>
         </a>

@@ -146,11 +146,11 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }: Vid
   };
 
   return (
-    <div className="glass-panel w-full md:max-w-md bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 rounded-2xl shadow-sm animate-fade-in-up">
+    <div className="glass-panel w-full md:max-w-md bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 rounded-2xl shadow-sm hover:shadow-md hover:border-violet-500/20 dark:hover:border-violet-500/20 transition-all duration-300 animate-fade-in-up">
       
       {/* Visual Header */}
-      <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-zinc-800/50 mb-4">
-        <h3 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200">
+      <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-zinc-850/50 mb-4">
+        <h3 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200 font-display">
           <Video size={16} className="text-violet-600 dark:text-violet-400" />
           Camera Sandbox
         </h3>
@@ -158,55 +158,73 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }: Vid
         {permission && (
           <div className="flex items-center gap-3">
             {recording ? (
-              <div className="flex items-center gap-1.5 bg-rose-50 dark:bg-rose-950/20 px-2.5 py-1 rounded-full text-[10px] font-bold text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-950/20">
-                <Circle size={8} fill="currentColor" className="animate-pulse" />
-                LIVE {formatTime(duration)}
+              <div className="flex items-center gap-1.5 bg-rose-500/10 dark:bg-rose-500/15 px-2.5 py-1 rounded-full text-[10px] font-bold text-rose-650 dark:text-rose-400 border border-rose-500/25 animate-pulse-slow">
+                <Circle size={6.5} fill="currentColor" className="text-rose-600 dark:text-rose-400 animate-pulse" />
+                REC {formatTime(duration)}
               </div>
             ) : (
-              <span className="text-xs text-slate-400 dark:text-slate-500 font-semibold">Ready</span>
+              <span className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">Standby</span>
             )}
             
             {/* Audio Indicator */}
-            <div className="flex items-center gap-0.5 h-6">
-              <Volume2 size={13} className="text-slate-400 dark:text-slate-500 mr-1" />
-              <div className="w-0.5 rounded-sm bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(4, volume * 0.2)}px` }}></div>
-              <div className="w-0.5 rounded-sm bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(4, volume * 0.15)}px` }}></div>
-              <div className="w-0.5 rounded-sm bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(4, volume * 0.25)}px` }}></div>
+            <div className="flex items-center gap-[3px] h-5 px-1.5 py-0.5 rounded-md bg-slate-50 dark:bg-zinc-850/40 border border-slate-150 dark:border-zinc-800/50">
+              <Volume2 size={12} className="text-slate-400 dark:text-slate-500 mr-0.5" />
+              <div className="w-[3px] rounded-full bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(3, volume * 0.12)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(3, volume * 0.22)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(3, volume * 0.16)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(3, volume * 0.28)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-cyan-500 dark:bg-cyan-400 audio-bar" style={{ height: `${Math.max(3, volume * 0.08)}px` }}></div>
             </div>
           </div>
         )}
       </div>
 
       {/* Camera Viewport Frame */}
-      <div className="relative aspect-[4/3] bg-slate-900/5 dark:bg-black/30 rounded-xl overflow-hidden border border-slate-200/50 dark:border-zinc-800/50 flex items-center justify-center shadow-inner">
+      <div className="relative aspect-[4/3] bg-slate-950 rounded-xl overflow-hidden border border-slate-200/50 dark:border-zinc-800/50 flex items-center justify-center shadow-inner">
         {!permission ? (
           <div className="text-center p-6 max-w-sm flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-400 dark:text-slate-500 mb-4 border border-slate-200/50 dark:border-zinc-800/50">
-              <CameraOff size={20} />
+            <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-slate-400 mb-4 shadow-inner">
+              <CameraOff size={20} className="text-slate-500" />
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-5 leading-relaxed">
-              We require camera and microphone permission to analyze speech and pace.
+            <p className="text-xs text-slate-400 mb-5 leading-relaxed">
+              We require camera and microphone permission to analyze speech pacing and filler words.
             </p>
-            <button className="btn btn-primary text-xs" onClick={getCameraPermission}>
-              <Camera size={14} /> Enable Camera
+            <button className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white text-xs font-bold rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 transition-all duration-300 flex items-center gap-1.5" onClick={getCameraPermission}>
+              <Camera size={14} /> Enable Sandbox Camera
             </button>
           </div>
         ) : (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            playsInline
-            className="w-full h-full object-cover scale-x-[-1]"
-          />
+          <>
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              className="w-full h-full object-cover scale-x-[-1]"
+            />
+            
+            {/* Viewport Corners */}
+            <div className="absolute top-3.5 left-3.5 w-4 h-4 border-t-[2px] border-l-[2px] border-violet-500/80 rounded-tl-sm pointer-events-none z-10"></div>
+            <div className="absolute top-3.5 right-3.5 w-4 h-4 border-t-[2px] border-r-[2px] border-violet-500/80 rounded-tr-sm pointer-events-none z-10"></div>
+            <div className="absolute bottom-3.5 left-3.5 w-4 h-4 border-b-[2px] border-l-[2px] border-violet-500/80 rounded-bl-sm pointer-events-none z-10"></div>
+            <div className="absolute bottom-3.5 right-3.5 w-4 h-4 border-b-[2px] border-r-[2px] border-violet-500/80 rounded-br-sm pointer-events-none z-10"></div>
+
+            {/* Sweep Laser Scanner Line */}
+            {recording && (
+              <div className="absolute inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-violet-500/70 to-transparent animate-scan pointer-events-none z-10"></div>
+            )}
+          </>
         )}
 
         {/* AI Diagnostics Overlay */}
         {isProcessing && (
-          <div className="absolute inset-0 bg-slate-900/80 dark:bg-zinc-950/85 backdrop-blur-sm flex flex-col items-center justify-center gap-3 text-center p-6 z-10">
-            <RefreshCw size={28} className="text-violet-500 animate-spin" />
-            <h4 className="text-sm font-bold text-white">AI Grading & Speech Diagnostics...</h4>
-            <p className="text-[11px] text-slate-400">Evaluating pacing index and running transcript analysis</p>
+          <div className="absolute inset-0 bg-zinc-950/90 backdrop-blur-md flex flex-col items-center justify-center gap-4 text-center p-6 z-25">
+            <div className="relative flex items-center justify-center">
+              <RefreshCw size={32} className="text-violet-500 animate-spin" />
+              <div className="absolute w-12 h-12 rounded-full border border-violet-500/30 border-t-transparent animate-ping"></div>
+            </div>
+            <h4 className="text-sm font-bold text-white font-display mt-2">AI Diagnostics Analysis...</h4>
+            <p className="text-[10px] text-slate-400 max-w-[200px] leading-relaxed">Processing speech velocity indexes, calculating grammar scorecards, and compiling responses.</p>
           </div>
         )}
       </div>
@@ -219,14 +237,14 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }: Vid
               className="px-6 py-2.5 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold text-xs rounded-xl shadow-md shadow-rose-500/10 hover:shadow-rose-500/25 transition-all duration-300 active:scale-95 flex items-center gap-1.5"
               onClick={startRecording}
             >
-              <Circle size={10} fill="white" stroke="transparent" /> Start Recording
+              <Circle size={9} fill="white" stroke="transparent" className="animate-pulse" /> Start Recording
             </button>
           ) : (
             <button 
-              className="px-6 py-2.5 bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700 text-white font-bold text-xs rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/25 transition-all duration-300 active:scale-95 flex items-center gap-1.5 border border-transparent"
+              className="px-6 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-650 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/25 transition-all duration-300 active:scale-95 flex items-center gap-1.5"
               onClick={stopRecording}
             >
-              <Square size={10} fill="white" stroke="transparent" /> Finish Response
+              <Square size={9} fill="white" stroke="transparent" /> Stop & Submit Response
             </button>
           )}
         </div>

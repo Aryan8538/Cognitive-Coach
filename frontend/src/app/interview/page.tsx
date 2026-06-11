@@ -120,10 +120,13 @@ function InterviewRoomContent() {
 
   if (loading) {
     return (
-      <div className="flex-grow flex flex-col items-center justify-center py-20 px-6">
-        <div className="w-10 h-10 border-4 border-slate-100 border-t-violet-600 rounded-full animate-spin mb-5" />
-        <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">Setting up interview sandbox...</h3>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">Initializing virtual camera feeds and seeding question databases</p>
+      <div className="flex-grow flex flex-col items-center justify-center py-24 px-6">
+        <div className="relative flex items-center justify-center mb-6">
+          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-violet-600 animate-spin" />
+          <div className="absolute w-16 h-16 rounded-full border border-violet-500/10 animate-pulse-slow" />
+        </div>
+        <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display">Setting up interview sandbox...</h3>
+        <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 text-center max-w-[280px]">Initializing virtual camera feeds and seeding question databases</p>
       </div>
     );
   }
@@ -131,13 +134,13 @@ function InterviewRoomContent() {
   if (errorMsg) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center py-20 px-6 max-w-lg mx-auto">
-        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-rose-200/50 dark:border-rose-950/20 p-8 rounded-2xl text-center shadow-sm w-full">
+        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-rose-200/40 dark:border-rose-950/20 p-8 rounded-2xl text-center shadow-sm w-full animate-fade-in-up">
           <AlertCircle size={40} className="text-rose-500 mx-auto mb-4" />
-          <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2.5">Initialization Failed</h3>
+          <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display mb-2">Initialization Failed</h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
             {errorMsg}
           </p>
-          <button className="w-full flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition-all duration-200" onClick={() => router.push("/")}>
+          <button className="w-full flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition-all duration-200" onClick={() => router.push("/")}>
             <ArrowLeft size={13} /> Return to Dashboard
           </button>
         </div>
@@ -151,46 +154,47 @@ function InterviewRoomContent() {
   const allAnswered = questions.every((q) => answeredMap[q.id]);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 w-full flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 w-full flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 items-start font-sans">
       
       {/* Question panel */}
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 w-full">
         <button 
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-violet-600 dark:text-slate-500 dark:hover:text-violet-400 transition-colors duration-200"
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-violet-600 dark:text-slate-500 dark:hover:text-violet-400 transition-colors duration-200 w-fit"
           onClick={() => {
             if (confirm("Are you sure you want to exit? Current progress will be discarded.")) {
               router.push("/");
             }
           }}
         >
-          <ArrowLeft size={13} /> Back to Dashboard
+          <ArrowLeft size={13} /> Exit Session
         </button>
 
-        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm flex flex-col gap-5">
+        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm flex flex-col gap-5 hover:border-violet-500/10 dark:hover:border-violet-500/10 transition-all duration-300">
           <div className="flex justify-between items-center">
-            <span className="text-[10px] font-bold bg-slate-100 dark:bg-zinc-800/80 border border-slate-200/30 dark:border-zinc-800/40 text-slate-500 dark:text-slate-400 px-3 py-1 rounded-md">
+            <span className="text-[10px] font-extrabold bg-slate-100 dark:bg-zinc-800/80 border border-slate-200/30 dark:border-zinc-800/40 text-slate-500 dark:text-slate-400 px-3 py-1 rounded-md uppercase tracking-wider font-outfit">
               QUESTION {currentIdx + 1} OF {totalQuestions}
             </span>
-            <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded ${
-              currentQuestion.difficulty === 'Easy' ? 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400' :
-              currentQuestion.difficulty === 'Medium' ? 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400' :
-              'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400'
+            <span className={`text-[10px] font-extrabold tracking-wider px-2.5 py-0.5 rounded-md font-outfit ${
+              currentQuestion.difficulty === 'Easy' ? 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/20' :
+              currentQuestion.difficulty === 'Medium' ? 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 border border-amber-150 dark:border-amber-900/20' :
+              'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border border-rose-150 dark:border-rose-900/20'
             }`}>
               {currentQuestion.difficulty.toUpperCase()}
             </span>
           </div>
 
-          <h2 className="text-xl font-bold leading-relaxed text-slate-900 dark:text-white">
+          <h2 className="text-lg md:text-xl font-bold leading-relaxed text-slate-900 dark:text-white font-display">
             {currentQuestion.text}
           </h2>
 
-          <div className="flex flex-col gap-2 border-t border-slate-100 dark:border-zinc-800/50 pt-5 mt-2">
-            <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+          <div className="flex flex-col gap-2 border-t border-slate-150 dark:border-zinc-800/40 pt-5 mt-2">
+            <h4 className="text-xs font-bold text-slate-450 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wide">
               <HelpCircle size={13} className="text-cyan-500" /> Key Topics to Touch Upon
             </h4>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {currentQuestion.suggested_keywords.split(",").map((kw, i) => (
-                <span key={i} className="text-[10px] font-bold bg-cyan-50/60 text-cyan-600 dark:bg-cyan-950/20 dark:text-cyan-400 border border-cyan-100/60 dark:border-cyan-950/30 px-2.5 py-0.5 rounded-full">
+                <span key={i} className="text-[10px] font-bold bg-cyan-50/60 text-cyan-705 dark:bg-cyan-950/20 dark:text-cyan-400 border border-cyan-100/50 dark:border-cyan-900/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                  <span className="w-1 h-1 rounded-full bg-cyan-500" />
                   {kw.trim()}
                 </span>
               ))}
@@ -198,8 +202,8 @@ function InterviewRoomContent() {
           </div>
           
           {isCurrentAnswered && (
-            <div className="bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/35 p-3.5 rounded-xl flex items-center gap-2 text-xs font-bold text-emerald-800 dark:text-emerald-400 animate-fade-in-up">
-              <Check size={14} className="flex-shrink-0" />
+            <div className="bg-emerald-50/60 dark:bg-emerald-950/15 border border-emerald-100/60 dark:border-emerald-900/30 p-3.5 rounded-xl flex items-center gap-2 text-xs font-bold text-emerald-800 dark:text-emerald-450 animate-fade-in-up">
+              <Check size={14} className="flex-shrink-0 text-emerald-500" />
               <span>Response successfully submitted & graded.</span>
             </div>
           )}
@@ -226,7 +230,7 @@ function InterviewRoomContent() {
               </button>
             ) : (
               <button 
-                className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700 text-white disabled:opacity-40 text-xs font-bold rounded-xl shadow-md shadow-violet-500/10 transition-all duration-200 flex items-center gap-1.5"
+                className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-750 text-white disabled:opacity-40 text-xs font-bold rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 transition-all duration-300 flex items-center gap-1.5"
                 onClick={handleFinishInterview}
                 disabled={!allAnswered}
               >
@@ -238,10 +242,12 @@ function InterviewRoomContent() {
       </div>
 
       {/* Video recorder panel */}
-      <VideoRecorder 
-        onRecordingComplete={handleRecordingComplete} 
-        isProcessing={isProcessing} 
-      />
+      <div className="w-full flex justify-center">
+        <VideoRecorder 
+          onRecordingComplete={handleRecordingComplete} 
+          isProcessing={isProcessing} 
+        />
+      </div>
       
     </div>
   );
@@ -250,7 +256,8 @@ function InterviewRoomContent() {
 export default function InterviewRoom() {
   return (
     <Suspense fallback={
-      <div className="flex-grow flex items-center justify-center py-20">
+      <div className="flex-grow flex flex-col items-center justify-center py-24">
+        <div className="w-10 h-10 border-4 border-slate-200 border-t-violet-600 rounded-full animate-spin mb-4" />
         <h3 className="text-sm font-bold text-slate-400">Loading interview components...</h3>
       </div>
     }>

@@ -107,6 +107,49 @@ body {
   animation: float-reverse 22s infinite alternate ease-in-out;
 }
 
+/* Background Blurs / Blobs */
+.background-blobs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: -2;
+  pointer-events: none;
+  filter: blur(90px);
+  opacity: 0.9;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  mix-blend-mode: multiply;
+  opacity: 0.12;
+  transition: all 1s ease-in-out;
+}
+
+.dark .blob {
+  mix-blend-mode: screen;
+  opacity: 0.16;
+}
+
+.blob-1 {
+  top: -10%;
+  left: -10%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, rgba(99, 102, 241, 0) 70%);
+}
+
+.blob-2 {
+  bottom: -10%;
+  right: -10%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.55) 0%, rgba(59, 130, 246, 0) 70%);
+}
+
 /* Entry Animation for cards */
 @keyframes fadeInUp {
   from {
@@ -123,8 +166,27 @@ body {
   animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Camera scan animations */
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  50% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+.animate-scan {
+  animation: scan 4s ease-in-out infinite;
+}
+
 /* Audio visualizer bar animations */
 .audio-bar {
   transition: height 0.1s ease;
   min-height: 4px;
 }
+
+/* Circular Progress Ring Transitions */
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
