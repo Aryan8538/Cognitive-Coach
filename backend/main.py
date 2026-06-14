@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from database import engine, Base, SessionLocal
 import models
-from router import interviews, analyze
+from router import interviews, analyze, chat
 
 # Initialize database tables
 Base.metadata.create_all(bind=engine)
@@ -49,6 +49,20 @@ def seed_questions():
                     "suggested_keywords": "hash map, O(N) time, O(N) space, complement, two sum, lookup"
                 },
                 {
+                    "role": "Software Engineer",
+                    "topic": "Coding Logic",
+                    "difficulty": "Easy",
+                    "text": "Write a function in your preferred language to check if a given string is a valid palindrome, ignoring capitalization, spaces, and punctuation. Explain your approach and state the time and space complexity.",
+                    "suggested_keywords": "two pointers, O(N) time, O(1) space, palindrome, clean string, character check"
+                },
+                {
+                    "role": "Software Engineer",
+                    "topic": "Coding Logic",
+                    "difficulty": "Medium",
+                    "text": "Given two sorted integer arrays nums1 and nums2, merge nums2 into nums1 as one sorted array. Explain your two-pointer approach and state time/space complexity.",
+                    "suggested_keywords": "merge sorted array, two pointers, O(N+M) time, O(1) space, in-place, reverse iteration"
+                },
+                {
                     "role": "Product Manager",
                     "topic": "Product Strategy",
                     "difficulty": "Hard",
@@ -88,6 +102,7 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 # Include Routers
 app.include_router(interviews.router, prefix="/api", tags=["interviews"])
 app.include_router(analyze.router, prefix="/api", tags=["analyze"])
+app.include_router(chat.router, prefix="/api", tags=["chat"])
 
 @app.get("/")
 def read_root():

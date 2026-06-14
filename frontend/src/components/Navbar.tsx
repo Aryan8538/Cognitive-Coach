@@ -54,6 +54,9 @@ export default function Navbar() {
           <a href="/" className="text-sm font-semibold text-slate-800 hover:text-violet-600 dark:text-slate-200 dark:hover:text-violet-400 transition-colors duration-200">
             Dashboard
           </a>
+          <a href="/advisor" className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200">
+            Career Center
+          </a>
           <a href="/#roles" className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200">
             Start Interview
           </a>

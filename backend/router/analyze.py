@@ -20,6 +20,8 @@ async def respond_to_question(
     question_id: int,
     duration: float = Form(...),
     video: UploadFile = File(...),
+    code: str = Form(None),
+    code_language: str = Form(None),
     db: Session = Depends(get_db)
 ):
     # 1. Verify interview and question exist
@@ -48,7 +50,7 @@ async def respond_to_question(
     transcript = transcribe_audio(video_path, question.text)
     
     # 4. Evaluate transcript and compile metrics
-    evaluation = evaluate_response(transcript, question.text, duration)
+    evaluation = evaluate_response(transcript, question.text, duration, code=code, code_language=code_language)
     
     # 5. Save Response to DB
     relative_video_url = f"/uploads/{unique_filename}"
@@ -56,7 +58,9 @@ async def respond_to_question(
         interview_id=interview_id,
         question_id=question_id,
         video_url=relative_video_url,
-        transcript=transcript
+        transcript=transcript,
+        code=code,
+        code_language=code_language
     )
     db.add(db_response)
     db.commit()

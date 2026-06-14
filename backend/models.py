@@ -46,6 +46,8 @@ class Response(Base):
     question_id = Column(Integer, ForeignKey("questions.id"))
     video_url = Column(String, nullable=True)
     transcript = Column(Text, nullable=True)
+    code = Column(Text, nullable=True)
+    code_language = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     interview = relationship("Interview", back_populates="responses")

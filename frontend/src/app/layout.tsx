@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
+import CareerChatbot from "@/components/CareerChatbot";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,6 +36,9 @@ export default function RootLayout({
         <main className="min-h-[calc(100vh-64px)] flex flex-col">
           {children}
         </main>
+
+        {/* Global floating career advisor bot */}
+        <CareerChatbot />
 
       </body>
     </html>

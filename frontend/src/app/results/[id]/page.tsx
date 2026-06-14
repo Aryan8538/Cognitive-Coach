@@ -2,7 +2,8 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Play, FileText, CheckCircle2, MessageSquare, Clock, ShieldAlert, Award, Star } from "lucide-react";
+import { ArrowLeft, Play, FileText, CheckCircle2, MessageSquare, Clock, ShieldAlert, Award, Star, Code2 } from "lucide-react";
+import Editor from "@monaco-editor/react";
 import { API_BASE_URL } from "@/utils/config";
 
 interface Metric {
@@ -23,6 +24,8 @@ interface Response {
   transcript: string;
   created_at: string;
   metrics: Metric;
+  code?: string;
+  code_language?: string;
 }
 
 interface Question {
@@ -48,6 +51,21 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
   const [questions, setQuestions] = useState<Record<number, Question>>({});
   const [activeIdx, setActiveIdx] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+
+  const [editorTheme, setEditorTheme] = useState("vs-dark");
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setEditorTheme(isDark ? "vs-dark" : "light");
+
+    const observer = new MutationObserver(() => {
+      const darkActive = document.documentElement.classList.contains("dark");
+      setEditorTheme(darkActive ? "vs-dark" : "light");
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     async function loadData() {
@@ -316,6 +334,47 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
               </div>
             )}
           </div>
+
+          {/* Submitted Code Block */}
+          {activeResponse && activeResponse.code && (
+            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm hover:border-violet-500/15 transition-all duration-300">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 uppercase tracking-wider font-display">
+                  <Code2 size={15} className="text-violet-650 dark:text-violet-400" />
+                  Submitted Coding Solution
+                </h3>
+                <span className="text-[10px] font-extrabold bg-slate-100 dark:bg-zinc-800/80 border border-slate-200/30 dark:border-zinc-800/40 text-slate-505 dark:text-slate-400 px-3 py-1 rounded-md uppercase tracking-wider font-outfit font-bold">
+                  {(activeResponse.code_language || "python").toUpperCase()}
+                </span>
+              </div>
+              
+              <div className="rounded-xl overflow-hidden border border-slate-200/40 dark:border-zinc-800/50 h-[300px] relative">
+                <Editor
+                  height="100%"
+                  language={activeResponse.code_language === "cpp" ? "cpp" : activeResponse.code_language || "python"}
+                  value={activeResponse.code}
+                  theme={editorTheme}
+                  options={{
+                    readOnly: true,
+                    fontSize: 12,
+                    fontFamily: "Fira Code, Source Code Pro, Consolas, Courier New, monospace",
+                    minimap: { enabled: false },
+                    lineNumbers: "on",
+                    scrollbar: {
+                      vertical: "visible",
+                      horizontal: "visible",
+                      useShadows: false,
+                      verticalScrollbarSize: 6,
+                      horizontalScrollbarSize: 6
+                    },
+                    padding: { top: 10, bottom: 10 },
+                    automaticLayout: true,
+                    domReadOnly: true
+                  }}
+                />
+              </div>
+            </div>
+          )}
 
           {/* Transcript Box */}
           <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm hover:border-cyan-500/10 transition-all duration-300">

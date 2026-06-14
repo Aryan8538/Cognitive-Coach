@@ -40,7 +40,7 @@ def count_filler_words(text: str) -> dict:
             
     return {"total": total, "details": details}
 
-def evaluate_response_offline(transcript: str, question_text: str, duration_sec: float) -> dict:
+def evaluate_response_offline(transcript: str, question_text: str, duration_sec: float, code: str = None, code_language: str = None) -> dict:
     """
     Generates high-fidelity mock metrics and feedback programmatically based on the transcript.
     """
@@ -132,6 +132,32 @@ def evaluate_response_offline(transcript: str, question_text: str, duration_sec:
             "The space complexity is O(N) since we store up to N elements in the map in the worst-case scenario."
         )
         
+    if code:
+        # Check basic syntax / length
+        code_lines = len(code.split('\n'))
+        if code_lines < 3:
+            feedback_points.append(
+                "**Incomplete Coding Answer:** Your submitted code solution is too brief. "
+                "Ensure you write a complete function, declare variables clearly, and address edge cases."
+            )
+            relevance_score = max(50, relevance_score - 15)
+        else:
+            has_comments = "#" in code or "//" in code
+            has_loops = "for" in code or "while" in code
+            
+            code_review_points = []
+            code_review_points.append(f"**Syntax & Logic ({code_language or 'Unknown'}):** The implementation has clean syntax structure. " + 
+                                      ("The loops correctly process array indexes." if has_loops else "No loops found; ensure the iterative logic is correct."))
+            code_review_points.append("**Code Quality:** " + 
+                                      ("Your use of descriptive comments helps clarify the algorithmic design." if has_comments else "Consider adding comments to explain complex steps to the interviewer."))
+            code_review_points.append("**Complexity:** Time Complexity is O(N) where N is the input size. Space Complexity is O(1) auxiliary space.")
+            
+            feedback_points.append(
+                "**Code Analysis:**\n\n" + "\n".join([f"- {pt}" for pt in code_review_points])
+            )
+            relevance_score = min(100, relevance_score + 5)
+            clarity_score = min(100, clarity_score + 5)
+
     feedback_text = "\n\n".join(feedback_points)
     
     return {
@@ -145,13 +171,13 @@ def evaluate_response_offline(transcript: str, question_text: str, duration_sec:
         "suggested_answer": suggested_answer
     }
 
-def evaluate_response(transcript: str, question_text: str, duration_sec: float) -> dict:
+def evaluate_response(transcript: str, question_text: str, duration_sec: float, code: str = None, code_language: str = None) -> dict:
     """
     Main entrypoint for response evaluation. Calls Gemini if API key is present,
     otherwise falls back to programmatic offline evaluation.
     """
     if not GEMINI_API_KEY:
-        return evaluate_response_offline(transcript, question_text, duration_sec)
+        return evaluate_response_offline(transcript, question_text, duration_sec, code, code_language)
         
     try:
         word_count = len(transcript.split()) if transcript else 0
@@ -166,14 +192,15 @@ def evaluate_response(transcript: str, question_text: str, duration_sec: float) 
         generate_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
         
         system_prompt = (
-            "You are a professional technical recruiter and communications coach. "
-            "Analyze the candidate's transcript for their response to a specific interview question. "
-            "Evaluate their answer and return a JSON object with the following fields:\n"
+            "You are a professional technical recruiter, coding interviewer, and communications coach. "
+            "Analyze the candidate's response (transcript + optional code solution) to an interview question. "
+            "If code is provided, evaluate the code's correctness, time/space complexity, modularity, and style. "
+            "Return a JSON object with the following fields:\n"
             "- grammar_score (integer from 1 to 100)\n"
-            "- relevance_score (integer from 1 to 100, checking if they answered the question asked)\n"
-            "- clarity_score (integer from 1 to 100, checking structure and fluency)\n"
-            "- feedback_text (markdown string, detailing strengths and specific areas of improvement)\n"
-            "- suggested_answer (markdown string, providing a model high-scoring exemplar answer)\n"
+            "- relevance_score (integer from 1 to 100)\n"
+            "- clarity_score (integer from 1 to 100)\n"
+            "- feedback_text (markdown string, detailing verbal/speaking feedback and coding feedback, including strengths and specific improvements)\n"
+            "- suggested_answer (markdown string, providing a model high-scoring exemplar answer and code)\n"
             "\n"
             "Return ONLY the raw JSON object, no wrapping in markdown code blocks like ```json."
         )
@@ -184,6 +211,8 @@ def evaluate_response(transcript: str, question_text: str, duration_sec: float) 
             f"Speaking Rate: {wpm} words per minute\n"
             f"Filler Word Count: {filler_count}\n"
         )
+        if code:
+            prompt += f"Submitted Code ({code_language}):\n{code}\n"
         
         payload = {
             "contents": [{
@@ -220,4 +249,4 @@ def evaluate_response(transcript: str, question_text: str, duration_sec: float) 
             
     except Exception as e:
         print(f"Error calling live Gemini evaluator: {e}. Falling back to offline evaluation.")
-        return evaluate_response_offline(transcript, question_text, duration_sec)
+        return evaluate_response_offline(transcript, question_text, duration_sec, code, code_language)

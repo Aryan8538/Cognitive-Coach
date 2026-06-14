@@ -42,6 +42,8 @@ class ResponseResponse(BaseModel):
     question_id: int
     video_url: Optional[str] = None
     transcript: Optional[str] = None
+    code: Optional[str] = None
+    code_language: Optional[str] = None
     created_at: datetime
     metrics: Optional[MetricResponse] = None
 
