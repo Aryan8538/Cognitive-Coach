@@ -167,12 +167,12 @@ export default function Dashboard() {
       {/* Hero Welcome Header */}
       <section className="flex flex-col gap-4 mb-16 animate-fade-in-up">
         
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-slate-900 dark:text-white font-display">
-          Master Your Placement Interviews with <span className="bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-500 dark:from-violet-400 dark:via-indigo-300 dark:to-cyan-400 bg-clip-text text-transparent">AI Intelligence</span>
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-slate-900 dark:text-white font-display uppercase">
+          Architecting Frontiers for Tomorrow
         </h1>
         
-        <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-3xl leading-relaxed">
-          CognitiveCoach analyzes your webcam mock interviews and provides intelligent feedback on speech pacing, filler words, grammar correctness, and technical relevance.
+        <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-3xl leading-relaxed font-sans">
+          Designing modular environments with precision-crafted systems that evolve with your vision. CognitiveCoach analyzes your webcam mock interviews and provides intelligent feedback on speech pacing, filler words, grammar correctness, and technical relevance.
         </p>
       </section>
 

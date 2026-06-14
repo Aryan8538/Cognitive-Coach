@@ -13,9 +13,10 @@ module.exports = {
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
-        display: ["Plus Jakarta Sans", "Outfit", "system-ui", "sans-serif"],
-        outfit: ["Outfit", "system-ui", "sans-serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["DM Sans", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
+        outfit: ["Inter", "system-ui", "sans-serif"],
       },
       boxShadow: {
         glow: "0 0 20px rgba(139, 92, 246, 0.15)",
