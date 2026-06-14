@@ -24,17 +24,21 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }: Vid
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Sync camera stream once video DOM element mounts after permission state updates
+  useEffect(() => {
+    if (permission && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+    }
+  }, [permission]);
+
   const getCameraPermission = async () => {
     try {
       const streamData = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: { width: 640, height: 480 }
       });
-      setPermission(true);
       streamRef.current = streamData;
-      if (videoRef.current) {
-        videoRef.current.srcObject = streamData;
-      }
+      setPermission(true);
       setupAudioVisualizer(streamData);
     } catch (err) {
       alert("Please allow camera and microphone access to record your mock interview.");
