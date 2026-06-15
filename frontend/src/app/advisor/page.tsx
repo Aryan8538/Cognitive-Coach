@@ -71,10 +71,10 @@ export default function AdvisorPage() {
       color: "border-indigo-500/20 hover:border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-500/5"
     },
     {
-      title: "Data Analyst",
-      topic: "SQL, Statistics & A/B Experiments",
-      icon: <BarChart3 size={15} />,
-      query: "Provide a study roadmap for Data Analyst placement interviews. Include SQL query drills, statistical signficance tests, and analytics frameworks.",
+      title: "Full Stack Web Developer",
+      topic: "React, Node.js & Database Scale",
+      icon: <Terminal size={15} />,
+      query: "Provide a study roadmap for Full Stack Web Developer placement interviews. Include React optimization, Node.js event loop dynamics, microservices, and database query optimization.",
       color: "border-emerald-500/20 hover:border-emerald-500/40 text-emerald-650 dark:text-emerald-400 bg-emerald-500/5"
     },
     {

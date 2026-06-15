@@ -59,12 +59,12 @@ export default function Dashboard() {
       topics: ["Product Strategy", "Growth Metrics"]
     },
     {
-      id: "Data Analyst",
-      title: "Data Analyst",
-      icon: <BarChart3 size={20} />,
-      desc: "Practice structuring analytical reports, A/B experiments, and join queries. Focuses on significance, sample sizes, and SQL.",
+      id: "Full Stack Web Developer",
+      title: "Full Stack Web Developer",
+      icon: <Terminal size={20} />,
+      desc: "Practice building full-stack REST APIs, state management, and database query optimization. Focuses on pagination, security protocols, and API latency.",
       gradient: "from-emerald-500 to-teal-500 dark:from-emerald-400 dark:to-teal-400",
-      topics: ["A/B Testing", "SQL Optimization"]
+      topics: ["REST APIs", "Pagination Logic"]
     },
     {
       id: "Behavioral",

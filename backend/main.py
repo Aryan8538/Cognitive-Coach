@@ -77,11 +77,11 @@ def seed_questions():
                     "suggested_keywords": "STAR method, active listening, compromise, resolution, project delivery, collaboration"
                 },
                 {
-                    "role": "Data Analyst",
-                    "topic": "Metrics & Experimentation",
+                    "role": "Full Stack Web Developer",
+                    "topic": "Coding Logic",
                     "difficulty": "Medium",
-                    "text": "Explain what an A/B test is, how you would determine if a change is statistically significant, and what common pitfalls you should avoid.",
-                    "suggested_keywords": "p-value, sample size, statistical significance, selection bias, null hypothesis, Type I error"
+                    "text": "Implement a REST API endpoint in your preferred framework (e.g., Express/Node, FastAPI) that fetches a paginated list of users from a database, handles search queries, and prevents SQL injection. Walk through your implementation and state its complexity.",
+                    "suggested_keywords": "pagination, SQL injection, query parameters, route handler, error handling, database query"
                 }
             ]
             for q_data in default_questions:
