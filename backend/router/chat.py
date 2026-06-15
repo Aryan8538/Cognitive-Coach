@@ -28,21 +28,67 @@ def generate_advisor_fallback(query: str) -> str:
     """
     query_lower = query.lower()
     
-    if any(k in query_lower for k in ["roadmap", "study", "syllabus", "prepare", "learn"]):
+    if any(k in query_lower for k in ["full stack", "web", "react", "frontend", "node", "javascript"]):
         return (
-            "### 🗺️ Software Engineer Placement Roadmap (3-Month Plan)\n\n"
-            "Here is a comprehensive week-by-week roadmap to help you prepare for software engineering placements:\n\n"
-            "#### **Month 1: Data Structures & Algorithms (DSA)**\n"
-            "- **Week 1-2 (Linear DSA):** Arrays, Strings, Hash Maps, and Linked Lists. Master two-pointer, sliding window, and hashing logic.\n"
-            "- **Week 3-4 (Non-Linear DSA):** Binary Trees, BSTs, Heaps, and Graphs. Practice DFS and BFS traversals.\n"
-            "- *Recommended Practice:* Solve the 'NeetCode 150' list on LeetCode.\n\n"
-            "#### **Month 2: Computer Science Core Fundamentals**\n"
-            "- **Week 5-6 (OOP & Database Management):** Learn Object-Oriented Design (Inheritance, Polymorphism, Abstraction, Encapsulation). Master SQL Joins, Group By, Indexes, and Transactions.\n"
-            "- **Week 7-8 (Operating Systems & Networks):** Process synchronization, CPU scheduling, virtual memory paging, TCP/IP handshake, and HTTP protocols.\n"
-            "- *Recommended Tool:* Use SQLZoo or LeetCode Database section to practice SQL queries.\n\n"
-            "#### **Month 3: System Design & Mock Interviews**\n"
-            "- **Week 9-10 (System Architecture):** Scalability parameters, caching (Redis/Memcached), load balancing, sharding, and database replication.\n"
-            "- **Week 11-12 (Mock Interview Drills):** Practice answering behavioral questions using the STAR format. Record webcam mocks using CognitiveCoach to analyze WPM pacing and filler words.\n\n"
+            "### 🌐 Full Stack Web Developer Placement Roadmap (3-Month Plan)\n\n"
+            "Here is a targeted full-stack preparation guide for technical placements:\n\n"
+            "#### **Month 1: Frontend Architecture & Client Optimization**\n"
+            "- **Core Concepts:** HTML5/CSS3 semantic layouts, ES6+ JavaScript. State management (Zustand, Redux Toolkit). React.js & Next.js App Router.\n"
+            "- **Interview Questions:** Walk through Client-Side Rendering (CSR) vs. Server-Side Rendering (SSR) page-load differences, hydration stages, React component re-rendering triggers.\n"
+            "- **Resources:** freeCodeCamp, MDN Web Docs, Next.js official learn portal.\n\n"
+            "#### **Month 2: Backend Frameworks & Database Scaling**\n"
+            "- **Core Concepts:** Node.js event loops, Express/FastAPI middlewares, REST API conventions, database queries, and pagination logic.\n"
+            "- **Interview Questions:** Explain how database indexes optimize queries. Walk through route handlers that protect against SQL Injection using parameterized inputs.\n"
+            "- **Resources:** Official Node.js guides, database index scanning documents.\n\n"
+            "#### **Month 3: System Design, Cache & Mock Mocks**\n"
+            "- **Core Concepts:** Caching strategies (Redis/Memcached), CDNs, database sharding, normalizations (1NF, 2NF, 3NF), and message queues (Kafka).\n"
+            "- **Mock Practice:** Code full-stack API controllers inside Monaco playground and explain space/time complexity bounds.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+        
+    elif any(k in query_lower for k in ["database", "sql", "query"]):
+        return (
+            "### 🗄️ Database & SQL Interview Guide\n\n"
+            "Prepare the following core areas to clear SDE database rounds:\n\n"
+            "#### **1. SQL Query Drills (Mandatory)**\n"
+            "- Practice query operations involving `INNER JOIN`, `LEFT JOIN`, `GROUP BY`, `HAVING`, and nested subqueries.\n"
+            "- Master analytical window functions like `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()`.\n"
+            "- *Practice platforms:* SQLZoo, LeetCode Database, HackerRank SQL.\n\n"
+            "#### **2. DBMS Internals & Theory**\n"
+            "- **ACID Properties:** Atomicity, Consistency, Isolation, Durability. Explain transaction logs and concurrency lock states.\n"
+            "- **Database Indexes:** B-Trees vs. Hash maps. Understand query optimization, index scans, and composite indexes.\n"
+            "- **Normalizations:** 1NF, 2NF, 3NF, and BCNF tables. Know when to denormalize schemas for query speed.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+
+    elif any(k in query_lower for k in ["system design", "architecture", "scale", "system"]):
+        return (
+            "### 🏗️ SDE System Design Preparation Framework\n\n"
+            "When answering System Design questions, structure your thoughts with this structured framework:\n\n"
+            "#### **Step 1: Feature & Constraint Estimation**\n"
+            "- Ask clarifying questions. Establish Daily Active Users (DAU), read/write ratios, and scale parameters.\n"
+            "- Calculate approximate storage, bandwidth, and CPU capacity bounds (QPS).\n\n"
+            "#### **Step 2: High-Level Architecture**\n"
+            "- Define request flows from DNS/CDN, API Gateway, Load Balancers, Web Servers, microservices, and database layers.\n\n"
+            "#### **Step 3: Component Deep-Dive**\n"
+            "- **Caching:** Add a Redis layer for hot key/value storage.\n"
+            "- **Scaling:** Horizontal database sharding based on partition keys.\n"
+            "- **Availability:** Set up read replicas and database mirroring.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+
+    elif any(k in query_lower for k in ["roadmap", "study", "prepare", "learn", "software", "sde", "coding", "dsa"]):
+        return (
+            "### 💻 Software Engineer (SDE) Preparation Roadmap\n\n"
+            "A structured week-by-week SDE placement study guide:\n\n"
+            "#### **Phase 1: Advanced DSA (Weeks 1-6)**\n"
+            "- Master arrays, two pointers, sliding windows, hash maps, linked lists, trees, binary search, and heaps.\n"
+            "- Practice recursion, back-tracking, and dynamic programming fundamentals.\n"
+            "- *Target list:* Settle the 'NeetCode 150' list on LeetCode.\n\n"
+            "#### **Phase 2: CS Core Systems (Weeks 7-10)**\n"
+            "- **Operating Systems:** Process scheduling, virtual memory paging, multithreading, and lock states.\n"
+            "- **Computer Networks:** TCP/IP handshake, DNS resolution process, OSI model layers, HTTP/HTTPS methods.\n"
+            "- **Object-Oriented Design (OOP):** Inheritance, polymorphism, encapsulation, and abstraction.\n\n"
             "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
         )
         
@@ -59,26 +105,25 @@ def generate_advisor_fallback(query: str) -> str:
             "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
         )
         
-    elif any(k in query_lower for k in ["placement", "job", "drive", "interview", "hr"]):
+    elif any(k in query_lower for k in ["placement", "job", "drive", "interview", "hr", "behavioral", "conflict", "star"]):
         return (
-            "### 💼 Technical Placement Prep Checklist\n\n"
-            "Ensure you complete these preparation tasks before college placement season begins:\n\n"
-            "- **Aptitude Rounds:** Standard screening drives contain Quantitative Aptitude, Logical Reasoning, and Verbal Comprehension. Dedicate 30 minutes daily on IndiaBIX or GeeksforGeeks to practice aptitude.\n"
-            "- **CS Fundamentals:** Be ready to write SQL queries involving Joins, Aggregation (Group By/Having), and Subqueries. Be able to explain OOP pillars with code code snippets.\n"
-            "- **STAR format for HR rounds:** Prepare answers for standard questions:\n"
-            "  * *'Tell me about a time you handled conflict in a group project.'*\n"
-            "  * *'What is your greatest technical challenge?'*\n"
-            "- **Pacing & Confidence:** Practice mock drills. Speak at a steady rate of 110–140 WPM and keep filler words ('like', 'um', 'actually') under 2–3 per response.\n\n"
+            "### 💼 Behavioral Round prep Checklist (STAR Method)\n\n"
+            "Structure your behavioral responses using the **STAR Method** (Situation, Task, Action, Result):\n\n"
+            "- **Situation:** Contextualize the challenge. Be brief (e.g., 'In a group project, our team conflicted on database selection').\n"
+            "- **Task:** Define your role/objective (e.g., 'As lead, my goal was to resolve the dispute without project delays').\n"
+            "- **Action:** Specify the exact steps you personally took (e.g., 'I built a benchmark script and compiled latencies for PostgreSQL and MongoDB').\n"
+            "- **Result:** Detail the outcome with metrics (e.g., 'empirical benchmarks resolved the dispute, saving 3 days of development').\n\n"
             "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
         )
         
     else:
         return (
             "👋 **Hi! I am your CognitiveCoach AI Career Counselor.**\n\n"
-            "I can help you build structured roadmaps, refine your projects, review your code, and guide your placement strategy. Ask me questions such as:\n\n"
-            "- *'Give me a study roadmap for backend engineering.'*\n"
-            "- *'How can I improve my project resume bullet points?'*\n"
-            "- *'What topics should I prepare for SQL interview rounds?'*\n\n"
+            "I can help you build structured study roadmaps, review coding patterns, refine resume projects, and prepare for placement interviews. Try asking me:\n\n"
+            "- *'Give me a Full Stack Web Developer study roadmap'* (Upgraded!)\n"
+            "- *'What topics should I prepare for SQL interview rounds?'*\n"
+            "- *'Provide a SDE System Design preparation guide.'*\n"
+            "- *'How can I structure resume bullet points?'*\n\n"
             "Type a career or study-related query in the chat box to begin!"
         )
 
@@ -104,25 +149,16 @@ def get_chat_response(req: ChatRequest):
             "Your job is to help college students prepare for interviews, design roadmaps, recommend study resources, "
             "review coding patterns, and provide guidance for software engineering, product management, data analysis, "
             "and HR roles.\n"
-            "Be encouraging, structured, and highly detailed. Use Markdown lists, bold headers, and code snippets where relevant. "
-            "If they ask for a roadmap, structure it week-by-week or phase-by-phase with clear topics and free resource links."
+            "Adhere to these rules strictly:\n"
+            "- Be highly encouraging, structured, and detailed.\n"
+            "- Use Markdown lists, bold headers, and code snippets where relevant.\n"
+            "- If they ask for a roadmap, structure it week-by-week or phase-by-phase with clear topics and free resource links.\n"
+            "- Provide accurate, industry-aligned guidance on standard web development, database scaling, SDE, product, and data systems.\n"
+            "- Recommend standard coding patterns, proper complexities (like O(N) time or O(1) space), and robust database constraints."
         )
         
         # Format conversation history for Gemini
         gemini_contents = []
-        # Add system instructions via first message or parameter. 
-        # Gemini 1.5 allows system instructions, but for a simple API call we can prepend it to the first message.
-        
-        # Prepend system instructions to prompt or history
-        gemini_contents.append({
-            "role": "user",
-            "parts": [{"text": f"System Instructions:\n{system_prompt}"}]
-        })
-        gemini_contents.append({
-            "role": "model",
-            "parts": [{"text": "Understood. I will act as a career advisor and provide structured, detailed guidance with markdown headings and lists."}]
-        })
-        
         for msg in req.messages:
             role_map = "user" if msg.role == "user" else "model"
             gemini_contents.append({
@@ -131,7 +167,12 @@ def get_chat_response(req: ChatRequest):
             })
             
         payload = {
-            "contents": gemini_contents
+            "contents": gemini_contents,
+            "systemInstruction": {
+                "parts": [
+                    {"text": system_prompt}
+                ]
+            }
         }
         
         res = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload, params={"key": GEMINI_API_KEY})
