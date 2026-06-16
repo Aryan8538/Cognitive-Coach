@@ -22,6 +22,18 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-slate-50 transition-colors duration-300">
         
+        {/* Sleek Preloader Screen */}
+        <div className="page-loader">
+          <div className="loader-content flex flex-col items-center gap-4">
+            <div className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 shadow-xl shadow-violet-500/10">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/></svg>
+            </div>
+            <span className="text-sm font-extrabold tracking-widest uppercase font-display bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-600 dark:from-white dark:via-purple-100 dark:to-violet-400 bg-clip-text text-transparent">
+              NeuroSync
+            </span>
+          </div>
+        </div>
+
         {/* Subtle grid background & blur blobs */}
         <div className="fixed inset-0 bg-grid pointer-events-none z-[-1]"></div>
         <div className="background-blobs">

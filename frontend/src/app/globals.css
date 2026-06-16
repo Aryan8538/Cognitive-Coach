@@ -196,6 +196,77 @@ body {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
 }
 
+/* Custom Page Loader & Entrance Animations */
+@keyframes pageIntro {
+  0% { opacity: 1; pointer-events: all; }
+  75% { opacity: 1; pointer-events: all; }
+  100% { opacity: 0; pointer-events: none; visibility: hidden; }
+}
+
+@keyframes logoScale {
+  0% { transform: scale(0.95); opacity: 0; filter: blur(4px); }
+  25% { opacity: 1; filter: blur(0); }
+  70% { transform: scale(1.01); opacity: 1; }
+  100% { transform: scale(1.03); opacity: 0; }
+}
+
+@keyframes headingReveal {
+  from {
+    clip-path: inset(100% 0 0 0);
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes descReveal {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes gridFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background-color: rgb(var(--background));
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pageIntro 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+.loader-content {
+  animation: logoScale 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-heading-reveal {
+  animation: headingReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-desc-reveal {
+  animation: descReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.bg-grid {
+  animation: gridFadeIn 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Keyframe Animations */
 @keyframes float {
   0%, 100% { transform: translateY(0) scale(1); }
