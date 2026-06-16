@@ -4,31 +4,83 @@
 
 @layer base {
   :root {
-    --background: 5 5 5;
-    --foreground: 255 255 255;
+    --background: 248 250 252; /* slate-50: #f8fafc */
+    --foreground: 15 23 42;    /* slate-900: #0f172a */
     
-    --bg-glow: radial-gradient(circle at 50% 50%, #0d0d10 0%, #050505 100%);
-    --card-bg: rgba(24, 24, 27, 0.75);
-    --card-border: rgba(39, 39, 42, 0.7);
-    --card-border-hover: rgba(255, 255, 255, 0.45);
+    --bg-glow: radial-gradient(circle at 50% 50%, #f1f5f9 0%, #f8fafc 100%);
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --card-border: rgba(226, 232, 240, 0.7);
+    --card-border-hover: rgba(139, 92, 246, 0.45);
     
-    --text-primary: #FFFFFF;
-    --text-secondary: #A1A1AA;
-    --text-muted: #71717A;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
     
-    --accent-purple: #FFFFFF;
-    --accent-purple-glow: rgba(255, 255, 255, 0.08);
-    --accent-cyan: #A1A1AA;
-    --accent-cyan-glow: rgba(161, 161, 170, 0.08);
+    --accent-purple: #8B5CF6;
+    --accent-purple-glow: rgba(139, 92, 246, 0.08);
+    --accent-cyan: #06B6D4;
+    --accent-cyan-glow: rgba(6, 182, 212, 0.08);
     
-    --color-success: #FFFFFF;
-    --color-danger: #71717A;
-    --color-warning: #A1A1AA;
+    --color-success: #10B981;
+    --color-danger: #EF4444;
+    --color-warning: #F59E0B;
+
+    /* Dynamic Tailwind Palette in Light Mode */
+    --slate-50: 248 250 252;
+    --slate-100: 241 245 249;
+    --slate-150: 226 232 240;
+    --slate-200: 226 232 240;
+    --slate-250: 203 213 225;
+    --slate-300: 203 213 225;
+    --slate-400: 148 163 184;
+    --slate-450: 100 116 139;
+    --slate-500: 100 116 139;
+    --slate-505: 100 116 139;
+    --slate-600: 71 85 105;
+    --slate-650: 51 65 85;
+    --slate-700: 51 65 85;
+    --slate-800: 30 41 59;
+    --slate-900: 15 23 42;
+
+    --zinc-800: 39 39 42;
+    --zinc-850: 31 31 35;
+    --zinc-900: 24 24 27;
+    --zinc-950: 9 9 11;
+
+    --violet-50: 245 243 255;
+    --violet-200: 221 214 254;
+    --violet-250: 192 132 252;
+    --violet-400: 167 139 250;
+    --violet-550: 139 92 246;
+    --violet-600: 124 58 237;
+    --violet-605: 109 40 217;
+    --violet-650: 91 33 182;
+    --violet-700: 76 29 149;
+    --violet-750: 59 7 100;
+    --violet-900: 76 29 149;
+    --violet-950: 46 16 101;
+
+    --indigo-50: 240 244 255;
+    --indigo-100: 224 231 255;
+    --indigo-400: 129 140 248;
+    --indigo-500: 99 102 241;
+    --indigo-600: 79 70 229;
+    --indigo-650: 67 56 202;
+    --indigo-700: 55 48 163;
+    --indigo-750: 49 46 129;
+    --indigo-950: 30 27 75;
+
+    --cyan-50: 236 254 255;
+    --cyan-100: 207 250 254;
+    --cyan-400: 34 211 238;
+    --cyan-500: 6 182 212;
+    --cyan-700: 14 116 144;
+    --cyan-705: 8 145 178;
   }
 
   .dark {
-    --background: 5 5 5;
-    --foreground: 255 255 255;
+    --background: 5 5 5; /* #050505 */
+    --foreground: 255 255 255; /* #ffffff */
     
     --bg-glow: radial-gradient(circle at 50% 50%, #0d0d10 0%, #050505 100%);
     --card-bg: rgba(24, 24, 27, 0.75);
@@ -47,6 +99,58 @@
     --color-success: #FFFFFF;
     --color-danger: #71717A;
     --color-warning: #A1A1AA;
+
+    /* Dynamic Tailwind Palette in Dark Mode (Aura overrides) */
+    --slate-50: 24 24 27; /* #18181B */
+    --slate-100: 39 39 42; /* #27272A */
+    --slate-150: 39 39 42;
+    --slate-200: 39 39 42;
+    --slate-250: 39 39 42;
+    --slate-300: 63 63 70; /* #3F3F46 */
+    --slate-400: 161 161 170; /* #A1A1AA */
+    --slate-450: 161 161 170;
+    --slate-500: 161 161 170;
+    --slate-505: 161 161 170;
+    --slate-600: 255 255 255; /* #FFFFFF */
+    --slate-650: 255 255 255;
+    --slate-700: 255 255 255;
+    --slate-800: 255 255 255;
+    --slate-900: 255 255 255;
+
+    --zinc-800: 39 39 42; /* #27272A */
+    --zinc-850: 39 39 42;
+    --zinc-900: 24 24 27; /* #18181B */
+    --zinc-950: 5 5 5; /* #050505 */
+
+    --violet-50: 39 39 42; /* #27272A */
+    --violet-200: 161 161 170; /* #A1A1AA */
+    --violet-250: 161 161 170;
+    --violet-400: 255 255 255; /* #FFFFFF */
+    --violet-550: 255 255 255;
+    --violet-600: 255 255 255;
+    --violet-605: 255 255 255;
+    --violet-650: 255 255 255;
+    --violet-700: 255 255 255;
+    --violet-750: 255 255 255;
+    --violet-900: 24 24 27; /* #18181B */
+    --violet-950: 24 24 27;
+
+    --indigo-50: 39 39 42; /* #27272A */
+    --indigo-100: 39 39 42;
+    --indigo-400: 255 255 255; /* #FFFFFF */
+    --indigo-500: 255 255 255;
+    --indigo-600: 255 255 255;
+    --indigo-650: 255 255 255;
+    --indigo-700: 255 255 255;
+    --indigo-750: 255 255 255;
+    --indigo-950: 24 24 27; /* #18181B */
+
+    --cyan-50: 39 39 42; /* #27272A */
+    --cyan-100: 39 39 42;
+    --cyan-400: 161 161 170; /* #A1A1AA */
+    --cyan-500: 161 161 170;
+    --cyan-700: 255 255 255; /* #FFFFFF */
+    --cyan-705: 255 255 255;
   }
 }
 
@@ -194,7 +298,7 @@ body {
    Aura Design System Styles & Overrides
    ========================================== */
 
-/* Typography Rules */
+/* Typography Rules (Global) */
 h1, h2, h3, h4, h5, h6, .font-display {
   font-family: 'DM Sans', sans-serif !important;
   font-weight: 700 !important;
@@ -205,55 +309,23 @@ code, pre, .font-mono {
   font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* Force dark theme layout defaults globally */
-body, html {
-  background-color: #050505 !important;
-  background-image: var(--bg-glow) !important;
-  color: #FFFFFF !important;
-}
-
-/* Aura Background & Grid Pattern */
+/* Global Ambient Gradients & Grid details */
 .bg-grid {
   background-size: 40px 40px !important;
-  background-image: 
-    linear-gradient(to right, rgba(39, 39, 42, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(39, 39, 42, 0.15) 1px, transparent 1px) !important;
 }
 
-/* Ambient white blobs */
-.blob-1 {
+/* Dark-Theme Specific Aura Layout & Component Overrides */
+
+/* Ambient white blobs in dark mode */
+.dark .blob-1 {
   background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 70%) !important;
 }
-.blob-2 {
+.dark .blob-2 {
   background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 70%) !important;
 }
 
-/* Overriding Tailwind light backgrounds with Aura dark surfaces */
-.bg-white,
-.bg-slate-50,
-.bg-slate-50\/50,
-.bg-slate-100,
-.bg-white\/70,
-.bg-white\/80,
-.dark\:bg-zinc-950,
-.dark\:bg-zinc-900,
-.dark\:bg-zinc-900\/55,
-.dark\:bg-zinc-900\/60,
-.dark\:bg-zinc-950\/20,
-.dark\:bg-zinc-850\/30,
-.dark\:bg-zinc-850\/60,
-.dark\:bg-zinc-950\/40 {
-  background-color: #18181B !important;
-}
-
-/* Redefine card styling using Aura specifications */
-.glass-panel,
-.border-slate-200\/50,
-.dark\:border-zinc-850\/50,
-.dark\:border-zinc-800\/50,
-.border-slate-200,
-.border-slate-150,
-.border-slate-100 {
+/* Redefine card styling using Aura specifications in dark mode */
+.dark .glass-panel {
   background-color: #18181B !important;
   border: 1px solid #27272A !important;
   border-radius: 8px !important; /* rounded card: 8px */
@@ -262,50 +334,27 @@ body, html {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Card hover animation */
-.glass-panel:hover,
-.glass-panel.border-violet-500\/40 {
+/* Card hover animation in dark mode */
+.dark .glass-panel:hover,
+.dark .glass-panel.border-violet-500\/40 {
   border-color: #FFFFFF !important; /* Accent: White */
   transform: translateY(-2px) !important;
 }
 
-/* Navbar specific styling overrides */
-header,
-.sticky {
+/* Navbar specific styling overrides in dark mode */
+.dark header,
+.dark .sticky {
   background-color: rgba(5, 5, 5, 0.8) !important;
   border-bottom: 1px solid #27272A !important;
   backdrop-filter: blur(12px) !important;
 }
 
-/* Text color overrides */
-.text-slate-900,
-.text-slate-800,
-.text-slate-700,
-.text-slate-650,
-.text-slate-600,
-.dark\:text-slate-200,
-.dark\:text-slate-250,
-.dark\:text-slate-300,
-.dark\:text-slate-350,
-.dark\:text-white,
-.text-slate-505 {
-  color: #FFFFFF !important;
-}
-
-.text-slate-500,
-.text-slate-450,
-.text-slate-400,
-.dark\:text-slate-400,
-.dark\:text-slate-500 {
-  color: #A1A1AA !important;
-}
-
-/* Aura Primary CTA Buttons (Monochrome high-contrast style) */
-.bg-gradient-to-r.from-violet-500.to-indigo-650,
-.bg-violet-600,
-.bg-indigo-650,
-button[type="submit"],
-.bg-violet-600\/10 {
+/* Aura Primary CTA Buttons (Monochrome high-contrast style in dark mode) */
+.dark .bg-gradient-to-r.from-violet-500.to-indigo-650,
+.dark .bg-violet-600,
+.dark .bg-indigo-650,
+.dark button[type="submit"],
+.dark .bg-violet-600\/10 {
   background: #FFFFFF !important;
   color: #050505 !important;
   border: 1px solid #FFFFFF !important;
@@ -315,23 +364,23 @@ button[type="submit"],
   transition: all 0.2s ease-in-out !important;
 }
 
-.bg-gradient-to-r.from-violet-500.to-indigo-650:hover,
-.bg-violet-600:hover,
-.bg-indigo-650:hover,
-button[type="submit"]:hover {
+.dark .bg-gradient-to-r.from-violet-500.to-indigo-650:hover,
+.dark .bg-violet-600:hover,
+.dark .bg-indigo-650:hover,
+.dark button[type="submit"]:hover {
   background: #E4E4E7 !important;
   border-color: #E4E4E7 !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.12) !important;
 }
 
-/* Aura Secondary Buttons & Controls */
-button.bg-slate-50,
-button.bg-slate-100,
-button.dark\:bg-zinc-900,
-a.bg-slate-100,
-.bg-slate-50,
-.bg-slate-100 {
+/* Aura Secondary Buttons & Controls in dark mode */
+.dark button.bg-slate-50,
+.dark button.bg-slate-100,
+.dark button.dark\:bg-zinc-900,
+.dark a.bg-slate-100,
+.dark .bg-slate-50,
+.dark .bg-slate-100 {
   background-color: #18181B !important;
   color: #FFFFFF !important;
   border: 1px solid #27272A !important;
@@ -339,18 +388,18 @@ a.bg-slate-100,
   transition: all 0.2s ease-in-out !important;
 }
 
-button.bg-slate-50:hover,
-button.bg-slate-100:hover,
-button.dark\:bg-zinc-900:hover,
-a.bg-slate-100:hover {
+.dark button.bg-slate-50:hover,
+.dark button.bg-slate-100:hover,
+.dark button.dark\:bg-zinc-900:hover,
+.dark a.bg-slate-100:hover {
   background-color: #27272A !important;
   border-color: #A1A1AA !important;
 }
 
-/* Input Fields and Select Dropdowns */
-input[type="text"],
-select,
-textarea {
+/* Input Fields and Select Dropdowns in dark mode */
+.dark input[type="text"],
+.dark select,
+.dark textarea {
   background-color: #050505 !important;
   color: #FFFFFF !important;
   border: 1px solid #27272A !important;
@@ -358,62 +407,46 @@ textarea {
   transition: all 0.2s ease-in-out !important;
 }
 
-input[type="text"]:focus,
-select:focus,
-textarea:focus {
+.dark input[type="text"]:focus,
+.dark select:focus,
+.dark textarea:focus {
   border-color: #FFFFFF !important;
   outline: none !important;
 }
 
-/* SVG trends chart override to match Monochrome Aura */
-svg path[stroke="#8b5cf6"] {
+/* SVG trends chart override to match Monochrome Aura in dark mode */
+.dark svg path[stroke="#8b5cf6"] {
   stroke: #FFFFFF !important;
   filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.25)) !important;
 }
 
-svg stop[stopColor="#8b5cf6"] {
+.dark svg stop[stopColor="#8b5cf6"] {
   stop-color: #FFFFFF !important;
 }
 
-svg circle[stroke="#8b5cf6"] {
+.dark svg circle[stroke="#8b5cf6"] {
   stroke: #FFFFFF !important;
   fill: #050505 !important;
 }
 
-svg line[stroke*="rgba(139,92,246"],
-svg line[stroke*="rgba(139, 92, 246"] {
+.dark svg line[stroke*="rgba(139,92,246"],
+.dark svg line[stroke*="rgba(139, 92, 246"] {
   stroke: rgba(255, 255, 255, 0.1) !important;
 }
 
-svg text.fill-slate-900,
-svg text.dark\:fill-white {
+.dark svg text.fill-slate-900,
+.dark svg text.dark\:fill-white {
   fill: #FFFFFF !important;
   font-family: 'DM Sans', sans-serif !important;
 }
 
-svg text.fill-slate-400 {
+.dark svg text.fill-slate-400 {
   fill: #A1A1AA !important;
   font-family: 'DM Sans', sans-serif !important;
 }
 
-/* Badges and tags overrides */
-span.bg-cyan-50\/60,
-span.bg-cyan-50,
-span.bg-violet-500\/10,
-span.bg-emerald-500\/10,
-span.bg-indigo-500\/5,
-span.bg-emerald-500\/5,
-span.bg-cyan-500\/5,
-span.bg-amber-500\/5,
-span.bg-violet-50 {
-  background-color: #27272A !important;
-  color: #FFFFFF !important;
-  border: 1px solid #27272A !important;
-  border-radius: 9999px !important; /* pill styling */
-}
-
-/* Sidebar and general layouts */
-.md\:w-80.flex-shrink-0 {
+/* Sidebar and general layouts in dark mode */
+.dark .md\:w-80.flex-shrink-0 {
   border-right: 1px solid #27272A !important;
   padding-right: 1.5rem !important;
 }
