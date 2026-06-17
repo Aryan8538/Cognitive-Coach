@@ -74,3 +74,30 @@ class DashboardStats(BaseModel):
     average_grammar: float
     filler_words_trend: List[Dict[str, str]] # list of {"date": "...", "count": X}
     average_wpm: float
+
+# User schemas
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Token schemas
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
+
+class UserLogin(BaseModel):
+    email: str
+    password: str

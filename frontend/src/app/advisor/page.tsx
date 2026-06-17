@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Sparkles, Send, BookOpen, GraduationCap, Trophy, ChevronRight, MessageSquare, Terminal, Users, BarChart3, HelpCircle } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
@@ -10,6 +11,7 @@ interface Message {
 }
 
 export default function AdvisorPage() {
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -19,6 +21,14 @@ export default function AdvisorPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     if (chatEndRef.current) {

@@ -21,13 +21,27 @@ export default function Dashboard() {
   const [backendOffline, setBackendOffline] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
     async function fetchStats() {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`);
+        const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           setStats(data);
           setBackendOffline(false);
+        } else if (res.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          router.push("/login");
         } else {
           setBackendOffline(true);
         }
@@ -39,7 +53,7 @@ export default function Dashboard() {
       }
     }
     fetchStats();
-  }, []);
+  }, [router]);
 
   const roles = [
     {

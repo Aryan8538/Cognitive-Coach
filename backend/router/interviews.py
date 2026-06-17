@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from database import get_db
 import models, schemas
+from services.auth import get_current_user_optional
 
 router = APIRouter()
 
@@ -14,8 +15,13 @@ def get_questions(role: str = None, db: Session = Depends(get_db)):
     return query.all()
 
 @router.post("/interviews", response_model=schemas.InterviewResponse)
-def create_interview(interview: schemas.InterviewCreate, db: Session = Depends(get_db)):
-    db_interview = models.Interview(role=interview.role, user_id=interview.user_id)
+def create_interview(
+    interview: schemas.InterviewCreate, 
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_optional)
+):
+    user_id = current_user.id if current_user else interview.user_id
+    db_interview = models.Interview(role=interview.role, user_id=user_id)
     db.add(db_interview)
     db.commit()
     db.refresh(db_interview)
@@ -39,26 +45,38 @@ def complete_interview(interview_id: str, db: Session = Depends(get_db)):
     return db_interview
 
 @router.get("/dashboard-stats", response_model=schemas.DashboardStats)
-def get_dashboard_stats(db: Session = Depends(get_db)):
+def get_dashboard_stats(
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_optional)
+):
     # 1. Total interviews completed
-    total_interviews = db.query(models.Interview).filter(models.Interview.status == "Completed").count()
+    interviews_query = db.query(models.Interview).filter(models.Interview.status == "Completed")
+    if current_user:
+        interviews_query = interviews_query.filter(models.Interview.user_id == current_user.id)
+    total_interviews = interviews_query.count()
     
     # Calculate average metric scores across all completed interviews
-    metrics_query = db.query(models.Metric).join(models.Response).join(models.Interview).filter(models.Interview.status == "Completed").all()
+    metrics_query = db.query(models.Metric).join(models.Response).join(models.Interview).filter(models.Interview.status == "Completed")
+    if current_user:
+        metrics_query = metrics_query.filter(models.Interview.user_id == current_user.id)
+    metrics_list = metrics_query.all()
     
     avg_clarity = 0.0
     avg_relevance = 0.0
     avg_grammar = 0.0
     avg_wpm = 0.0
     
-    if metrics_query:
-        avg_clarity = sum(m.clarity_score for m in metrics_query) / len(metrics_query)
-        avg_relevance = sum(m.relevance_score for m in metrics_query) / len(metrics_query)
-        avg_grammar = sum(m.grammar_score for m in metrics_query) / len(metrics_query)
-        avg_wpm = sum(m.words_per_minute for m in metrics_query) / len(metrics_query)
+    if metrics_list:
+        avg_clarity = sum(m.clarity_score for m in metrics_list) / len(metrics_list)
+        avg_relevance = sum(m.relevance_score for m in metrics_list) / len(metrics_list)
+        avg_grammar = sum(m.grammar_score for m in metrics_list) / len(metrics_list)
+        avg_wpm = sum(m.words_per_minute for m in metrics_list) / len(metrics_list)
         
     # Generate filler words trend (last 5 interviews)
-    recent_interviews = db.query(models.Interview).filter(models.Interview.status == "Completed").order_by(models.Interview.created_at.asc()).limit(5).all()
+    recent_interviews_query = db.query(models.Interview).filter(models.Interview.status == "Completed")
+    if current_user:
+        recent_interviews_query = recent_interviews_query.filter(models.Interview.user_id == current_user.id)
+    recent_interviews = recent_interviews_query.order_by(models.Interview.created_at.asc()).limit(5).all()
     
     filler_words_trend = []
     for index, interview in enumerate(recent_interviews):

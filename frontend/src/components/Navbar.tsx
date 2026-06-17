@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Sun, Moon, Sparkles } from "lucide-react";
 
 export default function Navbar() {
+  const router = useRouter();
   const [isDark, setIsDark] = useState<boolean>(false);
+  const [user, setUser] = useState<{ name: string } | null>(null);
 
   useEffect(() => {
     // Check local storage or system preferences on mount
@@ -18,7 +21,25 @@ export default function Navbar() {
       document.documentElement.classList.remove("dark");
       setIsDark(false);
     }
+
+    // Load active user session on mount
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.warn("Failed to parse user session", e);
+      }
+    }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    router.push("/login");
+    router.refresh();
+  };
 
   const toggleTheme = () => {
     const root = document.documentElement;
@@ -61,6 +82,24 @@ export default function Navbar() {
             Start Interview
           </a>
           
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="hidden sm:inline text-xs font-semibold text-slate-400 dark:text-slate-500">
+                Hi, {user.name}
+              </span>
+              <button 
+                onClick={handleLogout}
+                className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200 cursor-pointer"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <a href="/login" className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200">
+              Sign In
+            </a>
+          )}
+
           {/* Theme Switcher Button */}
           <button 
             onClick={toggleTheme}

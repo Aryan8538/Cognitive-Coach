@@ -68,9 +68,27 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
     async function loadData() {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/interviews/${interviewId}`);
+        const res = await fetch(`${API_BASE_URL}/api/interviews/${interviewId}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        
+        if (res.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          router.push("/login");
+          return;
+        }
+
         if (!res.ok) throw new Error("Failed to load interview report.");
         const data = await res.json();
         setInterview(data);
@@ -91,7 +109,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
       }
     }
     loadData();
-  }, [interviewId]);
+  }, [interviewId, router]);
 
   if (loading) {
     return (

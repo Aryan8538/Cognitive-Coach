@@ -10,6 +10,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     interviews = relationship("Interview", back_populates="user")
