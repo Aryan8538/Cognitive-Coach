@@ -451,4 +451,43 @@ code, pre, .font-mono {
   padding-right: 1.5rem !important;
 }
 
+/* Animated gradient text style */
+.animate-text-glow {
+  background: linear-gradient(
+    to right,
+    #8b5cf6,
+    #06b6d4,
+    #6366f1,
+    #8b5cf6
+  );
+  background-size: 200% auto;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  animation: shine 6s linear infinite;
+  display: inline-block;
+}
+
+.dark .animate-text-glow {
+  background: linear-gradient(
+    to right,
+    #ffffff,
+    #a1a1aa,
+    #e4e4e7,
+    #ffffff
+  );
+  background-size: 200% auto;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  animation: shine 6s linear infinite;
+  display: inline-block;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
 
