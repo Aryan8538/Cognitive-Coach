@@ -20,6 +20,8 @@ export default function AdvisorPage() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [apiKey, setApiKey] = useState("");
+  const [apiKeyInput, setApiKeyInput] = useState("");
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,6 +30,11 @@ export default function AdvisorPage() {
       router.push("/login");
       return;
     }
+    const savedKey = localStorage.getItem("gemini_api_key") || "";
+    setApiKey(savedKey);
+    if (savedKey) {
+      setApiKeyInput(savedKey);
+    }
   }, [router]);
 
   useEffect(() => {
@@ -35,6 +42,17 @@ export default function AdvisorPage() {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, loading]);
+
+  const handleSaveApiKey = () => {
+    localStorage.setItem("gemini_api_key", apiKeyInput.trim());
+    setApiKey(apiKeyInput.trim());
+  };
+
+  const handleClearApiKey = () => {
+    localStorage.removeItem("gemini_api_key");
+    setApiKey("");
+    setApiKeyInput("");
+  };
 
   const handleSend = async (text: string) => {
     if (!text.trim()) return;
@@ -45,9 +63,17 @@ export default function AdvisorPage() {
     setLoading(true);
 
     try {
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json"
+      };
+      const savedKey = localStorage.getItem("gemini_api_key") || "";
+      if (savedKey) {
+        headers["X-Gemini-Key"] = savedKey;
+      }
+
       const res = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           messages: [...messages.filter(m => !m.content.startsWith("👋")), userMessage]
         })
@@ -109,7 +135,7 @@ export default function AdvisorPage() {
       {/* Left Sidebar: Quick Actions Panel */}
       <div className="md:w-80 flex flex-col gap-6 flex-shrink-0 animate-fade-in-up">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold rounded-full bg-violet-50 text-violet-650 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-100 dark:border-violet-900/50 mb-3 shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold rounded-full bg-violet-50 text-violet-650 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-100 dark:border-violet-900/55 mb-3 shadow-sm">
             <Trophy size={11} className="text-amber-500" /> Placement Ready
           </div>
           <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white font-display">
@@ -118,6 +144,44 @@ export default function AdvisorPage() {
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
             Generate customized study roadmaps, review technical concepts, and receive structured career guidance.
           </p>
+        </div>
+
+        {/* Gemini API Key Configuration Panel */}
+        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-4 shadow-sm flex flex-col gap-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+              Gemini API Settings
+            </span>
+            <span className={`w-1.5 h-1.5 rounded-full ${apiKey ? "bg-emerald-500 animate-pulse-slow" : "bg-amber-500"}`} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <input
+              type="password"
+              placeholder={apiKey ? "••••••••••••••••••••••••" : "Enter GEMINI_API_KEY"}
+              value={apiKeyInput}
+              onChange={(e) => setApiKeyInput(e.target.value)}
+              className="w-full px-3 py-2 text-[10.5px] bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-slate-250 border border-slate-200/80 dark:border-zinc-850/80 rounded-xl focus:outline-none focus:border-violet-500/50 transition-colors"
+            />
+            <div className="flex gap-2.5 justify-end items-center">
+              {apiKey && (
+                <button
+                  onClick={handleClearApiKey}
+                  className="text-[9.5px] font-extrabold text-rose-500 dark:text-rose-450 hover:underline cursor-pointer"
+                >
+                  Reset
+                </button>
+              )}
+              <button
+                onClick={handleSaveApiKey}
+                className="text-[9.5px] font-extrabold text-violet-605 dark:text-violet-400 hover:underline cursor-pointer"
+              >
+                Save Key
+              </button>
+            </div>
+            <p className="text-[9px] text-slate-400 dark:text-slate-500 leading-normal mt-0.5">
+              Get a free API key from <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="text-violet-500 dark:text-violet-400 underline hover:text-violet-650">Google AI Studio</a> to enable live interactive counseling.
+            </p>
+          </div>
         </div>
 
         {/* Pre-built roadmaps list */}

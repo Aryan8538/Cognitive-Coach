@@ -1,7 +1,7 @@
 import os
 import requests
 import json
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Header
 from pydantic import BaseModel
 from typing import List, Optional
 from dotenv import load_dotenv
@@ -128,7 +128,7 @@ def generate_advisor_fallback(query: str) -> str:
         )
 
 @router.post("/chat", response_model=ChatResponse)
-def get_chat_response(req: ChatRequest):
+def get_chat_response(req: ChatRequest, x_gemini_key: Optional[str] = Header(None)):
     if not req.messages:
         raise HTTPException(status_code=400, detail="Message history cannot be empty")
         
@@ -136,7 +136,8 @@ def get_chat_response(req: ChatRequest):
     if not last_user_message:
         raise HTTPException(status_code=400, detail="No user message found in history")
         
-    if not GEMINI_API_KEY:
+    active_key = x_gemini_key or GEMINI_API_KEY
+    if not active_key:
         response_text = generate_advisor_fallback(last_user_message)
         return {"response": response_text}
         
@@ -175,7 +176,7 @@ def get_chat_response(req: ChatRequest):
             }
         }
         
-        res = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload, params={"key": GEMINI_API_KEY})
+        res = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload, params={"key": active_key})
         
         if res.status_code == 200:
             content = res.json()
