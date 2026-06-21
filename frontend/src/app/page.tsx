@@ -146,10 +146,17 @@ export default function Dashboard() {
             <line key={`grid-${idx}`} x1={p.x} y1={p.y} x2={p.x} y2={height - padding} stroke="rgba(139,92,246,0.06)" strokeDasharray="2" />
           ))}
 
-          <path d={areaD} fill="url(#chartGlow)" />
-          <path d={pathD} fill="none" stroke="#8b5cf6" strokeWidth="2.5" filter="url(#pathShadow)" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={areaD} fill="url(#chartGlow)" className="animate-chart-area" />
+          <path d={pathD} fill="none" stroke="#8b5cf6" strokeWidth="2.5" filter="url(#pathShadow)" strokeLinecap="round" strokeLinejoin="round" className="animate-chart-line" />
           {points.map((p, idx) => (
-            <g key={idx} className="group/dot cursor-pointer">
+            <g 
+              key={idx} 
+              className="group/dot cursor-pointer animate-chart-dot"
+              style={{
+                transformOrigin: `${p.x}px ${p.y}px`,
+                animationDelay: `${0.6 + idx * 0.15}s`
+              }}
+            >
               <circle cx={p.x} cy={p.y} r="4.5" fill="#ffffff" stroke="#8b5cf6" strokeWidth="2" className="transition-all duration-300 group-hover/dot:r-5.5 group-hover/dot:stroke-violet-400" />
               <text x={p.x} y={p.y - 12} fontSize="9" className="fill-slate-900 dark:fill-white font-extrabold" textAnchor="middle">
                 {p.count}

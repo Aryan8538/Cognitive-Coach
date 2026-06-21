@@ -187,7 +187,7 @@ export default function LoginPage() {
 
           {/* Form Input fields */}
           {activeTab === "signup" && (
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 animate-form-field">
               <label className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
                 Full Name
               </label>
@@ -245,7 +245,7 @@ export default function LoginPage() {
           </div>
 
           {activeTab === "signup" && (
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 animate-form-field">
               <label className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
                 Confirm Password
               </label>

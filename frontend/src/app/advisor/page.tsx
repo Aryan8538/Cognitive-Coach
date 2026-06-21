@@ -180,7 +180,7 @@ export default function AdvisorPage() {
             return (
               <div 
                 key={index}
-                className={`flex gap-3 max-w-[85%] ${isAssistant ? 'self-start items-start' : 'self-end items-end flex-row-reverse'}`}
+                className={`flex gap-3 max-w-[85%] animate-message-enter ${isAssistant ? 'self-start items-start' : 'self-end items-end flex-row-reverse'}`}
               >
                 {/* Profile Icon */}
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm ${

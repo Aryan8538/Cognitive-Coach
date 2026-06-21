@@ -8,8 +8,11 @@ export default function Navbar() {
   const router = useRouter();
   const [isDark, setIsDark] = useState<boolean>(false);
   const [user, setUser] = useState<{ name: string } | null>(null);
+  const [pathname, setPathname] = useState("");
 
   useEffect(() => {
+    setPathname(window.location.pathname);
+
     // Check local storage or system preferences on mount
     const savedTheme = localStorage.getItem("theme");
     const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -72,13 +75,36 @@ export default function Navbar() {
 
         {/* Navigation Actions */}
         <nav className="flex items-center gap-6 md:gap-8">
-          <a href="/" className="text-sm font-semibold text-slate-800 hover:text-violet-600 dark:text-slate-200 dark:hover:text-violet-400 transition-colors duration-200">
+          <a 
+            href="/" 
+            className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
+              pathname === "/" 
+                ? "text-violet-605 dark:text-violet-400" 
+                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
+            }`}
+          >
             Dashboard
+            {pathname === "/" && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
+            )}
           </a>
-          <a href="/advisor" className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200">
+          <a 
+            href="/advisor" 
+            className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
+              pathname === "/advisor" 
+                ? "text-violet-605 dark:text-violet-400" 
+                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
+            }`}
+          >
             Career Center
+            {pathname === "/advisor" && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
+            )}
           </a>
-          <a href="/#roles" className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200">
+          <a 
+            href="/#roles" 
+            className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200 py-1"
+          >
             Start Interview
           </a>
           
@@ -95,7 +121,7 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <a href="/login" className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200">
+            <a href="/login" className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200 py-1">
               Sign In
             </a>
           )}
