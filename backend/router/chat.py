@@ -28,7 +28,114 @@ def generate_advisor_fallback(query: str) -> str:
     """
     query_lower = query.lower()
     
-    if any(k in query_lower for k in ["full stack", "web", "react", "frontend", "node", "javascript"]):
+    # 1. Reversing a Binary Tree
+    if any(k in query_lower for k in ["reverse", "invert"]) and "tree" in query_lower:
+        return (
+            "### 🌳 Reversing a Binary Tree (Inverting a Binary Tree)\n\n"
+            "To invert/reverse a binary tree, you swap the left and right children for every node recursively.\n\n"
+            "#### **Recursive Python Approach (O(N) Time, O(H) Space)**\n"
+            "```python\n"
+            "class TreeNode:\n"
+            "    def __init__(self, val=0, left=None, right=None):\n"
+            "        self.val = val\n"
+            "        self.left = left\n"
+            "        self.right = right\n\n"
+            "def invertTree(root: TreeNode) -> TreeNode:\n"
+            "    if not root:\n"
+            "        return None\n"
+            "    \n"
+            "    # Swap the left and right subtrees\n"
+            "    root.left, root.right = invertTree(root.right), invertTree(root.left)\n"
+            "    return root\n"
+            "```\n\n"
+            "#### **Complexity Bounds**\n"
+            "- **Time Complexity:** `O(N)` since we visit each of the $N$ nodes exactly once.\n"
+            "- **Space Complexity:** `O(H)` where $H$ is the tree height, representing call stack frames.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+
+    # 2. Arrays vs Linked Lists
+    elif "array" in query_lower and any(k in query_lower for k in ["list", "linked list"]):
+        return (
+            "### 📊 Array vs Linked List Comparison\n\n"
+            "Both store linear collections, but differ in memory allocation and performance:\n\n"
+            "| Feature | Array | Linked List |\n"
+            "|---------|-------|-------------|\n"
+            "| **Memory** | Contiguous block | Non-contiguous (nodes + pointers) |\n"
+            "| **Size** | Fixed (on creation) | Dynamic (grows at runtime) |\n"
+            "| **Access** | `O(1)` (Random access) | `O(N)` (Sequential traversal) |\n"
+            "| **Insert/Delete** | `O(N)` (Requires shifting elements) | `O(1)` (If pointer is known) |\n"
+            "| **Overhead** | No extra metadata | Pointer storage for every element |\n\n"
+            "#### **SDE Tips:**\n"
+            "- Use **Arrays** for lookup-heavy operations.\n"
+            "- Use **Linked Lists** for write-heavy stacks, queues, or buffer pools.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+
+    # 3. Sliding Window
+    elif "sliding window" in query_lower or ("window" in query_lower and "array" in query_lower):
+        return (
+            "### 🎛️ Sliding Window Coding Pattern\n\n"
+            "The sliding window pattern optimizes nested loops in array/string sub-segments from `O(N^2)` to `O(N)` linear time.\n\n"
+            "#### **Variable Window Template (Python)**\n"
+            "```python\n"
+            "def sliding_window(arr):\n"
+            "    left = 0\n"
+            "    max_length = 0\n"
+            "    current_state = {}\n"
+            "    \n"
+            "    for right in range(len(arr)):\n"
+            "        # Expand the window: Add arr[right] to state\n"
+            "        # ...\n"
+            "        \n"
+            "        # Shrink the window: If state is invalid\n"
+            "        while state_invalid(current_state):\n"
+            "            # Remove arr[left] from state\n"
+            "            left += 1\n"
+            "            \n"
+            "        max_length = max(max_length, right - left + 1)\n"
+            "        \n"
+            "    return max_length\n"
+            "```\n\n"
+            "#### **Common LeetCode Applications**\n"
+            "- Longest Substring Without Repeating Characters\n"
+            "- Minimum Window Substring\n"
+            "- Maximum Sum Subarray of Size K\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+
+    # 4. Dynamic Programming
+    elif "dynamic programming" in query_lower or "dp" in query_lower:
+        return (
+            "### 🧠 Dynamic Programming (DP) Interview prep\n\n"
+            "Dynamic Programming optimizes plain recursion by solving overlapping subproblems exactly once and storing their results (caching).\n\n"
+            "#### **Two Approaches to Master:**\n"
+            "1. **Memoization (Top-Down):** Start from target problem, recurse down, caching results in a hash map/array.\n"
+            "2. **Tabulation (Bottom-Up):** Initialize a table (`dp` array), solve base cases, and iterate up.\n\n"
+            "#### **Essential DP Patterns:**\n"
+            "- **0/1 Knapsack:** Partition Equal Subset Sum, Target Sum.\n"
+            "- **Unbounded Knapsack:** Coin Change, Rod Cutting.\n"
+            "- **LCS (Longest Common Subsequence):** Edit Distance, Longest Palindromic Substring.\n"
+            "- **LIS (Longest Increasing Subsequence):** Russian Doll Envelopes.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+
+    # 5. OOP Pillars
+    elif any(k in query_lower for k in ["oop", "oops", "object oriented"]):
+        return (
+            "### 📦 Object-Oriented Programming (OOP) Pillars\n\n"
+            "Be ready to define and give code examples of these 4 primary pillars:\n\n"
+            "1. **Encapsulation:** Grouping variables and methods into a single class unit, and protecting access (via `private` or `protected` specifiers).\n"
+            "2. **Abstraction:** Hiding complex implementation details behind a clean, simple interface (e.g., using `interface` in Java or abstract base classes in Python).\n"
+            "3. **Inheritance:** Enabling a class to inherit properties/methods from a parent class, promoting DRY code reusability.\n"
+            "4. **Polymorphism:** Having one interface behave differently: \n"
+            "   - *Compile-Time:* Method overloading (different parameters).\n"
+            "   - *Run-Time:* Method overriding (parent function replaced by child subclass version).\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+
+    # Existing category roadmaps and fallbacks
+    elif any(k in query_lower for k in ["full stack", "web", "react", "frontend", "node", "javascript"]):
         return (
             "### 🌐 Full Stack Web Developer Placement Roadmap (3-Month Plan)\n\n"
             "Here is a targeted full-stack preparation guide for technical placements:\n\n"
@@ -60,7 +167,7 @@ def generate_advisor_fallback(query: str) -> str:
             "- **Normalizations:** 1NF, 2NF, 3NF, and BCNF tables. Know when to denormalize schemas for query speed.\n\n"
             "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
         )
-
+ 
     elif any(k in query_lower for k in ["system design", "architecture", "scale", "system"]):
         return (
             "### 🏗️ SDE System Design Preparation Framework\n\n"
@@ -76,7 +183,7 @@ def generate_advisor_fallback(query: str) -> str:
             "- **Availability:** Set up read replicas and database mirroring.\n\n"
             "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
         )
-
+ 
     elif any(k in query_lower for k in ["roadmap", "study", "prepare", "learn", "software", "sde", "coding", "dsa"]):
         return (
             "### 💻 Software Engineer (SDE) Preparation Roadmap\n\n"
@@ -119,12 +226,13 @@ def generate_advisor_fallback(query: str) -> str:
     else:
         return (
             "👋 **Hi! I am your CognitiveCoach AI Career Counselor.**\n\n"
-            "I can help you build structured study roadmaps, review coding patterns, refine resume projects, and prepare for placement interviews. Try asking me:\n\n"
-            "- *'Give me a Full Stack Web Developer study roadmap'* (Upgraded!)\n"
-            "- *'What topics should I prepare for SQL interview rounds?'*\n"
-            "- *'Provide a SDE System Design preparation guide.'*\n"
-            "- *'How can I structure resume bullet points?'*\n\n"
-            "Type a career or study-related query in the chat box to begin!"
+            "I can help you build structured study roadmaps, review coding patterns, compare structures, and prepare for placements. Try asking me:\n\n"
+            "- *'How do I reverse a binary tree?'* (New!)\n"
+            "- *'Compare arrays vs linked lists'* (New!)\n"
+            "- *'Explain sliding window pattern'* (New!)\n"
+            "- *'Explain OOP pillars'* (New!)\n"
+            "- *'Give me a Full Stack Web Developer study roadmap'*\n\n"
+            "Type a query in the chat box to begin!"
         )
 
 @router.post("/chat", response_model=ChatResponse)
