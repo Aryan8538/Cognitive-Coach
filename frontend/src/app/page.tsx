@@ -187,6 +187,10 @@ export default function Dashboard() {
 
       {/* Hero Welcome Header */}
       <section className="flex flex-col gap-4 mb-16 animate-fade-in-up">
+        <div className="flex items-center gap-2 self-start px-3 py-1 rounded-full border border-violet-500/20 bg-violet-500/5 text-violet-605 dark:text-violet-400 text-[10px] uppercase tracking-wider font-extrabold mb-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          System Status: Live Mocks Active
+        </div>
         
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-slate-900 dark:text-white font-display uppercase">
           <span className="animate-text-glow">Ace Your Next Interview</span>
