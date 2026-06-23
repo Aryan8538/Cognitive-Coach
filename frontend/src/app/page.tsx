@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Terminal, Users, BarChart3, HelpCircle, Activity, AlertTriangle, ArrowRight, Play, CheckCircle } from "lucide-react";
+import { Terminal, Users, BarChart3, HelpCircle, Activity, AlertTriangle, ArrowRight, Play, CheckCircle, Cpu } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
 interface StatsData {
@@ -79,6 +79,30 @@ export default function Dashboard() {
       desc: "Practice building full-stack REST APIs, state management, and database query optimization. Focuses on pagination, security protocols, and API latency.",
       gradient: "from-emerald-500 to-teal-500 dark:from-emerald-400 dark:to-teal-400",
       topics: ["REST APIs", "Pagination Logic"]
+    },
+    {
+      id: "AI Engineer",
+      title: "AI Engineer",
+      icon: <Cpu size={20} />,
+      desc: "Practice interviews focused on deep learning, neural network architectures, and LLMs. Questions cover transformer mechanisms, fine-tuning, and compute bounds.",
+      gradient: "from-purple-500 to-indigo-500 dark:from-purple-400 dark:to-indigo-400",
+      topics: ["Deep Learning", "LLM Fine-Tuning"]
+    },
+    {
+      id: "Data Scientist",
+      title: "Data Scientist",
+      icon: <BarChart3 size={20} />,
+      desc: "Practice statistical modeling, experimental design (A/B testing), and data pipelines. Questions test regression bounds, bias-variance, and SQL transforms.",
+      gradient: "from-rose-500 to-orange-500 dark:from-rose-400 dark:to-orange-400",
+      topics: ["A/B Testing", "Feature Engineering"]
+    },
+    {
+      id: "IoT Engineer",
+      title: "IoT Engineer",
+      icon: <Activity size={20} />,
+      desc: "Prepare for hardware-software integration, low-power edge computing, and protocols. Tests cover MQTT routing, sensor polling rates, and firmware design.",
+      gradient: "from-cyan-500 to-emerald-500 dark:from-cyan-400 dark:to-emerald-400",
+      topics: ["Firmware Design", "Edge Computing"]
     },
     {
       id: "Behavioral",
