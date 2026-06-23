@@ -109,13 +109,18 @@ export default function Navbar() {
           </a>
           
           {user ? (
-            <div className="flex items-center gap-4">
-              <span className="hidden sm:inline text-xs font-semibold text-slate-400 dark:text-slate-500">
-                Hi, {user.name}
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-500 text-white font-black text-[10px] flex items-center justify-center shadow-sm select-none uppercase border border-white/10">
+                  {user.name.slice(0, 2)}
+                </div>
+                <span className="hidden sm:inline text-xs font-semibold text-slate-700 dark:text-slate-350">
+                  {user.name}
+                </span>
+              </div>
               <button 
                 onClick={handleLogout}
-                className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200 cursor-pointer"
+                className="text-xs font-bold text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-450 transition-colors duration-200 cursor-pointer"
               >
                 Sign Out
               </button>
