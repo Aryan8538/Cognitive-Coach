@@ -52,7 +52,7 @@ export default function Dashboard() {
       title: "Software Engineer",
       icon: <Terminal size={20} />,
       desc: "Practice system architectural design and coding logic explanation. Standard questions cover scalability, cycle detection, and key/value caching.",
-      gradient: "from-indigo-500 to-blue-500 dark:from-indigo-400 dark:to-blue-400",
+      gradient: "from-[#6366f1] to-blue-500 dark:from-[#818cf8] dark:to-blue-400",
       topics: ["System Design", "Coding Logic"]
     },
     {
@@ -76,7 +76,7 @@ export default function Dashboard() {
       title: "AI Engineer",
       icon: <Cpu size={20} />,
       desc: "Practice interviews focused on deep learning, neural network architectures, and LLMs. Questions cover transformer mechanisms, fine-tuning, and compute bounds.",
-      gradient: "from-purple-500 to-indigo-500 dark:from-purple-400 dark:to-indigo-400",
+      gradient: "from-purple-500 to-[#6366f1] dark:from-purple-400 dark:to-[#818cf8]",
       topics: ["Deep Learning", "LLM Fine-Tuning"]
     },
     {

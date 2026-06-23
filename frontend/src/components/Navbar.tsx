@@ -64,7 +64,7 @@ export default function Navbar() {
         {/* Logo Brand */}
         <a href="/" className="flex items-center gap-2.5 group transition-transform duration-300 active:scale-95">
           {/* Glowing Icon */}
-          <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-500 shadow-md group-hover:shadow-violet-500/20 group-hover:scale-105 transition-all duration-300">
+          <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-[#7c3aed] to-[#6366f1] shadow-md group-hover:shadow-[#7c3aed]/20 group-hover:scale-105 transition-all duration-300">
             <Sparkles size={16} className="text-white" />
           </div>
           
@@ -109,7 +109,7 @@ export default function Navbar() {
           </a>
           
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-500 text-white font-black text-[10px] flex items-center justify-center shadow-sm select-none uppercase border border-white/10">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#7c3aed] to-[#6366f1] text-white font-black text-[10px] flex items-center justify-center shadow-sm select-none uppercase border border-white/10">
               GS
             </div>
             <span className="hidden sm:inline text-xs font-semibold text-slate-700 dark:text-slate-350">

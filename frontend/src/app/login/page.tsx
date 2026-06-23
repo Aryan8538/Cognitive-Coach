@@ -121,7 +121,7 @@ export default function LoginPage() {
       
       {/* Brand Header */}
       <div className="flex flex-col items-center gap-3 mb-10 text-center">
-        <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 shadow-md">
+        <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-[#7c3aed] to-[#6366f1] shadow-md">
           <Sparkles size={22} className="text-white" />
         </div>
         <h2 className="text-2xl font-black font-display tracking-tight text-slate-900 dark:text-white uppercase">
