@@ -68,26 +68,14 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     async function loadData() {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/interviews/${interviewId}`, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        });
-        
-        if (res.status === 401) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          router.push("/login");
-          return;
+        const token = localStorage.getItem("token") || "";
+        const headers: Record<string, string> = {};
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
         }
+        const res = await fetch(`${API_BASE_URL}/api/interviews/${interviewId}`, { headers });
 
         if (!res.ok) throw new Error("Failed to load interview report.");
         const data = await res.json();

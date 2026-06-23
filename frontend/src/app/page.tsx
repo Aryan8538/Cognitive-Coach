@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Terminal, Users, BarChart3, HelpCircle, Activity, AlertTriangle, ArrowRight, Play, CheckCircle, Cpu } from "lucide-react";
+import { Terminal, Users, BarChart3, HelpCircle, Activity, AlertTriangle, ArrowRight, Play, CheckCircle, Cpu, Cloud, Shield, Smartphone } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
 interface StatsData {
@@ -21,27 +21,18 @@ export default function Dashboard() {
   const [backendOffline, setBackendOffline] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     async function fetchStats() {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        });
+        const token = localStorage.getItem("token") || "";
+        const headers: Record<string, string> = {};
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
+        const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`, { headers });
         if (res.ok) {
           const data = await res.json();
           setStats(data);
           setBackendOffline(false);
-        } else if (res.status === 401) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          router.push("/login");
         } else {
           setBackendOffline(true);
         }
@@ -103,6 +94,30 @@ export default function Dashboard() {
       desc: "Prepare for hardware-software integration, low-power edge computing, and protocols. Tests cover MQTT routing, sensor polling rates, and firmware design.",
       gradient: "from-cyan-500 to-emerald-500 dark:from-cyan-400 dark:to-emerald-400",
       topics: ["Firmware Design", "Edge Computing"]
+    },
+    {
+      id: "DevOps Engineer",
+      title: "DevOps Engineer",
+      icon: <Cloud size={20} />,
+      desc: "Master continuous integration, infrastructure as code (IaC), container orchestration, and cloud deployment pipelines. Practice Docker, Kubernetes, and Terraform.",
+      gradient: "from-blue-500 to-cyan-500 dark:from-blue-400 dark:to-cyan-400",
+      topics: ["Kubernetes", "CI/CD Pipelines"]
+    },
+    {
+      id: "Cybersecurity Engineer",
+      title: "Cybersecurity Engineer",
+      icon: <Shield size={20} />,
+      desc: "Evaluate network security protocol design, penetration testing methodology, threat modeling, and encryption standards. Practice cross-site security.",
+      gradient: "from-red-500 to-rose-500 dark:from-red-400 dark:to-rose-400",
+      topics: ["Threat Modeling", "Penetration Testing"]
+    },
+    {
+      id: "Mobile Engineer",
+      title: "Mobile Engineer",
+      icon: <Smartphone size={20} />,
+      desc: "Optimize mobile application architecture, local database caching, memory management, and cross-platform layouts (iOS/Android). Focus on React Native and Swift/Kotlin.",
+      gradient: "from-amber-500 to-orange-500 dark:from-amber-400 dark:to-orange-400",
+      topics: ["App Lifecycle", "State Management"]
     },
     {
       id: "Behavioral",

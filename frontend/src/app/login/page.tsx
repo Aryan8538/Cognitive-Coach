@@ -22,12 +22,9 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // If already logged in, redirect to dashboard
+  // Authentication is removed, redirect to dashboard immediately
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      router.push("/");
-    }
+    router.push("/");
   }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {

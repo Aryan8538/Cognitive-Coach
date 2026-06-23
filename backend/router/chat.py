@@ -223,6 +223,120 @@ def generate_advisor_fallback(query: str) -> str:
             "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
         )
         
+    elif any(k in query_lower for k in ["ai engineer", "machine learning", "deep learning", "transformer", "llm"]):
+        return (
+            "### 🤖 AI Engineer Placement Roadmap (3-Month Plan)\n\n"
+            "Here is a targeted AI & Machine Learning preparation guide:\n\n"
+            "#### **Month 1: Mathematics & Core ML Models**\n"
+            "- **Concepts:** Linear Algebra, Calculus, Probability, and Statistics.\n"
+            "- **Algorithms:** Linear/Logistic Regression, Decision Trees, Random Forests, SVMs, and K-Means.\n"
+            "- **Interview Questions:** Explain bias-variance tradeoff, gradient descent mechanics, and L1 vs L2 regularization.\n\n"
+            "#### **Month 2: Deep Learning & Neural Architectures**\n"
+            "- **Concepts:** Feedforward networks, Backpropagation, CNNs for vision, and RNNs/LSTMs for sequences.\n"
+            "- **Optimization:** Adam vs SGD, Dropout, Batch Normalization, and activation functions (ReLU, GELU).\n"
+            "- **Hands-on:** PyTorch/TensorFlow custom training loops.\n\n"
+            "#### **Month 3: Transformers & LLMs**\n"
+            "- **Concepts:** Self-attention mechanism, Query-Key-Value matrices, and Positional Encodings.\n"
+            "- **LLMs:** Parameter-Efficient Fine-Tuning (LoRA, QLoRA) and Retrieval-Augmented Generation (RAG).\n"
+            "- **Mocks:** Design vector database search architectures and explain compute bounds.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+        
+    elif any(k in query_lower for k in ["iot", "internet of things", "firmware", "sensor", "embedded"]):
+        return (
+            "### 🔌 IoT Engineer Placement Roadmap (3-Month Plan)\n\n"
+            "Here is a targeted IoT & Embedded Systems preparation guide:\n\n"
+            "#### **Month 1: Microcontroller Architectures & Electronics**\n"
+            "- **Core:** GPIO, interrupts, timers, ADC/DAC conversions, and microcontroller architectures (ARM Cortex, ESP32).\n"
+            "- **Protocols:** I2C, SPI, UART serial communication protocols.\n"
+            "- **Tools:** Oscilloscopes, logic analyzers, and breadboard prototyping.\n\n"
+            "#### **Month 2: Low-Power Firmware & Real-Time OS**\n"
+            "- **RTOS:** Tasks, queues, semaphores, mutexes, and scheduling algorithms in FreeRTOS.\n"
+            "- **Low-Power:** Deep sleep configurations, wake-up sources, and peripheral power gating.\n"
+            "- **Interview Questions:** Discuss memory leak prevention in embedded C and interrupt handler execution boundaries.\n\n"
+            "#### **Month 3: Network Protocols & Cloud Integration**\n"
+            "- **Connectivity:** Wi-Fi, Bluetooth Low Energy (BLE), Zigbee, LoRaWAN.\n"
+            "- **Protocols:** MQTT, CoAP, HTTP, and WebSockets. Broker architectures (Mosquitto).\n"
+            "- **IoT Cloud:** AWS IoT Core, Azure IoT Hub, device provisioning, and security (certificates, TLS).\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+        
+    elif any(k in query_lower for k in ["data science", "data scientist", "stats", "a/b test"]):
+        return (
+            "### 📊 Data Scientist Placement Roadmap (3-Month Plan)\n\n"
+            "Here is a targeted Data Science preparation guide:\n\n"
+            "#### **Month 1: SQL & Data Wrangling**\n"
+            "- **SQL:** Window functions (`DENSE_RANK`), complex joins, subqueries, and database performance tuning.\n"
+            "- **Wrangling:** Pandas, NumPy, data cleaning, handling missing values, and outlier detection.\n"
+            "- **Interview Questions:** Write optimized window queries and explain database query plans.\n\n"
+            "#### **Month 2: Applied Statistics & A/B Testing**\n"
+            "- **Stats:** Hypothesis testing, p-values, Central Limit Theorem, confidence intervals, and probability distributions.\n"
+            "- **A/B Testing:** Minimum detectable effect, sample size calculation, statistical power, Type I/II errors, and split testing.\n"
+            "- **Interview Questions:** How do you design an A/B test for a new landing page and handle network effects?\n\n"
+            "#### **Month 3: Predictive Modeling & ML Pipelines**\n"
+            "- **Modeling:** Feature engineering, cross-validation, hyperparameter tuning (GridSearch/Optuna).\n"
+            "- **Evaluation:** ROC-AUC, Precision-Recall curves, F1-score, and confusion matrix.\n"
+            "- **Mocks:** Walk through complete model deployment pipelines and monitor feature drift.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+        
+    elif any(k in query_lower for k in ["devops", "kubernetes", "terraform", "docker", "pipeline", "ci/cd"]):
+        return (
+            "### ♾️ DevOps & Cloud Engineer Placement Roadmap (3-Month Plan)\n\n"
+            "Here is a targeted DevOps & Cloud Systems preparation guide:\n\n"
+            "#### **Month 1: Linux Administration & Containerization**\n"
+            "- **OS:** Linux system administration, shell scripting (Bash), networking, process management, and permissions.\n"
+            "- **Docker:** Building optimized multi-stage Dockerfiles, managing volumes, networks, and Docker Compose orchestration.\n"
+            "- **Interview Questions:** Explain container namespaces, cgroups, and how to reduce image size.\n\n"
+            "#### **Month 2: Orchestration & Infrastructure as Code (IaC)**\n"
+            "- **Kubernetes:** Control plane components, worker nodes, Pods, Deployments, Services, Ingress, and ConfigMaps.\n"
+            "- **Terraform:** Declarative infrastructure config, state management, modules, and multi-provider deployments.\n"
+            "- **Interview Questions:** Walk through a Kubernetes Pod scheduling cycle and explain state-lock in Terraform.\n\n"
+            "#### **Month 3: CI/CD, GitOps & Observability**\n"
+            "- **CI/CD:** GitHub Actions, GitLab CI, or Jenkins pipelines. Automating tests, builds, and artifact registries.\n"
+            "- **GitOps:** ArgoCD or FluxCD declarative state synchronization.\n"
+            "- **Observability:** Prometheus, Grafana, ELK stack (Elasticsearch, Logstash, Kibana) metrics/logs monitoring.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+        
+    elif any(k in query_lower for k in ["security", "cybersecurity", "encryption", "xss", "csrf", "sqli"]):
+        return (
+            "### 🛡️ Cybersecurity Engineer Placement Roadmap (3-Month Plan)\n\n"
+            "Here is a targeted Security Engineering preparation guide:\n\n"
+            "#### **Month 1: Cryptography & Network Security**\n"
+            "- **Crypto:** Symmetric vs asymmetric encryption, hashing algorithms (SHA-256), digital signatures, and certificates.\n"
+            "- **Networks:** OSI model, TCP/IP handshake, DNSSEC, VPNs, firewalls, and TLS/SSL handshake protocol details.\n"
+            "- **Interview Questions:** Describe the step-by-step handshake procedure of TLS 1.3.\n\n"
+            "#### **Month 2: Application Security & OWASP Top 10**\n"
+            "- **OWASP:** SQL Injection (SQLi), Cross-Site Scripting (XSS), CSRF, Broken Authentication, and SSRF.\n"
+            "- **Defenses:** Parameterized queries, Input Sanitization, Content Security Policy (CSP), and CORS configs.\n"
+            "- **Interview Questions:** How do you defend against Cross-Site Request Forgery (CSRF) in modern APIs?\n\n"
+            "#### **Month 3: Threat Modeling & Security Operations**\n"
+            "- **Threat Modeling:** STRIDE methodology, security risk assessments, and vulnerability scanning.\n"
+            "- **Operations:** IAM principles (Least Privilege), SOC processes, SIEM tools, and penetration testing methodologies.\n"
+            "- **Mocks:** Walk through incident response scenarios and security audits for cloud deployments.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+        
+    elif any(k in query_lower for k in ["mobile", "ios", "android", "swift", "kotlin", "react native", "flutter"]):
+        return (
+            "### 📱 Mobile Engineer Placement Roadmap (3-Month Plan)\n\n"
+            "Here is a targeted iOS & Android development preparation guide:\n\n"
+            "#### **Month 1: Language Mastery & UI Frameworks**\n"
+            "- **Native:** Swift (iOS) or Kotlin (Android). Standard control flow, memory model (ARC vs JVM GC), and OOP.\n"
+            "- **UI:** SwiftUI/UIKit (iOS) or Jetpack Compose/XML (Android) declarative layouts.\n"
+            "- **Interview Questions:** What is ARC in Swift, and how do you resolve retain cycles/strong reference cycles?\n\n"
+            "#### **Month 2: App Architecture & State Management**\n"
+            "- **Architecture:** MVVM, VIPER, or Clean Architecture. Dependency injection and repository patterns.\n"
+            "- **State:** Lifecycle hooks, reactive frameworks (Combine/Flow), and local database storage (Room/CoreData/SQLite).\n"
+            "- **Network:** REST/GraphQL consumption, handling offline caching, image loading optimization.\n\n"
+            "#### **Month 3: Performance, Testing & Publishing**\n"
+            "- **Performance:** Threading (GCD/Coroutines), memory profiling, frame rate debugging, and bundle size reduction.\n"
+            "- **Testing:** Unit tests, UI testing, and CI/CD pipelines for mobile apps (Fastlane).\n"
+            "- **Mocks:** Design a real-time chat interface with offline-first support and explain network queueing.\n\n"
+            "*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+        )
+        
     else:
         return (
             "👋 **Hi! I am your CognitiveCoach AI Career Counselor.**\n\n"

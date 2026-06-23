@@ -25,11 +25,6 @@ export default function AdvisorPage() {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
     const savedKey = localStorage.getItem("gemini_api_key") || "";
     setApiKey(savedKey);
     if (savedKey) {

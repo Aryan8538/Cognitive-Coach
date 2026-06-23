@@ -35,29 +35,20 @@ function InterviewRoomContent() {
   const [codeLanguage, setCodeLanguage] = useState<string>("python");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     async function initializeSession() {
       try {
+        const token = localStorage.getItem("token") || "";
+        const headers: Record<string, string> = { 
+          "Content-Type": "application/json"
+        };
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
         const sessionRes = await fetch(`${API_BASE_URL}/api/interviews`, {
           method: "POST",
-          headers: { 
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
+          headers,
           body: JSON.stringify({ role: role })
         });
-        
-        if (sessionRes.status === 401) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          router.push("/login");
-          return;
-        }
         
         if (!sessionRes.ok) throw new Error("Failed to create interview session on backend.");
         const sessionData = await sessionRes.json();
