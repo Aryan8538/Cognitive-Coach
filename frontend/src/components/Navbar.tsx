@@ -102,6 +102,19 @@ export default function Navbar() {
             )}
           </a>
           <a 
+            href="/resume-checker" 
+            className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
+              pathname === "/resume-checker" 
+                ? "text-violet-605 dark:text-violet-400" 
+                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
+            }`}
+          >
+            Resume Checker
+            {pathname === "/resume-checker" && (
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
+            )}
+          </a>
+          <a 
             href="/#roles" 
             className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200 py-1"
           >

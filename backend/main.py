@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from database import engine, Base, SessionLocal
 import models
-from router import interviews, analyze, chat, auth
+from router import interviews, analyze, chat, auth, resume
 
 # Initialize database tables
 Base.metadata.create_all(bind=engine)
@@ -201,6 +201,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(interviews.router, prefix="/api", tags=["interviews"])
 app.include_router(analyze.router, prefix="/api", tags=["analyze"])
 app.include_router(chat.router, prefix="/api", tags=["chat"])
+app.include_router(resume.router, prefix="/api", tags=["resume"])
 
 @app.get("/")
 def read_root():
