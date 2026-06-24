@@ -133,6 +133,65 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
   const activeQuestion = questions[activeResponse?.question_id] || { text: "Loading question text...", topic: "Technical" };
   const metrics = activeResponse?.metrics;
 
+  // Calculate overall performance scorecard metrics
+  const totalResponses = interview ? interview.responses.length : 0;
+  let overallScore = 0;
+  let totalWpm = 0;
+  let totalFillers = 0;
+
+  if (interview && totalResponses > 0) {
+    let combinedScoreSum = 0;
+    interview.responses.forEach((resp) => {
+      if (resp.metrics) {
+        const questionScore = (resp.metrics.clarity_score + resp.metrics.relevance_score + resp.metrics.grammar_score) / 3;
+        combinedScoreSum += questionScore;
+        totalWpm += resp.metrics.words_per_minute;
+        totalFillers += resp.metrics.filler_words_count;
+      }
+    });
+    overallScore = Math.round(combinedScoreSum / totalResponses);
+  }
+
+  const avgWpm = Math.round(totalWpm / (totalResponses || 1));
+  const avgFillers = Math.round(totalFillers / (totalResponses || 1));
+
+  // Calculate Hiring Probability (chance) based on overall score
+  let hiringProbability = 0;
+  if (overallScore > 0) {
+    hiringProbability = Math.min(Math.max(Math.round(overallScore * 1.15 - 10), 5), 99);
+  }
+
+  // Get hiring verdict text and styles
+  const getHiringVerdict = (score: number) => {
+    if (score >= 85) {
+      return {
+        verdict: "Strong Hire (Highly Recommended)",
+        description: "Excellent performance! You demonstrated exceptional communication clarity, strong technical relevance, and clear grammatical flow. Your responses are highly structured and aligned with industry SDE expectations.",
+        badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400",
+        pillColor: "bg-emerald-500",
+        chanceText: "Very High hiring probability"
+      };
+    } else if (score >= 70) {
+      return {
+        verdict: "Lean Hire (Recommended)",
+        description: "Good job! You communicated fluently and addressed the core question topics. To increase your hiring chances further, focus on reducing filler words, structuring your answers using the STAR method, and keeping pacing stable.",
+        badgeColor: "bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-450",
+        pillColor: "bg-amber-500",
+        chanceText: "Moderate to high hiring probability"
+      };
+    } else {
+      return {
+        verdict: "No Hire (Needs Practice)",
+        description: "Your responses need structure and technical details. Try to practice more mock sessions, focus on including key technical terms, and practice pausing naturally instead of using filler words like 'um' or 'like'.",
+        badgeColor: "bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-455",
+        pillColor: "bg-rose-500",
+        chanceText: "Low hiring probability"
+      };
+    }
+  };
+
+  const verdictInfo = getHiringVerdict(overallScore);
+
   const renderHighlightedTranscript = (transcript: string) => {
     if (!transcript) return <em className="text-slate-455">No transcript available.</em>;
     const words = transcript.split(/\s+/);
@@ -231,6 +290,94 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
           </div>
         </div>
       </div>
+
+      {/* Overall Performance Summary Scorecard */}
+      <section className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm hover:border-violet-500/20 transition-all duration-300 mb-8 flex flex-col md:flex-row gap-8 justify-between items-stretch animate-fade-in-up">
+        {/* Left: Overall Score Circle Gauge */}
+        <div className="flex flex-row md:flex-col items-center justify-center gap-6 border-slate-100 dark:border-zinc-850/50 pr-0 md:pr-8 md:border-r border-b md:border-b-0 pb-6 md:pb-0">
+          <div className="relative flex items-center justify-center w-24 h-24 hover:scale-105 transition-transform duration-300">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 96 96">
+              <circle
+                className="text-slate-100 dark:text-zinc-800/60"
+                strokeWidth="7"
+                stroke="currentColor"
+                fill="transparent"
+                r="38"
+                cx="48"
+                cy="48"
+              />
+              <circle
+                className={`${getScoreStrokeColor(overallScore)} progress-ring-circle`}
+                strokeWidth="7"
+                strokeDasharray={`${2 * Math.PI * 38} ${2 * Math.PI * 38}`}
+                style={{ strokeDashoffset: (2 * Math.PI * 38) - (overallScore / 100) * (2 * Math.PI * 38) }}
+                strokeLinecap="round"
+                fill="transparent"
+                r="38"
+                cx="48"
+                cy="48"
+              />
+            </svg>
+            <div className="absolute flex flex-col items-center">
+              <span className={`text-xl font-black font-outfit ${getScoreColorClass(overallScore)}`}>
+                {overallScore}%
+              </span>
+              <span className="text-[8px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
+                OVERALL
+              </span>
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-start md:items-center text-left md:text-center">
+            <div className="text-xl font-black text-slate-900 dark:text-white font-outfit animate-pulse-slow">
+              {hiringProbability}%
+            </div>
+            <div className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
+              Hiring Chance
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Recommendation Details */}
+        <div className="flex-grow flex flex-col justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2.5 mb-3 flex-wrap">
+              <span className={`px-3 py-1 rounded-full text-xs font-bold border ${verdictInfo.badgeColor}`}>
+                {verdictInfo.verdict}
+              </span>
+              <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest bg-slate-100 dark:bg-zinc-800/80 px-2.5 py-1 rounded-lg border border-slate-200/20">
+                {interview.responses.length} {interview.responses.length === 1 ? 'Question' : 'Questions'} Answered
+              </span>
+            </div>
+            
+            <p className="text-sm font-bold text-slate-800 dark:text-slate-100 font-display">
+              Hiring Probability Evaluation:
+            </p>
+            <p className="text-xs text-slate-555 dark:text-slate-400 leading-relaxed font-medium mt-1">
+              {verdictInfo.description}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2 border-t border-slate-100 dark:border-zinc-850/40 pt-4">
+            <div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Avg Pacing</div>
+              <div className="text-sm font-extrabold text-slate-800 dark:text-slate-200 mt-0.5 font-outfit">{avgWpm} WPM</div>
+            </div>
+            <div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Avg Fillers</div>
+              <div className="text-sm font-extrabold text-slate-800 dark:text-slate-200 mt-0.5 font-outfit">{avgFillers} words</div>
+            </div>
+            <div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Interview Status</div>
+              <div className="text-sm font-extrabold text-slate-800 dark:text-slate-200 mt-0.5 font-outfit">{interview.status}</div>
+            </div>
+            <div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Interview Role</div>
+              <div className="text-sm font-extrabold text-slate-800 dark:text-slate-200 mt-0.5 font-outfit truncate max-w-[120px]">{interview.role}</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Grid panels */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
