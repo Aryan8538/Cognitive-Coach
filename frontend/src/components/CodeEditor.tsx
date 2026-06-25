@@ -18,7 +18,7 @@ const LANGUAGES = [
   { value: "java", label: "Java 17" }
 ];
 
-const TEMPLATES: Record<string, string> = {
+export const TEMPLATES: Record<string, string> = {
   python: 'def solve(nums, target):\n    # Write your algorithmic solution here\n    # Example: Complement lookup in hash map\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []\n',
   javascript: 'function solve(nums, target) {\n    // Write your algorithmic solution here\n    const seen = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const complement = target - nums[i];\n        if (seen.has(complement)) {\n            return [seen.get(complement), i];\n        }\n        seen.set(nums[i], i);\n    }\n    return [];\n}\n',
   cpp: '#include <vector>\n#include <unordered_map>\n\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> solve(vector<int>& nums, int target) {\n        unordered_map<int, int> seen;\n        for (int i = 0; i < nums.size(); ++i) {\n            int complement = target - nums[i];\n            if (seen.count(complement)) {\n                return {seen[complement], i};\n            }\n            seen[nums[i]] = i;\n        }\n        return {};\n    }\n};\n',

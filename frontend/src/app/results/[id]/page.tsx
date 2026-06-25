@@ -54,6 +54,15 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
 
   const [editorTheme, setEditorTheme] = useState("vs-dark");
 
+  const formatMarkdown = (text: string) => {
+    if (!text) return "";
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>")
+      .replace(/`(.*?)`/g, "<code class='bg-slate-105 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded text-[10.5px] font-semibold text-violet-650 dark:text-violet-400'>$1</code>")
+      .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-violet-505 dark:text-violet-300 hover:underline font-semibold'>$1</a>");
+  };
+
   useEffect(() => {
     const isDark = document.documentElement.classList.contains("dark");
     setEditorTheme(isDark ? "vs-dark" : "light");
@@ -553,13 +562,13 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
                   if (match) {
                     return (
                       <div key={i} className="pl-3 border-l-2 border-violet-500/70">
-                        <strong className="text-slate-900 dark:text-white block text-xs md:text-sm font-bold mb-1 font-display">{match[1]}</strong>
-                        <p className="font-medium">{match[2].trim()}</p>
+                        <strong className="text-slate-900 dark:text-white block text-xs md:text-sm font-bold mb-1 font-display" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[1]) }} />
+                        <p className="font-medium" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[2].trim()) }} />
                       </div>
                     );
                   }
                 }
-                return <p key={i} className="font-medium pl-3 border-l-2 border-transparent">{para}</p>;
+                return <p key={i} className="font-medium pl-3 border-l-2 border-transparent" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
               })}
             </div>
           </div>
@@ -573,9 +582,9 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
             <div className="text-xs md:text-sm leading-relaxed text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-zinc-900/20 p-5 rounded-xl border border-violet-500/10 dark:border-violet-900/15">
               {metrics?.suggested_answer.split('\n\n').map((para, i) => {
                 if (para.startsWith('**') || para.match(/^\d+\./)) {
-                  return <p key={i} className="mb-4 font-bold text-slate-800 dark:text-slate-200 font-display">{para}</p>;
+                  return <p key={i} className="mb-4 font-bold text-slate-800 dark:text-slate-200 font-display" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
                 }
-                return <p key={i} className="mb-3 font-medium">{para}</p>;
+                return <p key={i} className="mb-3 font-medium" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
               })}
             </div>
           </div>

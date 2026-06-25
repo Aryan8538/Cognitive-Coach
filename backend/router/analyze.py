@@ -15,7 +15,7 @@ UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/interviews/{interview_id}/questions/{question_id}/respond", response_model=schemas.ResponseResponse)
-async def respond_to_question(
+def respond_to_question(
     interview_id: str,
     question_id: int,
     duration: float = Form(...),

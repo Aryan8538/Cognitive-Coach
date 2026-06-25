@@ -76,7 +76,8 @@ def get_dashboard_stats(
     recent_interviews_query = db.query(models.Interview).filter(models.Interview.status == "Completed")
     if current_user:
         recent_interviews_query = recent_interviews_query.filter(models.Interview.user_id == current_user.id)
-    recent_interviews = recent_interviews_query.order_by(models.Interview.created_at.asc()).limit(5).all()
+    recent_interviews = recent_interviews_query.order_by(models.Interview.created_at.desc()).limit(5).all()
+    recent_interviews.reverse()
     
     filler_words_trend = []
     for index, interview in enumerate(recent_interviews):

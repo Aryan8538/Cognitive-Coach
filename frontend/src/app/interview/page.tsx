@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, HelpCircle, Check, Award, AlertCircle } from "lucide-react";
 import VideoRecorder from "@/components/VideoRecorder";
-import CodeEditor from "@/components/CodeEditor";
+import CodeEditor, { TEMPLATES } from "@/components/CodeEditor";
 import { API_BASE_URL } from "@/utils/config";
 
 interface Question {
@@ -72,10 +72,12 @@ function InterviewRoomContent() {
     initializeSession();
   }, [role, router]);
 
-  // Reset editor text when question changes
+  // Reset editor text when question changes or on initialization
   useEffect(() => {
-    setCode("");
-  }, [currentIdx]);
+    if (questions.length > 0) {
+      setCode(TEMPLATES[codeLanguage] || "");
+    }
+  }, [currentIdx, codeLanguage, questions.length]);
 
   const handleRecordingComplete = async (videoBlob: Blob, durationSeconds: number) => {
     if (!interviewId || questions.length === 0) return;

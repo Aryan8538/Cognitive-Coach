@@ -256,36 +256,76 @@ export default function AdvisorPage() {
                 }`}>
                   {msg.content.split("\n\n").map((para, pIdx) => {
                     if (para.startsWith("###")) {
-                      return <h4 key={pIdx} className="font-extrabold font-display text-slate-900 dark:text-white mt-4 mb-2 text-sm border-b border-slate-100 dark:border-zinc-850/50 pb-1">{para.replace("###", "").trim()}</h4>;
-                    }
-                    if (para.startsWith("####")) {
-                      return <h5 key={pIdx} className="font-bold font-display text-slate-800 dark:text-slate-350 mt-3 mb-1.5 text-xs">{para.replace("####", "").trim()}</h5>;
-                    }
-                    
-                    // Render lists
-                    if (para.includes("\n-") || para.includes("\n*")) {
-                      const items = para.split(/\n[-*]\s+/);
-                      const headerText = items[0];
                       return (
-                        <div key={pIdx} className="mb-3">
-                          {headerText && <p className="mb-1.5 font-bold text-slate-900 dark:text-white">{headerText}</p>}
-                          <ul className="list-disc pl-4 flex flex-col gap-1.5">
-                            {items.slice(1).map((item, iIdx) => (
-                              <li key={iIdx} dangerouslySetInnerHTML={{
-                                __html: item.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                              }} />
-                            ))}
-                          </ul>
-                        </div>
+                        <h4 key={pIdx} className="font-extrabold font-display text-slate-900 dark:text-white mt-4 mb-2 text-sm border-b border-slate-100 dark:border-zinc-850/50 pb-1">
+                          {para.replace("###", "").trim()}
+                        </h4>
                       );
                     }
-                    
-                    return <p key={pIdx} className="mb-3 last:mb-0" dangerouslySetInnerHTML={{ 
-                      __html: para
+                    if (para.startsWith("####")) {
+                      return (
+                        <h5 key={pIdx} className="font-bold font-display text-slate-800 dark:text-slate-350 mt-3 mb-1.5 text-xs">
+                          {para.replace("####", "").trim()}
+                        </h5>
+                      );
+                    }
+
+                    const formatText = (text: string) => {
+                      return text
                         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
                         .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                        .replace(/`(.*?)`/g, "<code class='bg-slate-100 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded text-[10.5px] font-semibold text-violet-650 dark:text-violet-400'>$1</code>")
-                    }} />;
+                        .replace(/`(.*?)`/g, "<code class='bg-slate-105 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded text-[10.5px] font-semibold text-violet-650 dark:text-violet-400'>$1</code>")
+                        .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-violet-405 dark:text-violet-300 hover:underline font-semibold'>$1</a>");
+                    };
+
+                    const lines = para.split("\n");
+                    const elements: React.ReactNode[] = [];
+                    let currentList: React.ReactNode[] = [];
+
+                    lines.forEach((line, lIdx) => {
+                      const trimmed = line.trim();
+                      if (trimmed.startsWith("-") || trimmed.startsWith("*")) {
+                        const itemContent = trimmed.substring(1).trim();
+                        currentList.push(
+                          <li 
+                            key={`li-${lIdx}`} 
+                            dangerouslySetInnerHTML={{ __html: formatText(itemContent) }} 
+                          />
+                        );
+                      } else {
+                        if (currentList.length > 0) {
+                          elements.push(
+                            <ul key={`ul-${lIdx}`} className="list-disc pl-4 flex flex-col gap-1.5 my-2">
+                              {currentList}
+                            </ul>
+                          );
+                          currentList = [];
+                        }
+                        if (line) {
+                          elements.push(
+                            <p 
+                              key={`p-${lIdx}`} 
+                              className="mb-1.5 last:mb-0" 
+                              dangerouslySetInnerHTML={{ __html: formatText(line) }} 
+                            />
+                          );
+                        }
+                      }
+                    });
+
+                    if (currentList.length > 0) {
+                      elements.push(
+                        <ul key="ul-end" className="list-disc pl-4 flex flex-col gap-1.5 my-2">
+                          {currentList}
+                        </ul>
+                      );
+                    }
+
+                    return (
+                      <div key={pIdx} className="mb-3 last:mb-0">
+                        {elements}
+                      </div>
+                    );
                   })}
                 </div>
               </div>

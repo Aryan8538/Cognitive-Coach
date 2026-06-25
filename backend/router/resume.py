@@ -134,7 +134,7 @@ def analyze_resume_locally(text: str, role: str, num_pages: int) -> dict:
     }
 
 @router.post("/check", response_model=ResumeAnalysisResponse)
-async def check_resume(
+def check_resume(
     file: UploadFile = File(...),
     role: str = Form("Software Engineer"),
     x_gemini_key: Optional[str] = Header(None)
@@ -150,12 +150,12 @@ async def check_resume(
     
     try:
         if file_ext == "txt":
-            content_bytes = await file.read()
+            content_bytes = file.file.read()
             resume_text = content_bytes.decode("utf-8", errors="ignore")
         elif file_ext == "pdf":
             temp_path = f"temp_resume_{os.urandom(4).hex()}.pdf"
             with open(temp_path, "wb") as buffer:
-                buffer.write(await file.read())
+                buffer.write(file.file.read())
             
             try:
                 reader = PdfReader(temp_path)
@@ -170,7 +170,7 @@ async def check_resume(
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
         else:
-            content_bytes = await file.read()
+            content_bytes = file.file.read()
             resume_text = content_bytes.decode("utf-8", errors="ignore")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to parse resume document: {str(e)}")
