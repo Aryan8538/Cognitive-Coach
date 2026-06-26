@@ -15,7 +15,7 @@ CognitiveCoach is a full-stack web application designed to help students master 
                                 │ WebRTC Video Capture
                                 ▼
                     ┌────────────────────────┐
-                    │    Next.js Frontend    │ (TypeScript, React)
+                    │    Next.js Frontend    │ (JavaScript, React)
                     └───────────┬────────────┘
                                 │ Upload WebM File (HTTP Form)
                                 ▼
@@ -44,7 +44,7 @@ CognitiveCoach is a full-stack web application designed to help students master 
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Frontend** | **Next.js (v15)** | Full-stack framework, App Router, TypeScript |
+| **Frontend** | **Next.js (v15)** | Full-stack framework, App Router, JavaScript |
 | **Icons** | **Lucide React** | Premium icon pack |
 | **Styling** | **Vanilla CSS Modules** | Custom theme (Glassmorphism, Indigo/Cyan accents) |
 | **Backend** | **FastAPI** | Fast, asynchronous REST API framework |
@@ -76,11 +76,11 @@ cognitive-coach/
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── page.tsx          # Dashboard, SVG charts, and role selector
+│   │   │   ├── page.jsx          # Dashboard, SVG charts, and role selector
 │   │   │   ├── interview/        # Interactive interview room with question walk-through
 │   │   │   └── results/[id]/     # Metrics scorecard, video review, and transcripts
 │   │   ├── components/
-│   │   │   └── VideoRecorder.tsx # Camera/Microphone recorder & Audio visualizer
+│   │   │   └── VideoRecorder.jsx # Camera/Microphone recorder & Audio visualizer
 │   │   └── styles/
 │   │       └── globals.css       # Core theme styling (Glassmorphism layout)
 │
