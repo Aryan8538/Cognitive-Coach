@@ -6,55 +6,19 @@ import { ArrowLeft, Play, FileText, CheckCircle2, MessageSquare, Clock, ShieldAl
 import Editor from "@monaco-editor/react";
 import { API_BASE_URL } from "@/utils/config";
 
-interface Metric {
-  words_per_minute: number;
-  filler_words_count: number;
-  filler_words_details: Record<string, number>;
-  grammar_score: number;
-  relevance_score: number;
-  clarity_score: number;
-  feedback_text: string;
-  suggested_answer: string;
-}
-
-interface Response {
-  id: string;
-  question_id: number;
-  video_url: string;
-  transcript: string;
-  created_at: string;
-  metrics: Metric;
-  code?: string;
-  code_language?: string;
-}
-
-interface Question {
-  id: number;
-  text: string;
-  topic: string;
-}
-
-interface InterviewData {
-  id: string;
-  role: string;
-  status: string;
-  created_at: string;
-  responses: Response[];
-}
-
-export default function Results({ params }: { params: Promise<{ id: string }> }) {
+export default function Results({ params }) {
   const resolvedParams = use(params);
   const router = useRouter();
   const interviewId = resolvedParams.id;
 
-  const [interview, setInterview] = useState<InterviewData | null>(null);
-  const [questions, setQuestions] = useState<Record<number, Question>>({});
-  const [activeIdx, setActiveIdx] = useState<number>(0);
+  const [interview, setInterview] = useState(null);
+  const [questions, setQuestions] = useState({});
+  const [activeIdx, setActiveIdx] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const [editorTheme, setEditorTheme] = useState("vs-dark");
 
-  const formatMarkdown = (text: string) => {
+  const formatMarkdown = (text) => {
     if (!text) return "";
     return text
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
@@ -80,7 +44,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
     async function loadData() {
       try {
         const token = localStorage.getItem("token") || "";
-        const headers: Record<string, string> = {};
+        const headers = {};
         if (token) {
           headers["Authorization"] = `Bearer ${token}`;
         }
@@ -93,8 +57,8 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
         const qRes = await fetch(`${API_BASE_URL}/api/questions`);
         if (qRes.ok) {
           const qData = await qRes.json();
-          const qMap: Record<number, Question> = {};
-          qData.forEach((q: any) => {
+          const qMap = {};
+          qData.forEach((q) => {
             qMap[q.id] = q;
           });
           setQuestions(qMap);
@@ -112,7 +76,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
     return (
       <div className="flex-grow flex flex-col items-center justify-center py-24 px-6">
         <div className="relative flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-violet-600 animate-spin" />
+          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-violet-605 animate-spin" />
           <div className="absolute w-16 h-16 rounded-full border border-violet-500/10 animate-pulse-slow" />
         </div>
         <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display">Compiling AI Diagnostics...</h3>
@@ -171,7 +135,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
   }
 
   // Get hiring verdict text and styles
-  const getHiringVerdict = (score: number) => {
+  const getHiringVerdict = (score) => {
     if (score >= 85) {
       return {
         verdict: "Strong Hire (Highly Recommended)",
@@ -184,7 +148,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
       return {
         verdict: "Lean Hire (Recommended)",
         description: "Good job! You communicated fluently and addressed the core question topics. To increase your hiring chances further, focus on reducing filler words, structuring your answers using the STAR method, and keeping pacing stable.",
-        badgeColor: "bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-450",
+        badgeColor: "bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-455",
         pillColor: "bg-amber-500",
         chanceText: "Moderate to high hiring probability"
       };
@@ -193,7 +157,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
         verdict: "No Hire (Needs Practice)",
         description: "Your responses need structure and technical details. Try to practice more mock sessions, focus on including key technical terms, and practice pausing naturally instead of using filler words like 'um' or 'like'.",
         badgeColor: "bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-455",
-        pillColor: "bg-rose-500",
+        pillColor: "bg-rose-50",
         chanceText: "Low hiring probability"
       };
     }
@@ -201,7 +165,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
 
   const verdictInfo = getHiringVerdict(overallScore);
 
-  const renderHighlightedTranscript = (transcript: string) => {
+  const renderHighlightedTranscript = (transcript) => {
     if (!transcript) return <em className="text-slate-455">No transcript available.</em>;
     const words = transcript.split(/\s+/);
     const fillers = ["like", "um", "uh", "basically", "you know", "actually", "so"];
@@ -221,20 +185,20 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
     });
   };
 
-  const getScoreColorClass = (score: number) => {
+  const getScoreColorClass = (score) => {
     if (score >= 85) return 'text-emerald-600 dark:text-emerald-400';
-    if (score >= 70) return 'text-amber-600 dark:text-amber-450';
+    if (score >= 70) return 'text-amber-600 dark:text-amber-455';
     return 'text-rose-600 dark:text-rose-400';
   };
 
-  const getScoreStrokeColor = (score: number) => {
+  const getScoreStrokeColor = (score) => {
     if (score >= 85) return 'stroke-emerald-500';
     if (score >= 70) return 'stroke-amber-500';
     return 'stroke-rose-500';
   };
 
   // Reusable circle gauge component
-  const CircularGauge = ({ score, label }: { score: number; label: string }) => {
+  const CircularGauge = ({ score, label }) => {
     const radius = 36;
     const stroke = 5.5;
     const normalizedRadius = radius - stroke * 2;
@@ -283,7 +247,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
       {/* Back to Dashboard & Header */}
       <div className="flex flex-col gap-2 mb-10">
         <button 
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-450 hover:text-violet-650 dark:text-slate-500 dark:hover:text-violet-400 transition-colors duration-200 mb-4 w-fit"
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-455 hover:text-violet-650 dark:text-slate-500 dark:hover:text-violet-400 transition-colors duration-200 mb-4 w-fit"
           onClick={() => router.push("/")}
         >
           <ArrowLeft size={13} /> Back to Dashboard
@@ -412,13 +376,13 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
                   }`}
                   onClick={() => setActiveIdx(index)}
                 >
-                  <div className="flex justify-between items-center text-[10px] text-slate-450 dark:text-slate-500 font-extrabold font-outfit uppercase">
+                  <div className="flex justify-between items-center text-[10px] text-slate-455 dark:text-slate-500 font-extrabold font-outfit uppercase">
                     <span>Q{index + 1} &bull; {q.topic}</span>
                     <span className="text-violet-600 dark:text-violet-400">
                       Score: {resp.metrics ? Math.round((resp.metrics.clarity_score + resp.metrics.relevance_score + resp.metrics.grammar_score) / 3) : 0}%
                     </span>
                   </div>
-                  <p className={`text-xs font-bold leading-relaxed ${isActive ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-450'} line-clamp-2`}>
+                  <p className={`text-xs font-bold leading-relaxed ${isActive ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-455'} line-clamp-2`}>
                     {q.text}
                   </p>
                 </div>
@@ -487,7 +451,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
             {/* Filler details list */}
             {metrics && metrics.filler_words_count > 0 && (
               <div className="mt-4 pt-4 flex items-center gap-2 flex-wrap border-t border-slate-100 dark:border-zinc-850/40">
-                <span className="text-[9px] font-extrabold text-slate-450 dark:text-slate-500 uppercase tracking-wider">Breakdown:</span>
+                <span className="text-[9px] font-extrabold text-slate-455 dark:text-slate-500 uppercase tracking-wider">Breakdown:</span>
                 {Object.entries(metrics.filler_words_details).map(([word, count]) => (
                   <span key={word} className="text-[10px] font-extrabold bg-rose-500/5 border border-rose-550/15 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded-md uppercase">
                     "{word}": {count}x
@@ -544,7 +508,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
               <FileText size={15} className="text-cyan-500" /> 
               Speech Transcript
             </h3>
-            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50/50 dark:bg-zinc-950/40 p-5 rounded-xl border border-slate-100/60 dark:border-zinc-850/20 font-medium">
+            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50/50 dark:bg-zinc-955/40 p-5 rounded-xl border border-slate-100/60 dark:border-zinc-850/20 font-medium">
               {renderHighlightedTranscript(activeResponse.transcript)}
             </p>
           </div>
@@ -579,7 +543,7 @@ export default function Results({ params }: { params: Promise<{ id: string }> })
               <Star size={15} className="text-amber-500 fill-amber-500/20" />
               Suggested Model Answer
             </h3>
-            <div className="text-xs md:text-sm leading-relaxed text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-zinc-900/20 p-5 rounded-xl border border-violet-500/10 dark:border-violet-900/15">
+            <div className="text-xs md:text-sm leading-relaxed text-slate-505 dark:text-slate-400 bg-white/50 dark:bg-zinc-900/20 p-5 rounded-xl border border-violet-500/10 dark:border-violet-900/15">
               {metrics?.suggested_answer.split('\n\n').map((para, i) => {
                 if (para.startsWith('**') || para.match(/^\d+\./)) {
                   return <p key={i} className="mb-4 font-bold text-slate-800 dark:text-slate-200 font-display" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;

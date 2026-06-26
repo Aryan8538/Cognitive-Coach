@@ -5,14 +5,9 @@ import { useRouter } from "next/navigation";
 import { Sparkles, Send, BookOpen, GraduationCap, Trophy, ChevronRight, MessageSquare, Terminal, Users, BarChart3, HelpCircle } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
-
 export default function AdvisorPage() {
   const router = useRouter();
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState([
     {
       role: "assistant",
       content: "👋 **Welcome to the Placement Career Center!**\n\nI am your AI advisor. Choose a pre-built roadmap below or ask me any question about placements, roadmaps, technical preparation, or coding strategies to get started."
@@ -22,7 +17,7 @@ export default function AdvisorPage() {
   const [loading, setLoading] = useState(false);
   const [apiKey, setApiKey] = useState("");
   const [apiKeyInput, setApiKeyInput] = useState("");
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     const savedKey = localStorage.getItem("gemini_api_key") || "";
@@ -49,16 +44,16 @@ export default function AdvisorPage() {
     setApiKeyInput("");
   };
 
-  const handleSend = async (text: string) => {
+  const handleSend = async (text) => {
     if (!text.trim()) return;
 
-    const userMessage: Message = { role: "user", content: text };
+    const userMessage = { role: "user", content: text };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
     try {
-      const headers: Record<string, string> = {
+      const headers = {
         "Content-Type": "application/json"
       };
       const savedKey = localStorage.getItem("gemini_api_key") || "";
@@ -144,7 +139,7 @@ export default function AdvisorPage() {
         {/* Gemini API Key Configuration Panel */}
         <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-4 shadow-sm flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+            <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-505 uppercase tracking-wider">
               Gemini API Settings
             </span>
             <span className={`w-1.5 h-1.5 rounded-full ${apiKey ? "bg-emerald-500 animate-pulse-slow" : "bg-amber-500"}`} />
@@ -168,7 +163,7 @@ export default function AdvisorPage() {
               )}
               <button
                 onClick={handleSaveApiKey}
-                className="text-[9.5px] font-extrabold text-violet-605 dark:text-violet-400 hover:underline cursor-pointer"
+                className="text-[9.5px] font-extrabold text-violet-650 dark:text-violet-400 hover:underline cursor-pointer"
               >
                 Save Key
               </button>
@@ -198,7 +193,7 @@ export default function AdvisorPage() {
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white">{r.title}</h4>
-                    <p className="text-[10px] text-slate-400 dark:text-slate-500 line-clamp-1">{r.topic}</p>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-505 line-clamp-1">{r.topic}</p>
                   </div>
                 </div>
                 <ChevronRight size={13} className="text-slate-400" />
@@ -209,13 +204,13 @@ export default function AdvisorPage() {
 
         {/* Counselor Profile Details Card */}
         <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-4 rounded-2xl shadow-sm flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-violet-600 text-white font-extrabold font-display shadow-md shadow-violet-500/10">
+          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-violet-650 text-white font-extrabold font-display shadow-md shadow-violet-500/10">
             AI
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white dark:border-zinc-900 animate-pulse"></span>
           </div>
           <div>
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 font-display">Placement Advisor</h4>
-            <p className="text-[10px] text-slate-400 dark:text-slate-500">Multimodal Gemini Flash</p>
+            <p className="text-[10px] text-slate-400 dark:text-slate-505">Lorem Ipsum flash</p>
           </div>
         </div>
       </div>
@@ -226,10 +221,10 @@ export default function AdvisorPage() {
         {/* Chat Header */}
         <div className="px-6 py-4 border-b border-slate-150 dark:border-zinc-800/60 bg-slate-50/50 dark:bg-zinc-950/20 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Sparkles size={16} className="text-violet-605 dark:text-violet-400" />
+            <Sparkles size={16} className="text-violet-650 dark:text-violet-400" />
             <span className="text-xs font-bold text-slate-800 dark:text-slate-250 font-display">Interactive Career Counselor</span>
           </div>
-          <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-450 dark:text-slate-500">Live Session</span>
+          <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-450 dark:text-slate-505">Live Session</span>
         </div>
 
         {/* Chat History Panel */}
@@ -243,7 +238,7 @@ export default function AdvisorPage() {
               >
                 {/* Profile Icon */}
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm ${
-                  isAssistant ? 'bg-violet-600 text-white font-display' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-350 border border-slate-200/40 dark:border-zinc-800/40'
+                  isAssistant ? 'bg-violet-605 text-white font-display' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-350 border border-slate-200/40 dark:border-zinc-800/40'
                 }`}>
                   {isAssistant ? <GraduationCap size={15} /> : "ME"}
                 </div>
@@ -252,7 +247,7 @@ export default function AdvisorPage() {
                 <div className={`rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-sm ${
                   isAssistant 
                     ? 'bg-white/80 dark:bg-zinc-900/45 text-slate-800 dark:text-slate-250 border border-slate-200/50 dark:border-zinc-805/50 rounded-tl-sm' 
-                    : 'bg-violet-600 text-white rounded-tr-sm'
+                    : 'bg-violet-605 text-white rounded-tr-sm'
                 }`}>
                   {msg.content.split("\n\n").map((para, pIdx) => {
                     if (para.startsWith("###")) {
@@ -270,7 +265,7 @@ export default function AdvisorPage() {
                       );
                     }
 
-                    const formatText = (text: string) => {
+                    const formatText = (text) => {
                       return text
                         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
                         .replace(/\*(.*?)\*/g, "<em>$1</em>")
@@ -279,8 +274,8 @@ export default function AdvisorPage() {
                     };
 
                     const lines = para.split("\n");
-                    const elements: React.ReactNode[] = [];
-                    let currentList: React.ReactNode[] = [];
+                    const elements = [];
+                    let currentList = [];
 
                     lines.forEach((line, lIdx) => {
                       const trimmed = line.trim();
@@ -334,13 +329,13 @@ export default function AdvisorPage() {
           
           {loading && (
             <div className="flex gap-3 items-start self-start">
-              <div className="w-8 h-8 rounded-lg bg-violet-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+              <div className="w-8 h-8 rounded-lg bg-violet-605 text-white flex items-center justify-center font-bold text-xs shadow-sm">
                 <GraduationCap size={15} />
               </div>
               <div className="flex items-center gap-1.5 bg-white/80 dark:bg-zinc-900/45 border border-slate-200/50 dark:border-zinc-805/50 p-4 rounded-2xl rounded-tl-sm shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce"></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce" style={{ animationDelay: "0.2s" }}></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-505 animate-bounce" style={{ animationDelay: "0.4s" }}></span>
               </div>
             </div>
           )}
@@ -360,14 +355,14 @@ export default function AdvisorPage() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a career query here (e.g. 'Give me core OOP interview questions' or 'SE roadmap')"
+            placeholder="Type a career query here (e.g. 'Give me OOP interview questions')"
             disabled={loading}
             className="flex-grow bg-white dark:bg-zinc-800 border border-slate-200/60 dark:border-zinc-800/60 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-violet-500/60 dark:text-white"
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 active:scale-98 transition-all flex items-center gap-1.5"
+            className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-98 flex items-center gap-1.5 cursor-pointer"
           >
             <Send size={12} fill="currentColor" /> Send
           </button>

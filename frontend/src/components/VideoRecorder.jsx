@@ -3,26 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import { Camera, CameraOff, Video, Circle, Square, RefreshCw, Volume2 } from "lucide-react";
 
-interface VideoRecorderProps {
-  onRecordingComplete: (blob: Blob, durationSeconds: number) => void;
-  isProcessing: boolean;
-}
-
-export default function VideoRecorder({ onRecordingComplete, isProcessing }: VideoRecorderProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
+export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
+  const videoRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const streamRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const animationFrameRef = useRef(null);
   
-  const [permission, setPermission] = useState<boolean>(false);
-  const [recording, setRecording] = useState<boolean>(false);
-  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
-  const [duration, setDuration] = useState<number>(0);
-  const [volume, setVolume] = useState<number>(0); // 0 to 100
+  const [permission, setPermission] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [recordedChunks, setRecordedChunks] = useState([]);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(0); // 0 to 100
   
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef(null);
 
   // Sync camera stream once video DOM element mounts after permission state updates
   useEffect(() => {
@@ -45,9 +40,9 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }: Vid
     }
   };
 
-  const setupAudioVisualizer = (stream: MediaStream) => {
+  const setupAudioVisualizer = (stream) => {
     try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (!AudioContextClass) return;
       
       const audioContext = new AudioContextClass();
@@ -143,7 +138,7 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }: Vid
     };
   }, []);
 
-  const formatTime = (seconds: number) => {
+  const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;

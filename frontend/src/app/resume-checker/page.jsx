@@ -4,35 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { Sparkles, FileText, UploadCloud, CheckCircle2, AlertTriangle, ArrowRight, RefreshCw, BarChart2, ShieldAlert, BadgeCheck, FileSpreadsheet } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
-interface CompatibilityScore {
-  score: number;
-  feedback: string;
-}
-
-interface KeywordScore {
-  score: number;
-  found: string[];
-  missing: string[];
-}
-
-interface ResumeAnalysis {
-  score: number;
-  hiring_chance: number;
-  verdict: string;
-  formatting_check: CompatibilityScore;
-  keyword_check: KeywordScore;
-  impact_check: CompatibilityScore;
-  suggestions: string[];
-}
-
 export default function ResumeCheckerPage() {
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState(null);
   const [role, setRole] = useState("Software Engineer");
   const [loading, setLoading] = useState(false);
   const [scanStep, setScanStep] = useState(0);
-  const [result, setResult] = useState<ResumeAnalysis | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [result, setResult] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const fileInputRef = useRef(null);
 
   const scanSteps = [
     "Uploading document to parser...",
@@ -57,11 +36,11 @@ export default function ResumeCheckerPage() {
     return () => clearInterval(interval);
   }, [loading]);
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e) => {
     e.preventDefault();
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e) => {
     e.preventDefault();
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const droppedFile = e.dataTransfer.files[0];
@@ -69,13 +48,13 @@ export default function ResumeCheckerPage() {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       validateAndSetFile(e.target.files[0]);
     }
   };
 
-  const validateAndSetFile = (selectedFile: File) => {
+  const validateAndSetFile = (selectedFile) => {
     setErrorMsg(null);
     const ext = selectedFile.name.split(".").pop()?.toLowerCase();
     if (ext !== "pdf" && ext !== "txt" && ext !== "docx") {
@@ -96,7 +75,7 @@ export default function ResumeCheckerPage() {
     formData.append("file", file);
     formData.append("role", role);
 
-    const headers: Record<string, string> = {};
+    const headers = {};
     const savedKey = localStorage.getItem("gemini_api_key") || "";
     if (savedKey) {
       headers["X-Gemini-Key"] = savedKey;
@@ -119,7 +98,7 @@ export default function ResumeCheckerPage() {
         setResult(data);
         setLoading(false);
       }, 1000);
-    } catch (err: any) {
+    } catch (err) {
       setErrorMsg(err.message || "Connection failure with the ATS server.");
       setLoading(false);
     }
@@ -143,19 +122,19 @@ export default function ResumeCheckerPage() {
     "Mobile Engineer"
   ];
 
-  const getScoreColorClass = (score: number) => {
+  const getScoreColorClass = (score) => {
     if (score >= 85) return "text-emerald-600 dark:text-emerald-400";
     if (score >= 70) return "text-amber-600 dark:text-amber-450";
     return "text-rose-600 dark:text-rose-455";
   };
 
-  const getScoreStrokeColor = (score: number) => {
+  const getScoreStrokeColor = (score) => {
     if (score >= 85) return "stroke-emerald-500";
     if (score >= 70) return "stroke-amber-500";
     return "stroke-rose-500";
   };
 
-  const getVerdictStyle = (verdict: string) => {
+  const getVerdictStyle = (verdict) => {
     const v = verdict.toLowerCase();
     if (v.includes("strong") || v.includes("expert")) {
       return "bg-emerald-500/10 border-emerald-500/25 text-emerald-700 dark:text-emerald-400";
@@ -166,7 +145,7 @@ export default function ResumeCheckerPage() {
     return "bg-rose-500/10 border-rose-500/25 text-rose-700 dark:text-rose-455";
   };
 
-  const CircularProgress = ({ score, label }: { score: number; label: string }) => {
+  const CircularProgress = ({ score, label }) => {
     const radius = 32;
     const stroke = 5;
     const normalizedRadius = radius - stroke * 2;
@@ -183,8 +162,8 @@ export default function ResumeCheckerPage() {
           <span className={`absolute text-xs font-black font-outfit ${getScoreColorClass(score)}`}>{score}%</span>
         </div>
         <div>
-          <h5 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">{label}</h5>
-          <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200">Compatibility Checked</span>
+          <h5 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-505">{label}</h5>
+          <span className="text-[11px] font-bold text-slate-800 dark:text-slate-250">Compatibility Checked</span>
         </div>
       </div>
     );
@@ -195,7 +174,7 @@ export default function ResumeCheckerPage() {
       
       {/* Title Header */}
       <section className="flex flex-col gap-3 mb-12 animate-fade-in-up">
-        <div className="flex items-center gap-2 self-start px-3 py-1 rounded-full border border-violet-500/20 bg-violet-500/5 text-violet-605 dark:text-violet-400 text-[10px] uppercase tracking-wider font-extrabold">
+        <div className="flex items-center gap-2 self-start px-3 py-1 rounded-full border border-violet-500/20 bg-violet-500/5 text-violet-650 dark:text-violet-400 text-[10px] uppercase tracking-wider font-extrabold">
           <Sparkles size={11} className="text-amber-500 animate-pulse" />
           ATS Optimization Scanner
         </div>
@@ -214,7 +193,7 @@ export default function ResumeCheckerPage() {
             
             {/* Target Role Selector */}
             <div>
-              <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-450 dark:text-slate-500 mb-2">
+              <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-450 dark:text-slate-505 mb-2">
                 Select Target Job Role
               </label>
               <select
@@ -260,10 +239,10 @@ export default function ResumeCheckerPage() {
                 </div>
               ) : (
                 <div>
-                  <p className="text-sm font-bold text-slate-850 dark:text-slate-200">
+                  <p className="text-sm font-bold text-slate-850 dark:text-slate-205">
                     Drag and drop your resume file here
                   </p>
-                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-normal">
+                  <p className="text-xs text-slate-400 dark:text-slate-505 mt-1 leading-normal">
                     Supports PDF, TXT, or DOCX formats (Max 5MB)
                   </p>
                 </div>
@@ -272,7 +251,7 @@ export default function ResumeCheckerPage() {
 
             {/* Error Message Box */}
             {errorMsg && (
-              <div className="flex items-start gap-2.5 p-4 bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/50 dark:border-rose-900/35 rounded-xl text-xs font-semibold text-rose-700 dark:text-rose-455">
+              <div className="flex items-start gap-2.5 p-4 bg-rose-50/60 dark:bg-rose-955/20 border border-rose-200/50 dark:border-rose-900/35 rounded-xl text-xs font-semibold text-rose-700 dark:text-rose-455">
                 <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />
                 <span>{errorMsg}</span>
               </div>
@@ -282,7 +261,7 @@ export default function ResumeCheckerPage() {
             <button
               onClick={handleScan}
               disabled={!file}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-650 hover:from-violet-650 hover:to-indigo-700 disabled:opacity-40 text-white font-bold py-3.5 rounded-xl text-xs shadow-md shadow-violet-500/5 hover:shadow-violet-500/15 transition-all duration-355 disabled:shadow-none active:scale-[0.99]"
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-650 hover:from-violet-650 hover:to-indigo-700 disabled:opacity-40 text-white font-bold py-3.5 rounded-xl text-xs shadow-md shadow-violet-500/5 hover:shadow-violet-500/15 transition-all duration-355 disabled:shadow-none active:scale-[0.99] cursor-pointer"
             >
               Scan Resume <ArrowRight size={13} />
             </button>
@@ -297,13 +276,13 @@ export default function ResumeCheckerPage() {
           <div className="relative w-48 h-32 border border-slate-200/50 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950/40 rounded-xl overflow-hidden shadow-inner flex items-center justify-center text-slate-400">
             <FileText size={44} className="animate-pulse text-violet-500/60" />
             <div className="absolute left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 via-violet-500 to-cyan-400 animate-scanner-sweep shadow-[0_0_10px_#8b5cf6]" />
-            <div className="absolute top-2 left-2 text-[8px] font-extrabold uppercase text-slate-400 dark:text-slate-500">Scanning Resume</div>
-            <div className="absolute bottom-2 right-2 text-[8px] font-extrabold uppercase text-violet-605 dark:text-violet-450">ATS v1.1</div>
+            <div className="absolute top-2 left-2 text-[8px] font-extrabold uppercase text-slate-400 dark:text-slate-555">Scanning Resume</div>
+            <div className="absolute bottom-2 right-2 text-[8px] font-extrabold uppercase text-violet-650 dark:text-violet-450">ATS v1.1</div>
           </div>
           
           <div className="flex flex-col gap-2">
             <h3 className="text-base font-extrabold text-slate-800 dark:text-slate-200 font-display">Analyzing Document Layout</h3>
-            <p className="text-xs text-slate-400 dark:text-slate-500 leading-normal max-w-[280px]">
+            <p className="text-xs text-slate-400 dark:text-slate-505 leading-normal max-w-[280px]">
               {scanSteps[scanStep]}
             </p>
           </div>
@@ -327,7 +306,7 @@ export default function ResumeCheckerPage() {
             {/* Overall Scorecard */}
             <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm hover:border-violet-500/15 transition-all duration-300 text-center flex flex-col items-center gap-5">
               <div className="flex justify-between items-center w-full">
-                <span className="text-[10px] font-extrabold text-slate-450 dark:text-slate-500 uppercase tracking-wider">ATS Scorecard</span>
+                <span className="text-[10px] font-extrabold text-slate-450 dark:text-slate-505 uppercase tracking-wider">ATS Scorecard</span>
                 <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold border ${getVerdictStyle(result.verdict)}`}>
                   {result.verdict.toUpperCase()}
                 </span>
@@ -353,7 +332,7 @@ export default function ResumeCheckerPage() {
                   <span className={`text-2xl font-black font-outfit ${getScoreColorClass(result.score)}`}>
                     {result.score}%
                   </span>
-                  <span className="text-[8px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
+                  <span className="text-[8px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-505">
                     MATCH INDEX
                   </span>
                 </div>
@@ -364,18 +343,18 @@ export default function ResumeCheckerPage() {
                 <div className="text-2xl font-black text-slate-900 dark:text-white font-outfit animate-pulse-slow">
                   {result.hiring_chance}%
                 </div>
-                <div className="text-[10px] uppercase tracking-widest font-extrabold text-slate-400 dark:text-slate-500">
+                <div className="text-[10px] uppercase tracking-widest font-extrabold text-slate-400 dark:text-slate-505">
                   Target Interview Probability
                 </div>
               </div>
 
               <div className="w-full border-t border-slate-100 dark:border-zinc-850/50 pt-4 flex gap-4 text-left justify-around text-xs">
                 <div>
-                  <span className="text-[9px] uppercase font-extrabold text-slate-400 dark:text-slate-500 block">Evaluated Role</span>
+                  <span className="text-[9px] uppercase font-extrabold text-slate-400 dark:text-slate-505 block">Evaluated Role</span>
                   <strong className="text-slate-800 dark:text-slate-200 mt-0.5 truncate block max-w-[150px]">{role}</strong>
                 </div>
                 <div>
-                  <span className="text-[9px] uppercase font-extrabold text-slate-400 dark:text-slate-500 block">Resume File</span>
+                  <span className="text-[9px] uppercase font-extrabold text-slate-400 dark:text-slate-505 block">Resume File</span>
                   <strong className="text-slate-800 dark:text-slate-200 mt-0.5 truncate block max-w-[120px]">{file?.name}</strong>
                 </div>
               </div>
@@ -390,7 +369,7 @@ export default function ResumeCheckerPage() {
 
             <button
               onClick={handleReset}
-              className="w-full flex items-center justify-center gap-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-zinc-900/50 dark:hover:bg-zinc-900 border border-slate-250/50 dark:border-zinc-800/80 text-slate-700 dark:text-slate-300 py-3 rounded-xl text-xs font-bold transition-all active:scale-98"
+              className="w-full flex items-center justify-center gap-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-zinc-900/50 dark:hover:bg-zinc-900 border border-slate-250/50 dark:border-zinc-800/80 text-slate-700 dark:text-slate-300 py-3 rounded-xl text-xs font-bold transition-all active:scale-98 cursor-pointer"
             >
               <RefreshCw size={13} /> Scan Another Resume
             </button>
@@ -403,10 +382,10 @@ export default function ResumeCheckerPage() {
             {/* Formatting Audit */}
             <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm hover:border-violet-500/10 transition-all duration-300">
               <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-                <FileSpreadsheet size={15} className="text-violet-605 dark:text-violet-400" />
+                <FileSpreadsheet size={15} className="text-violet-650 dark:text-violet-400" />
                 Layout & Formatting Check
               </h3>
-              <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-950/30 p-4 rounded-xl border border-slate-150 dark:border-zinc-850/20 font-medium">
+              <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-955/30 p-4 rounded-xl border border-slate-150 dark:border-zinc-850/20 font-medium">
                 {result.formatting_check.feedback}
               </p>
             </div>
@@ -414,12 +393,12 @@ export default function ResumeCheckerPage() {
             {/* Keyword Density Checker */}
             <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm hover:border-cyan-500/10 transition-all duration-300">
               <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-                <BadgeCheck size={15} className="text-cyan-500" />
+                <BadgeCheck size={15} className="text-cyan-505" />
                 Role Keyword Matching
               </h3>
               <div className="flex flex-col gap-4">
                 <div>
-                  <h4 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450 dark:text-slate-500 mb-2">Identified Keywords ({result.keyword_check.found.length})</h4>
+                  <h4 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450 dark:text-slate-505 mb-2">Identified Keywords ({result.keyword_check.found.length})</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {result.keyword_check.found.length > 0 ? (
                       result.keyword_check.found.map((kw) => (
@@ -434,11 +413,11 @@ export default function ResumeCheckerPage() {
                 </div>
 
                 <div>
-                  <h4 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450 dark:text-slate-500 mb-2">Missing Keywords ({result.keyword_check.missing.length})</h4>
+                  <h4 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450 dark:text-slate-505 mb-2">Missing Keywords ({result.keyword_check.missing.length})</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {result.keyword_check.missing.length > 0 ? (
                       result.keyword_check.missing.map((kw) => (
-                        <span key={kw} className="text-[10px] font-bold bg-slate-100 dark:bg-zinc-800/60 border border-slate-200/30 dark:border-zinc-800/30 text-slate-405 dark:text-slate-500 px-2.5 py-1 rounded-md uppercase">
+                        <span key={kw} className="text-[10px] font-bold bg-slate-100 dark:bg-zinc-800/60 border border-slate-200/30 dark:border-zinc-800/30 text-slate-405 dark:text-slate-505 px-2.5 py-1 rounded-md uppercase">
                           {kw}
                         </span>
                       ))
@@ -453,10 +432,10 @@ export default function ResumeCheckerPage() {
             {/* Quantitative Impact Check */}
             <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm hover:border-rose-500/10 transition-all duration-300">
               <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-                <BarChart2 size={15} className="text-rose-500" />
+                <BarChart2 size={15} className="text-rose-505" />
                 Action Verbs & Impact Check
               </h3>
-              <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-950/30 p-4 rounded-xl border border-slate-150 dark:border-zinc-855/20 font-medium">
+              <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-955/30 p-4 rounded-xl border border-slate-150 dark:border-zinc-855/20 font-medium">
                 {result.impact_check.feedback}
               </p>
             </div>

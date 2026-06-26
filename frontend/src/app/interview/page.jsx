@@ -7,38 +7,29 @@ import VideoRecorder from "@/components/VideoRecorder";
 import CodeEditor, { TEMPLATES } from "@/components/CodeEditor";
 import { API_BASE_URL } from "@/utils/config";
 
-interface Question {
-  id: number;
-  role: string;
-  topic: string;
-  difficulty: string;
-  text: string;
-  suggested_keywords: string;
-}
-
 function InterviewRoomContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "Software Engineer";
 
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentIdx, setCurrentIdx] = useState<number>(0);
-  const [interviewId, setInterviewId] = useState<string | null>(null);
+  const [questions, setQuestions] = useState([]);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [interviewId, setInterviewId] = useState(null);
   
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [answeredMap, setAnsweredMap] = useState<Record<number, boolean>>({});
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [answeredMap, setAnsweredMap] = useState({});
+  const [errorMsg, setErrorMsg] = useState(null);
 
   // Code editor states
-  const [code, setCode] = useState<string>("");
-  const [codeLanguage, setCodeLanguage] = useState<string>("python");
+  const [code, setCode] = useState("");
+  const [codeLanguage, setCodeLanguage] = useState("python");
 
   useEffect(() => {
     async function initializeSession() {
       try {
         const token = localStorage.getItem("token") || "";
-        const headers: Record<string, string> = { 
+        const headers = { 
           "Content-Type": "application/json"
         };
         if (token) {
@@ -62,7 +53,7 @@ function InterviewRoomContent() {
           throw new Error("No questions available for this role inside the database.");
         }
         setQuestions(qData);
-      } catch (err: any) {
+      } catch (err) {
         console.warn(err);
         setErrorMsg(err.message || "An error occurred during interview startup.");
       } finally {
@@ -79,7 +70,7 @@ function InterviewRoomContent() {
     }
   }, [currentIdx, codeLanguage, questions.length]);
 
-  const handleRecordingComplete = async (videoBlob: Blob, durationSeconds: number) => {
+  const handleRecordingComplete = async (videoBlob, durationSeconds) => {
     if (!interviewId || questions.length === 0) return;
     
     setIsProcessing(true);
@@ -107,7 +98,7 @@ function InterviewRoomContent() {
       }
       
       setAnsweredMap((prev) => ({ ...prev, [question.id]: true }));
-    } catch (err: any) {
+    } catch (err) {
       alert(err.message || "Failed to process response. Please try again.");
     } finally {
       setIsProcessing(false);
@@ -147,11 +138,11 @@ function InterviewRoomContent() {
     return (
       <div className="flex-grow flex flex-col items-center justify-center py-24 px-6">
         <div className="relative flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-violet-600 animate-spin" />
+          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-violet-650 animate-spin" />
           <div className="absolute w-16 h-16 rounded-full border border-violet-500/10 animate-pulse-slow" />
         </div>
         <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display">Setting up interview sandbox...</h3>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 text-center max-w-[280px]">Initializing virtual camera feeds and seeding question databases</p>
+        <p className="text-xs text-slate-405 dark:text-slate-500 mt-2 text-center max-w-[280px]">Initializing virtual camera feeds and seeding question databases</p>
       </div>
     );
   }
@@ -212,18 +203,18 @@ function InterviewRoomContent() {
               </span>
             </div>
 
-            <h2 className="text-base font-bold leading-relaxed text-slate-900 dark:text-white font-display">
+            <h2 className="text-base font-bold leading-relaxed text-slate-909 dark:text-white font-display">
               {currentQuestion.text}
             </h2>
 
             <div className="flex flex-col gap-2 border-t border-slate-150 dark:border-zinc-800/40 pt-4 mt-1">
               <h4 className="text-[10px] font-bold text-slate-450 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wide">
-                <HelpCircle size={13} className="text-cyan-500" /> Key Topics to Touch Upon
+                <HelpCircle size={13} className="text-cyan-505" /> Key Topics to Touch Upon
               </h4>
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {currentQuestion.suggested_keywords.split(",").map((kw, i) => (
                   <span key={i} className="text-[9px] font-bold bg-cyan-50/60 text-cyan-705 dark:bg-cyan-950/20 dark:text-cyan-400 border border-cyan-100/50 dark:border-cyan-900/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
-                    <span className="w-1 h-1 rounded-full bg-cyan-500" />
+                    <span className="w-1 h-1 rounded-full bg-cyan-505" />
                     {kw.trim()}
                   </span>
                 ))}
@@ -259,7 +250,7 @@ function InterviewRoomContent() {
                 </button>
               ) : (
                 <button 
-                  className="px-4 py-2 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white disabled:opacity-40 text-xs font-bold rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 transition-all duration-300 flex items-center gap-1.5"
+                  className="px-4 py-2 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-605 hover:to-indigo-700 text-white disabled:opacity-40 text-xs font-bold rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
                   onClick={handleFinishInterview}
                   disabled={!allAnswered}
                 >
@@ -323,18 +314,18 @@ function InterviewRoomContent() {
             </span>
           </div>
 
-          <h2 className="text-lg md:text-xl font-bold leading-relaxed text-slate-900 dark:text-white font-display">
+          <h2 className="text-lg md:text-xl font-bold leading-relaxed text-slate-909 dark:text-white font-display">
             {currentQuestion.text}
           </h2>
 
           <div className="flex flex-col gap-2 border-t border-slate-150 dark:border-zinc-800/40 pt-5 mt-2">
             <h4 className="text-xs font-bold text-slate-450 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wide">
-              <HelpCircle size={13} className="text-cyan-500" /> Key Topics to Touch Upon
+              <HelpCircle size={13} className="text-cyan-505" /> Key Topics to Touch Upon
             </h4>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {currentQuestion.suggested_keywords.split(",").map((kw, i) => (
                 <span key={i} className="text-[10px] font-bold bg-cyan-50/60 text-cyan-705 dark:bg-cyan-950/20 dark:text-cyan-400 border border-cyan-100/50 dark:border-cyan-900/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
-                  <span className="w-1 h-1 rounded-full bg-cyan-500" />
+                  <span className="w-1 h-1 rounded-full bg-cyan-505" />
                   {kw.trim()}
                 </span>
               ))}
@@ -370,7 +361,7 @@ function InterviewRoomContent() {
               </button>
             ) : (
               <button 
-                className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-750 text-white disabled:opacity-40 text-xs font-bold rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 transition-all duration-300 flex items-center gap-1.5"
+                className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-750 text-white disabled:opacity-40 text-xs font-bold rounded-xl shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
                 onClick={handleFinishInterview}
                 disabled={!allAnswered}
               >
@@ -397,7 +388,7 @@ export default function InterviewRoom() {
   return (
     <Suspense fallback={
       <div className="flex-grow flex flex-col items-center justify-center py-24">
-        <div className="w-10 h-10 border-4 border-slate-200 border-t-violet-600 rounded-full animate-spin mb-4" />
+        <div className="w-10 h-10 border-4 border-slate-200 border-t-violet-650 rounded-full animate-spin mb-4" />
         <h3 className="text-sm font-bold text-slate-450">Loading interview components...</h3>
       </div>
     }>

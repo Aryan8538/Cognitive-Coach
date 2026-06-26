@@ -1,18 +1,13 @@
-import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import CareerChatbot from "@/components/CareerChatbot";
 import "./globals.css";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "CognitiveCoach | AI Mock Interview & Communication Diagnostics",
   description: "Evaluate your technical, communication, and behavioral interview skills. Receive instant transcript reviews, filler word counts, pacing analysis, and grading suggestions using AI.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>

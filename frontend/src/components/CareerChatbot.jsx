@@ -4,14 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { Sparkles, X, MessageSquare, Send, BookOpen, FileSpreadsheet, ListChecks } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
-
 export default function CareerChatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState([
     {
       role: "assistant",
       content: "👋 **Hi! I am your AI Career Advisor.**\n\nI can help you build study roadmaps, review tech stacks, and prepare for placement interviews. Ask me anything!"
@@ -19,7 +14,7 @@ export default function CareerChatbot() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatEndRef = useRef(null);
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -28,10 +23,10 @@ export default function CareerChatbot() {
     }
   }, [messages, loading]);
 
-  const handleSend = async (text: string) => {
+  const handleSend = async (text) => {
     if (!text.trim()) return;
 
-    const userMessage: Message = { role: "user", content: text };
+    const userMessage = { role: "user", content: text };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
@@ -115,31 +110,65 @@ export default function CareerChatbot() {
                         return <h4 key={pIdx} className="font-bold font-display text-slate-900 dark:text-white mt-2 mb-1 text-xs">{para.replace("###", "").trim()}</h4>;
                       }
                       if (para.startsWith("####")) {
-                        return <h5 key={pIdx} className="font-bold font-display text-slate-800 dark:text-slate-350 mt-2 mb-1 text-[11px]">{para.replace("####", "").trim()}</h5>;
+                        return <h5 key={pIdx} className="font-bold font-display text-slate-800 dark:text-slate-355 mt-2 mb-1 text-[11px]">{para.replace("####", "").trim()}</h5>;
                       }
                       
-                      // Render list items
-                      if (para.includes("\n-") || para.includes("\n*")) {
-                        const items = para.split(/\n[-*]\s+/);
-                        const headerText = items[0];
-                        return (
-                          <div key={pIdx} className="mb-2">
-                            {headerText && <p className="mb-1 font-bold">{headerText}</p>}
-                            <ul className="list-disc pl-4 flex flex-col gap-1">
-                              {items.slice(1).map((item, iIdx) => (
-                                <li key={iIdx}>{item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      }
-                      
-                      return <p key={pIdx} className="mb-2 last:mb-0" dangerouslySetInnerHTML={{ 
-                        __html: para
+                      const formatText = (text) => {
+                        return text
                           .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
                           .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                          .replace(/`(.*?)`/g, "<code class='bg-slate-200/50 dark:bg-zinc-800/80 px-1 py-0.5 rounded text-[10px]'>$1</code>")
-                      }} />;
+                          .replace(/`(.*?)`/g, "<code class='bg-slate-200/50 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded text-[10px]'>$1</code>")
+                          .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-violet-550 dark:text-violet-400 hover:underline font-semibold'>$1</a>");
+                      };
+
+                      const lines = para.split("\n");
+                      const elements = [];
+                      let currentList = [];
+
+                      lines.forEach((line, lIdx) => {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith("-") || trimmed.startsWith("*")) {
+                          const itemContent = trimmed.substring(1).trim();
+                          currentList.push(
+                            <li 
+                              key={`li-${lIdx}`} 
+                              dangerouslySetInnerHTML={{ __html: formatText(itemContent) }} 
+                            />
+                          );
+                        } else {
+                          if (currentList.length > 0) {
+                            elements.push(
+                              <ul key={`ul-${lIdx}`} className="list-disc pl-4 flex flex-col gap-1 my-2">
+                                {currentList}
+                              </ul>
+                            );
+                            currentList = [];
+                          }
+                          if (line) {
+                            elements.push(
+                              <p 
+                                key={`p-${lIdx}`} 
+                                className="mb-1 last:mb-0" 
+                                dangerouslySetInnerHTML={{ __html: formatText(line) }} 
+                              />
+                            );
+                          }
+                        }
+                      });
+
+                      if (currentList.length > 0) {
+                        elements.push(
+                          <ul key="ul-end" className="list-disc pl-4 flex flex-col gap-1 my-2">
+                            {currentList}
+                          </ul>
+                        );
+                      }
+
+                      return (
+                        <div key={pIdx} className="mb-2 last:mb-0">
+                          {elements}
+                        </div>
+                      );
                     })}
                   </div>
                 </div>
@@ -151,7 +180,7 @@ export default function CareerChatbot() {
               <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-zinc-850 p-3 rounded-2xl rounded-tl-sm border border-slate-100 dark:border-zinc-800/40 self-start">
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce"></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce" style={{ animationDelay: "0.2s" }}></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-505 animate-bounce" style={{ animationDelay: "0.4s" }}></span>
               </div>
             )}
             
@@ -161,15 +190,15 @@ export default function CareerChatbot() {
           {/* Quick Prompts Panel */}
           {messages.length === 1 && (
             <div className="px-4 py-2 border-t border-slate-100 dark:border-zinc-800/60 flex flex-col gap-1.5 bg-slate-50/30">
-              <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">Suggested Queries</span>
+              <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-505">Suggested Queries</span>
               <div className="flex flex-col gap-1.5">
                 {quickPrompts.map((qp, index) => (
                   <button
                     key={index}
                     onClick={() => handleSend(qp.text)}
-                    className="flex items-center gap-2 text-[10px] text-left font-bold text-slate-600 hover:text-violet-600 dark:text-slate-450 dark:hover:text-violet-400 bg-slate-50 dark:bg-zinc-850/60 border border-slate-250/30 dark:border-zinc-800/45 p-2 rounded-xl hover:bg-violet-500/5 dark:hover:bg-violet-500/5 hover:border-violet-500/25 transition-all"
+                    className="flex items-center gap-2 text-[10px] text-left font-bold text-slate-600 hover:text-violet-600 dark:text-slate-450 dark:hover:text-violet-400 bg-slate-50 dark:bg-zinc-850/60 border border-slate-250/30 dark:border-zinc-800/45 p-2 rounded-xl hover:bg-violet-500/5 dark:hover:bg-violet-500/5 hover:border-violet-500/25 transition-all cursor-pointer"
                   >
-                    <span className="text-violet-550 dark:text-violet-450">{qp.icon}</span>
+                    <span className="text-violet-550 dark:text-violet-455">{qp.icon}</span>
                     {qp.label}
                   </button>
                 ))}
@@ -196,7 +225,7 @@ export default function CareerChatbot() {
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-650 flex items-center justify-center text-white disabled:opacity-40 hover:shadow-md hover:shadow-violet-500/10 active:scale-95 transition-all"
+              className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-650 to-indigo-650 flex items-center justify-center text-white disabled:opacity-40 hover:shadow-md hover:shadow-violet-500/10 active:scale-95 transition-all cursor-pointer"
             >
               <Send size={13} fill="currentColor" />
             </button>
@@ -207,7 +236,7 @@ export default function CareerChatbot() {
       {/* Floating Bubble Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-650 via-indigo-600 to-indigo-750 flex items-center justify-center text-white shadow-xl shadow-violet-500/10 hover:shadow-violet-500/25 hover:scale-105 active:scale-95 transition-all"
+        className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-650 via-indigo-600 to-indigo-750 flex items-center justify-center text-white shadow-xl shadow-violet-500/10 hover:shadow-violet-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         aria-label="Ask Career Bot"
       >
         {isOpen ? <X size={20} /> : <MessageSquare size={20} />}

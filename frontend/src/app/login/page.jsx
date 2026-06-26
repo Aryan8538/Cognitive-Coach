@@ -9,7 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
   
   // Tabs: "login" or "signup"
-  const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
+  const [activeTab, setActiveTab] = useState("login");
   
   // Input fields
   const [name, setName] = useState("");
@@ -19,15 +19,15 @@ export default function LoginPage() {
   
   // UI states
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
 
   // Authentication is removed, redirect to dashboard immediately
   useEffect(() => {
     router.push("/");
   }, [router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
@@ -109,7 +109,7 @@ export default function LoginPage() {
           setSuccessMsg(null);
         }, 1500);
       }
-    } catch (err: any) {
+    } catch (err) {
       setErrorMsg(err.message || "An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -169,14 +169,14 @@ export default function LoginPage() {
           
           {/* Notification Alerts */}
           {errorMsg && (
-            <div className="flex items-start gap-2 bg-rose-50/80 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 p-3.5 rounded-xl text-xs backdrop-blur-sm">
+            <div className="flex items-start gap-2 bg-rose-50/80 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-rose-700 dark:text-rose-450 p-3.5 rounded-xl text-xs backdrop-blur-sm">
               <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
               <span className="font-semibold">{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="flex items-start gap-2 bg-emerald-50/80 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-400 p-3.5 rounded-xl text-xs backdrop-blur-sm">
+            <div className="flex items-start gap-2 bg-emerald-50/80 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-450 p-3.5 rounded-xl text-xs backdrop-blur-sm">
               <Shield size={14} className="flex-shrink-0 mt-0.5" />
               <span className="font-semibold">{successMsg}</span>
             </div>

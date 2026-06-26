@@ -4,13 +4,6 @@ import { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Code2, RefreshCw, Copy, Check } from "lucide-react";
 
-interface CodeEditorProps {
-  value: string;
-  onChange: (value: string) => void;
-  language: string;
-  onLanguageChange: (lang: string) => void;
-}
-
 const LANGUAGES = [
   { value: "python", label: "Python 3" },
   { value: "javascript", label: "JavaScript" },
@@ -18,14 +11,14 @@ const LANGUAGES = [
   { value: "java", label: "Java 17" }
 ];
 
-export const TEMPLATES: Record<string, string> = {
+export const TEMPLATES = {
   python: 'def solve(nums, target):\n    # Write your algorithmic solution here\n    # Example: Complement lookup in hash map\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []\n',
   javascript: 'function solve(nums, target) {\n    // Write your algorithmic solution here\n    const seen = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const complement = target - nums[i];\n        if (seen.has(complement)) {\n            return [seen.get(complement), i];\n        }\n        seen.set(nums[i], i);\n    }\n    return [];\n}\n',
   cpp: '#include <vector>\n#include <unordered_map>\n\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> solve(vector<int>& nums, int target) {\n        unordered_map<int, int> seen;\n        for (int i = 0; i < nums.size(); ++i) {\n            int complement = target - nums[i];\n            if (seen.count(complement)) {\n                return {seen[complement], i};\n            }\n            seen[nums[i]] = i;\n        }\n        return {};\n    }\n};\n',
   java: 'import java.util.HashMap;\nimport java.util.Map;\n\nclass Solution {\n    public int[] solve(int[] nums, int target) {\n        Map<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int complement = target - nums[i];\n            if (seen.containsKey(complement)) {\n                return new int[] { seen.get(complement), i };\n            }\n            seen.put(nums[i], i);\n        }\n        return new int[] {};\n    }\n}\n'
 };
 
-export default function CodeEditor({ value, onChange, language, onLanguageChange }: CodeEditorProps) {
+export default function CodeEditor({ value, onChange, language, onLanguageChange }) {
   const [copied, setCopied] = useState(false);
   const [editorTheme, setEditorTheme] = useState("vs-dark");
 
@@ -44,7 +37,7 @@ export default function CodeEditor({ value, onChange, language, onLanguageChange
     return () => observer.disconnect();
   }, []);
 
-  const handleLanguageSelect = (lang: string) => {
+  const handleLanguageSelect = (lang) => {
     onLanguageChange(lang);
     if (!value || Object.values(TEMPLATES).includes(value)) {
       onChange(TEMPLATES[lang] || "");
@@ -86,7 +79,7 @@ export default function CodeEditor({ value, onChange, language, onLanguageChange
               <option key={l.value} value={l.value}>{l.label}</option>
             ))}
           </select>
-
+ 
           {/* Copy Button */}
           <button
             onClick={handleCopy}
@@ -95,7 +88,7 @@ export default function CodeEditor({ value, onChange, language, onLanguageChange
           >
             {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
           </button>
-
+ 
           {/* Reset Button */}
           <button
             onClick={handleReset}

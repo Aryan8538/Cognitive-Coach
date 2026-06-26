@@ -5,18 +5,9 @@ import { useRouter } from "next/navigation";
 import { Terminal, Users, BarChart3, HelpCircle, Activity, AlertTriangle, ArrowRight, Play, CheckCircle, Cpu, Cloud, Shield, Smartphone } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
-interface StatsData {
-  total_interviews: number;
-  average_clarity: number;
-  average_relevance: number;
-  average_grammar: number;
-  filler_words_trend: { date: string; count: string }[];
-  average_wpm: number;
-}
-
 export default function Dashboard() {
   const router = useRouter();
-  const [stats, setStats] = useState<StatsData | null>(null);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [backendOffline, setBackendOffline] = useState(false);
 
@@ -24,7 +15,7 @@ export default function Dashboard() {
     async function fetchStats() {
       try {
         const token = localStorage.getItem("token") || "";
-        const headers: Record<string, string> = {};
+        const headers = {};
         if (token) {
           headers["Authorization"] = `Bearer ${token}`;
         }
@@ -129,7 +120,7 @@ export default function Dashboard() {
     }
   ];
 
-  const handleStartSession = (roleName: string) => {
+  const handleStartSession = (roleName) => {
     router.push(`/interview?role=${encodeURIComponent(roleName)}`);
   };
 
@@ -197,6 +188,7 @@ export default function Dashboard() {
               }}
             >
               <circle cx={p.x} cy={p.y} r="4.5" fill="#ffffff" stroke="#8b5cf6" strokeWidth="2" className="transition-all duration-300 group-hover/dot:r-5.5 group-hover/dot:stroke-violet-400" />
+              <circle cx={p.x} cy={p.y} r="4.5" fill="#ffffff" stroke="#8b5cf6" strokeWidth="2" className="transition-all duration-300 group-hover/dot:r-5.5 group-hover/dot:stroke-violet-400" />
               <text x={p.x} y={p.y - 12} fontSize="9" className="fill-slate-900 dark:fill-white font-extrabold" textAnchor="middle">
                 {p.count}
               </text>
@@ -226,7 +218,7 @@ export default function Dashboard() {
 
       {/* Hero Welcome Header */}
       <section className="flex flex-col gap-4 mb-16 animate-fade-in-up">
-        <div className="flex items-center gap-2 self-start px-3 py-1 rounded-full border border-violet-500/20 bg-violet-500/5 text-violet-605 dark:text-violet-400 text-[10px] uppercase tracking-wider font-extrabold mb-1">
+        <div className="flex items-center gap-2 self-start px-3 py-1 rounded-full border border-violet-500/20 bg-violet-500/5 text-violet-650 dark:text-violet-400 text-[10px] uppercase tracking-wider font-extrabold mb-1">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
           System Status: Live Mocks Active
         </div>
@@ -246,12 +238,12 @@ export default function Dashboard() {
         {/* Core Metrics Summary */}
         <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-violet-500/20 dark:hover:border-violet-500/20 transition-all duration-300 flex flex-col justify-between animate-fade-in-up">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/20 flex items-center justify-center text-violet-600 dark:text-violet-400 shadow-inner">
+            <div className="w-10 h-10 rounded-xl bg-violet-55 dark:bg-violet-950/20 flex items-center justify-center text-violet-600 dark:text-violet-400 shadow-inner">
               <Activity size={18} />
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 font-display">Diagnostics Summary</h3>
-              <p className="text-xs text-slate-400 dark:text-slate-500">Global averages</p>
+              <p className="text-xs text-slate-400 dark:text-slate-505">Global averages</p>
             </div>
           </div>
           
@@ -307,7 +299,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 font-display">Filler Words Trend</h3>
-              <p className="text-xs text-slate-400 dark:text-slate-500">Counts across recent sessions</p>
+              <p className="text-xs text-slate-400 dark:text-slate-505">Counts across recent sessions</p>
             </div>
             <span className="flex h-2 w-2 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
@@ -346,7 +338,7 @@ export default function Dashboard() {
                   {role.title}
                 </h3>
                 
-                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed mb-5">
+                <p className="text-slate-505 dark:text-slate-400 text-xs leading-relaxed mb-5">
                   {role.desc}
                 </p>
               </div>
@@ -361,7 +353,7 @@ export default function Dashboard() {
                 </div>
                 
                 <button 
-                  className="w-full flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-zinc-900/50 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent py-2.5 rounded-xl text-xs font-bold transition-all duration-300 active:scale-98"
+                  className="w-full flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-zinc-900/55 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent py-2.5 rounded-xl text-xs font-bold transition-all duration-300 active:scale-98"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleStartSession(role.id);

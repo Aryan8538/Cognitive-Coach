@@ -6,8 +6,8 @@ import { Sun, Moon, Sparkles } from "lucide-react";
 
 export default function Navbar() {
   const router = useRouter();
-  const [isDark, setIsDark] = useState<boolean>(false);
-  const [user, setUser] = useState<{ name: string } | null>(null);
+  const [isDark, setIsDark] = useState(false);
+  const [user, setUser] = useState(null);
   const [pathname, setPathname] = useState("");
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md border-b border-slate-200/50 dark:border-zinc-800/50 transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full bg-white/70 dark:bg-zinc-955/70 backdrop-blur-md border-b border-slate-200/50 dark:border-zinc-800/50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
         
         {/* Logo Brand */}
@@ -79,7 +79,7 @@ export default function Navbar() {
             href="/" 
             className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
               pathname === "/" 
-                ? "text-violet-605 dark:text-violet-400" 
+                ? "text-violet-650 dark:text-violet-400" 
                 : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
             }`}
           >
@@ -92,8 +92,8 @@ export default function Navbar() {
             href="/advisor" 
             className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
               pathname === "/advisor" 
-                ? "text-violet-605 dark:text-violet-400" 
-                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
+                ? "text-violet-650 dark:text-violet-400" 
+                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
             }`}
           >
             Career Center
@@ -105,8 +105,8 @@ export default function Navbar() {
             href="/resume-checker" 
             className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
               pathname === "/resume-checker" 
-                ? "text-violet-605 dark:text-violet-400" 
-                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
+                ? "text-violet-650 dark:text-violet-400" 
+                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
             }`}
           >
             Resume Checker
