@@ -2,6 +2,8 @@ import os
 import re
 import requests
 import json
+import zipfile
+import xml.etree.ElementTree as ET
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Header
 from typing import List, Optional, Dict
 from pydantic import BaseModel
@@ -68,14 +70,18 @@ def analyze_resume_locally(text: str, role: str, num_pages: int) -> dict:
 
     # 2. Keyword Check
     keywords = ROLE_KEYWORDS.get(role, ROLE_KEYWORDS["Software Engineer"])
-    found_keywords = [kw for kw in keywords if re.search(r'\b' + re.escape(kw) + r'\b', text_lower)]
+    found_keywords = []
+    for kw in keywords:
+        pattern = r'(?:^|[^a-zA-Z0-9_#+])' + re.escape(kw) + r'(?=$|[^a-zA-Z0-9_#+])'
+        if re.search(pattern, text_lower):
+            found_keywords.append(kw)
     missing_keywords = [kw for kw in keywords if kw not in found_keywords]
     
     keyword_score = max(round((len(found_keywords) / len(keywords)) * 100), 20)
 
     # 3. Impact & Quantitative Check
     # Look for metrics, numbers, percentages
-    has_metrics = bool(re.search(r'\b\d+%\b|\$\d+|\b\d+x\b|\b\d+[\s-](users|servers|clients|percent)\b', text_lower))
+    has_metrics = bool(re.search(r'\b\d+%|\$\d+|\b\d+x\b|\b\d+[\s-](users|servers|clients|percent)\b', text_lower))
     # Look for active action verbs
     action_verbs = ["designed", "implemented", "optimized", "reduced", "increased", "developed", "built", "managed", "created", "led", "architected"]
     found_verbs = [v for v in action_verbs if v in text_lower]
@@ -169,9 +175,23 @@ def check_resume(
             finally:
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
+        elif file_ext == "docx":
+            temp_path = f"temp_resume_{os.urandom(4).hex()}.docx"
+            with open(temp_path, "wb") as buffer:
+                buffer.write(file.file.read())
+            
+            try:
+                with zipfile.ZipFile(temp_path) as docx:
+                    xml_content = docx.read('word/document.xml')
+                    root = ET.fromstring(xml_content)
+                    namespaces = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+                    text_elements = root.findall('.//w:t', namespaces)
+                    resume_text = " ".join([elem.text for elem in text_elements if elem.text])
+            finally:
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
         else:
-            content_bytes = file.file.read()
-            resume_text = content_bytes.decode("utf-8", errors="ignore")
+            raise HTTPException(status_code=400, detail="Unsupported file format.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to parse resume document: {str(e)}")
         
