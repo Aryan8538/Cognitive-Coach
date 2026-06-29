@@ -8,11 +8,28 @@ from services.auth import get_current_user_optional
 router = APIRouter()
 
 @router.get("/questions", response_model=List[schemas.QuestionResponse])
-def get_questions(role: str = None, db: Session = Depends(get_db)):
+def get_questions(role: str = None, keywords: str = None, db: Session = Depends(get_db)):
     query = db.query(models.Question)
     if role:
         query = query.filter(models.Question.role == role)
-    return query.all()
+    questions = query.all()
+    
+    if keywords and questions:
+        keyword_list = [k.strip().lower() for k in keywords.split(",") if k.strip()]
+        keyword_set = set(keyword_list)
+        scored_questions = []
+        for q in questions:
+            score = 0
+            if q.suggested_keywords:
+                suggested_list = [sk.strip().lower() for sk in q.suggested_keywords.split(",") if sk.strip()]
+                for sk in suggested_list:
+                    if sk in keyword_set or any(kw in sk or sk in kw for kw in keyword_set):
+                        score += 1
+            scored_questions.append((score, q))
+        scored_questions.sort(key=lambda x: x[0], reverse=True)
+        return [q for score, q in scored_questions]
+        
+    return questions
 
 @router.post("/interviews", response_model=schemas.InterviewResponse)
 def create_interview(

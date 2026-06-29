@@ -16,7 +16,9 @@ function InterviewRoomContent() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [interviewId, setInterviewId] = useState(null);
   
-  const [loading, setLoading] = useState(true);
+  const [isConfiguring, setIsConfiguring] = useState(true);
+  const [useAdaptive, setUseAdaptive] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [answeredMap, setAnsweredMap] = useState({});
   const [errorMsg, setErrorMsg] = useState(null);
@@ -25,43 +27,52 @@ function InterviewRoomContent() {
   const [code, setCode] = useState("");
   const [codeLanguage, setCodeLanguage] = useState("python");
 
-  useEffect(() => {
-    async function initializeSession() {
-      try {
-        const token = localStorage.getItem("token") || "";
-        const headers = { 
-          "Content-Type": "application/json"
-        };
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
-        const sessionRes = await fetch(`${API_BASE_URL}/api/interviews`, {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ role: role })
-        });
-        
-        if (!sessionRes.ok) throw new Error("Failed to create interview session on backend.");
-        const sessionData = await sessionRes.json();
-        setInterviewId(sessionData.id);
-
-        const qRes = await fetch(`${API_BASE_URL}/api/questions?role=${encodeURIComponent(role)}`);
-        if (!qRes.ok) throw new Error("Failed to load role questions.");
-        const qData = await qRes.json();
-        
-        if (qData.length === 0) {
-          throw new Error("No questions available for this role inside the database.");
-        }
-        setQuestions(qData);
-      } catch (err) {
-        console.warn(err);
-        setErrorMsg(err.message || "An error occurred during interview startup.");
-      } finally {
-        setLoading(false);
+  const handleLaunch = async () => {
+    setIsConfiguring(false);
+    setLoading(true);
+    setErrorMsg(null);
+    
+    try {
+      const token = localStorage.getItem("token") || "";
+      const headers = { 
+        "Content-Type": "application/json"
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
       }
+      const sessionRes = await fetch(`${API_BASE_URL}/api/interviews`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ role: role })
+      });
+      
+      if (!sessionRes.ok) throw new Error("Failed to create interview session on backend.");
+      const sessionData = await sessionRes.json();
+      setInterviewId(sessionData.id);
+
+      let questionsUrl = `${API_BASE_URL}/api/questions?role=${encodeURIComponent(role)}`;
+      if (useAdaptive) {
+        const keywords = localStorage.getItem("coach_resume_keywords") || "";
+        if (keywords) {
+          questionsUrl += `&keywords=${encodeURIComponent(keywords)}`;
+        }
+      }
+
+      const qRes = await fetch(questionsUrl);
+      if (!qRes.ok) throw new Error("Failed to load role questions.");
+      const qData = await qRes.json();
+      
+      if (qData.length === 0) {
+        throw new Error("No questions available for this role inside the database.");
+      }
+      setQuestions(qData);
+    } catch (err) {
+      console.warn(err);
+      setErrorMsg(err.message || "An error occurred during interview startup.");
+    } finally {
+      setLoading(false);
     }
-    initializeSession();
-  }, [role, router]);
+  };
 
   // Reset editor text when question changes or on initialization
   useEffect(() => {
@@ -133,6 +144,75 @@ function InterviewRoomContent() {
       setCurrentIdx((prev) => prev - 1);
     }
   };
+
+  if (isConfiguring) {
+    const hasCachedKeywords = typeof window !== "undefined" && localStorage.getItem("coach_resume_keywords");
+    return (
+      <div className="flex-grow flex flex-col items-center justify-center py-20 px-6 max-w-xl mx-auto font-sans w-full">
+        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-8 rounded-2xl shadow-sm hover:border-violet-500/20 transition-all duration-300 w-full animate-fade-in-up">
+          <h2 className="text-xl font-extrabold text-slate-900 dark:text-white font-display mb-2 uppercase tracking-wide">
+            Setup Interview Room
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
+            Configure your workspace parameters before launching the virtual mock session.
+          </p>
+
+          <div className="flex flex-col gap-5">
+            {/* Display Selected Role */}
+            <div className="bg-slate-50/50 dark:bg-zinc-850/40 border border-slate-150 dark:border-zinc-800/50 p-4 rounded-xl">
+              <span className="text-[9px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1">Target Domain</span>
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-200">{role}</span>
+            </div>
+
+            {/* Resume Adaptation Toggle */}
+            {hasCachedKeywords ? (
+              <div className="flex items-center justify-between bg-slate-50/50 dark:bg-zinc-850/40 border border-slate-150 dark:border-zinc-800/50 p-4 rounded-xl">
+                <div>
+                  <span className="text-[10px] font-extrabold text-slate-800 dark:text-slate-250 block">Adapt to Scanned Resume</span>
+                  <span className="text-[9px] text-slate-455 dark:text-slate-500 block mt-0.5">Prioritizes questions matching your resume keywords.</span>
+                </div>
+                <input 
+                  type="checkbox" 
+                  checked={useAdaptive} 
+                  onChange={(e) => setUseAdaptive(e.target.checked)}
+                  className="w-4 h-4 rounded text-violet-650 bg-slate-100 border-slate-350 focus:ring-violet-500 cursor-pointer"
+                />
+              </div>
+            ) : (
+              <div className="bg-slate-50/20 dark:bg-zinc-850/10 border border-dashed border-slate-200 dark:border-zinc-800/40 p-4 rounded-xl text-center">
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block">No Scanned Resume Found</span>
+                <span className="text-[9px] text-slate-400/80 dark:text-slate-550 block mt-0.5 font-medium">Upload your resume in the ATS Checker first to enable adaptive questioning.</span>
+              </div>
+            )}
+
+            {/* Language Selector */}
+            {(role.includes("Software") || role.includes("Web") || role.includes("AI")) && (
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-extrabold text-slate-450 dark:text-slate-550 uppercase tracking-wide">Default Coding Language</label>
+                <select
+                  value={codeLanguage}
+                  onChange={(e) => setCodeLanguage(e.target.value)}
+                  className="text-xs bg-slate-50 dark:bg-zinc-850 border border-slate-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 focus:outline-none focus:border-violet-500/50 cursor-pointer font-bold text-slate-700 dark:text-slate-300"
+                >
+                  <option value="python">Python 3</option>
+                  <option value="javascript">JavaScript</option>
+                  <option value="cpp">C++ (GCC)</option>
+                  <option value="java">Java 17</option>
+                </select>
+              </div>
+            )}
+
+            <button 
+              className="mt-4 w-full bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white py-3 rounded-xl text-xs font-bold shadow-md shadow-violet-500/10 hover:shadow-violet-500/20 transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95"
+              onClick={handleLaunch}
+            >
+              Launch Interview Room <ArrowRight size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

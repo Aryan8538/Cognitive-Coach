@@ -94,6 +94,9 @@ export default function ResumeCheckerPage() {
       }
 
       const data = await res.json();
+      if (data.keyword_check && Array.isArray(data.keyword_check.found)) {
+        localStorage.setItem("coach_resume_keywords", data.keyword_check.found.join(","));
+      }
       setTimeout(() => {
         setResult(data);
         setLoading(false);
