@@ -16,8 +16,10 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0); // 0 to 100
+  const [wordCount, setWordCount] = useState(0);
   
   const timerRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   // Sync camera stream once video DOM element mounts after permission state updates
   useEffect(() => {
@@ -81,6 +83,7 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
     setRecording(true);
     setRecordedChunks([]);
     setDuration(0);
+    setWordCount(0);
     
     const options = { mimeType: "video/webm;codecs=vp9,opus" };
     let recorder;
@@ -102,6 +105,40 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
     timerRef.current = setInterval(() => {
       setDuration((prev) => prev + 1);
     }, 1000);
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      try {
+        const rec = new SpeechRecognition();
+        rec.continuous = true;
+        rec.interimResults = true;
+        rec.lang = "en-US";
+        rec.onresult = (event) => {
+          let totalText = "";
+          for (let i = 0; i < event.results.length; ++i) {
+            totalText += event.results[i][0].transcript + " ";
+          }
+          const totalWords = totalText.trim().split(/\s+/).filter(Boolean).length;
+          setWordCount(totalWords);
+        };
+        rec.onerror = (e) => {
+          console.warn("Speech recognition warning/error:", e);
+        };
+        rec.onend = () => {
+          if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+            try {
+              rec.start();
+            } catch (err) {
+              console.warn("Failed to restart speech recognition:", err);
+            }
+          }
+        };
+        recognitionRef.current = rec;
+        rec.start();
+      } catch (err) {
+        console.error("Speech recognition startup error:", err);
+      }
+    }
   };
 
   const stopRecording = () => {
@@ -111,6 +148,12 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
     mediaRecorderRef.current.stop();
     if (timerRef.current) {
       clearInterval(timerRef.current);
+    }
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {}
+      recognitionRef.current = null;
     }
   };
 
@@ -135,6 +178,11 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
       if (audioContextRef.current) {
         audioContextRef.current.close();
       }
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.abort();
+        } catch (err) {}
+      }
     };
   }, []);
 
@@ -142,6 +190,34 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const elapsedMinutes = duration / 60.0;
+  const currentWpm = duration > 2 ? Math.round(wordCount / elapsedMinutes) : 0;
+
+  const getPacingInfo = (wpm) => {
+    if (wpm === 0) {
+      return {
+        label: "Calibrating...",
+        colorStyle: "bg-slate-500/10 border-slate-550/20 text-slate-400"
+      };
+    }
+    if (wpm < 110) {
+      return {
+        label: "Too Slow",
+        colorStyle: "bg-cyan-500/15 border-cyan-500/25 text-cyan-700 dark:text-cyan-405"
+      };
+    } else if (wpm > 145) {
+      return {
+        label: "Too Fast",
+        colorStyle: "bg-amber-500/15 border-amber-500/25 text-amber-700 dark:text-amber-405"
+      };
+    } else {
+      return {
+        label: "Ideal Pacing",
+        colorStyle: "bg-emerald-500/15 border-emerald-500/25 text-emerald-700 dark:text-emerald-405"
+      };
+    }
   };
 
   return (
@@ -211,6 +287,16 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
             {/* Sweep Laser Scanner Line */}
             {recording && (
               <div className="absolute inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-violet-500/70 to-transparent animate-scan pointer-events-none z-10"></div>
+            )}
+
+            {/* Real-time Pacing HUD Overlay */}
+            {recording && (
+              <div className={`absolute top-3.5 left-1/2 transform -translate-x-1/2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider border backdrop-blur-md transition-all duration-300 z-20 flex items-center gap-1.5 ${
+                getPacingInfo(currentWpm).colorStyle
+              }`}>
+                <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
+                {currentWpm} WPM &bull; {getPacingInfo(currentWpm).label}
+              </div>
             )}
           </>
         )}
