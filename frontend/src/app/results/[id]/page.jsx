@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, use, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Play, FileText, CheckCircle2, MessageSquare, Clock, ShieldAlert, Award, Star, Code2 } from "lucide-react";
 import Editor from "@monaco-editor/react";
@@ -10,6 +10,7 @@ export default function Results({ params }) {
   const resolvedParams = use(params);
   const router = useRouter();
   const interviewId = resolvedParams.id;
+  const videoRef = useRef(null);
 
   const [interview, setInterview] = useState(null);
   const [questions, setQuestions] = useState({});
@@ -165,9 +166,19 @@ export default function Results({ params }) {
 
   const verdictInfo = getHiringVerdict(overallScore);
 
+  const handleWordClick = (wordIdx, totalWords) => {
+    if (videoRef.current && videoRef.current.duration) {
+      const percentage = wordIdx / totalWords;
+      const seekTime = percentage * videoRef.current.duration;
+      videoRef.current.currentTime = seekTime;
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
   const renderHighlightedTranscript = (transcript) => {
     if (!transcript) return <em className="text-slate-455">No transcript available.</em>;
     const words = transcript.split(/\s+/);
+    const totalWords = words.length;
     const fillers = ["like", "um", "uh", "basically", "you know", "actually", "so"];
     
     return words.map((word, idx) => {
@@ -176,12 +187,26 @@ export default function Results({ params }) {
       
       if (isFiller) {
         return (
-          <span key={idx} className="inline-block px-1.5 py-0.5 rounded bg-rose-500/10 dark:bg-rose-500/15 border border-rose-500/20 text-rose-600 dark:text-rose-455 text-[10px] font-extrabold mx-0.5 leading-none uppercase tracking-wide">
+          <span 
+            key={idx} 
+            onClick={() => handleWordClick(idx, totalWords)}
+            className="inline-block px-1.5 py-0.5 rounded bg-rose-500/10 dark:bg-rose-500/15 border border-rose-500/20 text-rose-600 dark:text-rose-455 text-[10px] font-extrabold mx-1 leading-none uppercase tracking-wide cursor-pointer hover:scale-105 transition-transform"
+            title="Click to skip video to this section"
+          >
             {word}
           </span>
         );
       }
-      return <span key={idx}> {word} </span>;
+      return (
+        <span 
+          key={idx} 
+          onClick={() => handleWordClick(idx, totalWords)}
+          className="cursor-pointer hover:bg-violet-500/10 hover:text-violet-650 dark:hover:text-violet-400 transition-colors rounded px-0.5"
+          title="Click to skip video here"
+        >
+          {word}{" "}
+        </span>
+      );
     });
   };
 
@@ -398,6 +423,7 @@ export default function Results({ params }) {
               </h4>
               <div className="relative rounded-lg overflow-hidden border border-slate-200/40 dark:border-zinc-800/50 bg-black aspect-[4/3] flex items-center justify-center shadow-inner">
                 <video
+                  ref={videoRef}
                   src={`${API_BASE_URL}${activeResponse.video_url}`}
                   controls
                   className="w-full h-full object-cover"
