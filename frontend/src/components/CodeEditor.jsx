@@ -270,4 +270,3 @@ except Exception as e:
     </div>
   );
 }
-}
