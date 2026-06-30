@@ -36,6 +36,18 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 def get_current_user(token: Optional[str] = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> models.User:
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            email: str = payload.get("sub")
+            if email:
+                user = db.query(models.User).filter(models.User.email == email).first()
+                if user:
+                    return user
+        except JWTError:
+            pass # Fallback to guest if token is invalid or expired
+
+    # Fallback to Guest
     user = db.query(models.User).filter(models.User.email == "guest@cognitivecoach.com").first()
     if not user:
         user = models.User(

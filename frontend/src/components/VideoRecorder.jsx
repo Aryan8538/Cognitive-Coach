@@ -17,6 +17,7 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0); // 0 to 100
   const [wordCount, setWordCount] = useState(0);
+  const [currentTranscript, setCurrentTranscript] = useState("");
   
   const timerRef = useRef(null);
   const recognitionRef = useRef(null);
@@ -27,6 +28,33 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
       videoRef.current.srcObject = streamRef.current;
     }
   }, [permission]);
+
+  // Spacebar hotkey to start/stop recording (ignoring input field contexts)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === "Space" && permission && !isProcessing) {
+        const activeEl = document.activeElement;
+        if (
+          activeEl && 
+          (activeEl.tagName === "INPUT" || 
+           activeEl.tagName === "TEXTAREA" || 
+           activeEl.isContentEditable || 
+           activeEl.className.includes("input") || 
+           activeEl.className.includes("editor"))
+        ) {
+          return;
+        }
+        e.preventDefault();
+        if (recording) {
+          stopRecording();
+        } else {
+          startRecording();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [permission, recording, isProcessing]);
 
   const getCameraPermission = async () => {
     try {
@@ -84,6 +112,7 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
     setRecordedChunks([]);
     setDuration(0);
     setWordCount(0);
+    setCurrentTranscript("");
     
     const options = { mimeType: "video/webm;codecs=vp9,opus" };
     let recorder;
@@ -118,7 +147,9 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
           for (let i = 0; i < event.results.length; ++i) {
             totalText += event.results[i][0].transcript + " ";
           }
-          const totalWords = totalText.trim().split(/\s+/).filter(Boolean).length;
+          const trimmed = totalText.trim();
+          setCurrentTranscript(trimmed);
+          const totalWords = trimmed.split(/\s+/).filter(Boolean).length;
           setWordCount(totalWords);
         };
         rec.onerror = (e) => {
@@ -296,6 +327,32 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
               }`}>
                 <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
                 {currentWpm} WPM &bull; {getPacingInfo(currentWpm).label}
+              </div>
+            )}
+
+            {/* Live Subtitles HUD Overlay */}
+            {recording && currentTranscript && (
+              <div className="absolute bottom-3.5 inset-x-3.5 bg-black/60 backdrop-blur-sm border border-white/10 text-white rounded-xl p-2.5 text-center text-[11px] font-medium leading-normal max-h-16 overflow-y-auto pointer-events-none z-20">
+                "{currentTranscript}"
+              </div>
+            )}
+
+            {/* Mic Calibrator Check Overlay */}
+            {!recording && (
+              <div className="absolute bottom-3.5 inset-x-3.5 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-xl p-3 z-20 flex flex-col gap-1.5 items-center">
+                <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">Microphone Calibration check</span>
+                <div className="flex items-center gap-2 w-full justify-center">
+                  <span className="text-[10px] text-slate-300 font-medium">Volume: {volume}%</span>
+                  <div className="flex-grow max-w-[120px] h-1.5 bg-zinc-800 rounded-full overflow-hidden border border-white/5">
+                    <div 
+                      className={`h-full transition-all duration-75 ${volume > 50 ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                      style={{ width: `${volume}%` }} 
+                    />
+                  </div>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-extrabold uppercase">
+                    Ready
+                  </span>
+                </div>
               </div>
             )}
           </>

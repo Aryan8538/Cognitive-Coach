@@ -231,7 +231,14 @@ export default function Results({ params }) {
     const strokeDashoffset = circumference - (score / 100) * circumference;
 
     return (
-      <div className="flex flex-col items-center gap-2 hover:scale-105 transition-transform duration-300">
+      <div 
+        className="flex flex-col items-center gap-2 hover:scale-105 transition-transform duration-300"
+        role="progressbar"
+        aria-valuenow={score}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label={`${label} compatibility rating: ${score}%`}
+      >
         <div className="relative flex items-center justify-center w-20 h-20">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 72 72">
             <circle

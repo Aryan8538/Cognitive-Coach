@@ -22,9 +22,12 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
-  // Authentication is removed, redirect to dashboard immediately
+  // If the user already has a token in localStorage, redirect to dashboard.
   useEffect(() => {
-    router.push("/");
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/");
+    }
   }, [router]);
 
   const handleSubmit = async (e) => {
@@ -282,6 +285,20 @@ export default function LoginPage() {
                 Create Account <ArrowRight size={13} />
               </>
             )}
+          </button>
+
+          {/* Guest Access Button */}
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              router.push("/");
+              router.refresh();
+            }}
+            className="w-full mt-2 flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-slate-200 border border-slate-200/50 dark:border-zinc-750 font-bold py-3 px-4 rounded-xl text-xs transition-all active:scale-98 cursor-pointer"
+          >
+            Continue as Guest <ArrowRight size={13} className="text-slate-400" />
           </button>
 
         </form>

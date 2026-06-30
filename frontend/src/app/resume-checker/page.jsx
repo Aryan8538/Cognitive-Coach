@@ -156,7 +156,14 @@ export default function ResumeCheckerPage() {
     const strokeDashoffset = circumference - (score / 100) * circumference;
 
     return (
-      <div className="flex items-center gap-3 bg-slate-50/60 dark:bg-zinc-850/30 border border-slate-150 dark:border-zinc-800/40 p-3 rounded-xl">
+      <div 
+        className="flex items-center gap-3 bg-slate-50/60 dark:bg-zinc-850/30 border border-slate-150 dark:border-zinc-800/40 p-3 rounded-xl"
+        role="progressbar"
+        aria-valuenow={score}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label={`${label} compatibility rating: ${score}%`}
+      >
         <div className="relative flex items-center justify-center w-14 h-14">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 64 64">
             <circle className="text-slate-100 dark:text-zinc-800/40" strokeWidth={stroke} stroke="currentColor" fill="transparent" r={normalizedRadius} cx={radius} cy={radius} />

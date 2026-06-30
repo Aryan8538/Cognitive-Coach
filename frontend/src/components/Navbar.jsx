@@ -121,6 +121,34 @@ export default function Navbar() {
             Start Interview
           </a>
 
+          {/* User profile block */}
+          {user ? (
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col text-right hidden sm:flex">
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{user.name}</span>
+                <span className="text-[9px] text-violet-650 dark:text-violet-400 font-extrabold uppercase tracking-wider leading-none">Member</span>
+              </div>
+              <button 
+                onClick={handleLogout}
+                className="text-xs font-bold text-rose-500 dark:text-rose-450 hover:underline cursor-pointer"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col text-right hidden sm:flex">
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 leading-tight">Guest Student</span>
+                <span className="text-[9px] text-amber-500 font-extrabold uppercase tracking-wider leading-none">Sandbox</span>
+              </div>
+              <a 
+                href="/login"
+                className="text-xs font-bold text-violet-650 dark:text-violet-400 hover:underline"
+              >
+                Sign In
+              </a>
+            </div>
+          )}
 
           {/* Theme Switcher Button */}
           <button 
