@@ -220,11 +220,6 @@ export default function Dashboard() {
       {/* Hero Welcome Header */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-24 min-h-[70vh] py-8 lg:py-12 animate-fade-in-up">
         <div className="lg:col-span-7 flex flex-col gap-6 text-left">
-          <div className="flex items-center gap-2 self-start px-3 py-1 rounded-full border border-yellow-500/20 bg-yellow-500/5 text-yellow-600 dark:text-yellow-500 text-[10px] uppercase tracking-wider font-extrabold mb-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            ✦ TRUSTED BY 10,000+ PREPPING ENGINEERS
-          </div>
-          
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-slate-900 dark:text-white font-display">
             Everything you need to ace your <em className="text-yellow-600 dark:text-[#D4AF37] font-serif not-italic">dream</em> tech interview.
           </h1>
