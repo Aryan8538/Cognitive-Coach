@@ -11,15 +11,29 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [backendOffline, setBackendOffline] = useState(false);
+  const [user, setUser] = useState(null);
+  const [interviews, setInterviews] = useState([]);
 
   useEffect(() => {
-    async function fetchStats() {
+    // Load active user session from localStorage
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.warn("Failed to parse user session in dashboard", e);
+      }
+    }
+
+    async function fetchStatsAndInterviews() {
       try {
         const token = localStorage.getItem("token") || "";
         const headers = {};
         if (token) {
           headers["Authorization"] = `Bearer ${token}`;
         }
+        
+        // 1. Fetch Stats
         const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`, { headers });
         if (res.ok) {
           const data = await res.json();
@@ -28,6 +42,15 @@ export default function Dashboard() {
         } else {
           setBackendOffline(true);
         }
+
+        // 2. Fetch User Practice Interviews History
+        if (token) {
+          const interviewsRes = await fetch(`${API_BASE_URL}/api/interviews`, { headers });
+          if (interviewsRes.ok) {
+            const interviewsData = await interviewsRes.json();
+            setInterviews(interviewsData);
+          }
+        }
       } catch (err) {
         console.warn("Failed to fetch dashboard stats", err);
         setBackendOffline(true);
@@ -35,7 +58,7 @@ export default function Dashboard() {
         setLoading(false);
       }
     }
-    fetchStats();
+    fetchStatsAndInterviews();
   }, [router]);
 
   const roles = [
@@ -387,6 +410,77 @@ export default function Dashboard() {
           ))}
         </div>
       </section>
+
+      {/* Historical Interviews Given */}
+      {user && interviews && interviews.length > 0 && (
+        <section id="history" className="mt-20 scroll-mt-20">
+          <h2 className="text-xl font-bold tracking-tight mb-8 border-b border-slate-200/50 dark:border-zinc-800/60 pb-3 text-slate-800 dark:text-slate-200 font-display">
+            My Interview Practice History
+          </h2>
+          
+          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-slate-100 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-850/50 text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-505">
+                    <th className="py-4 px-6">Role Focus</th>
+                    <th className="py-4 px-6">Date Completed</th>
+                    <th className="py-4 px-6">Responses</th>
+                    <th className="py-4 px-6">Average Metric Score</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {interviews.map((interview) => {
+                    // Compute average score of responses
+                    const completedResponses = interview.responses.filter(r => r.metrics);
+                    let avgScore = 0;
+                    if (completedResponses.length > 0) {
+                      const totalScore = completedResponses.reduce((sum, r) => {
+                        return sum + (r.metrics.clarity_score + r.metrics.relevance_score + r.metrics.grammar_score) / 3;
+                      }, 0);
+                      avgScore = Math.round(totalScore / completedResponses.length);
+                    }
+                    
+                    return (
+                      <tr key={interview.id} className="border-b border-slate-100 dark:border-zinc-800/50 hover:bg-slate-50/30 dark:hover:bg-zinc-850/20 transition-colors">
+                        <td className="py-4 px-6 font-bold text-slate-800 dark:text-slate-200">{interview.role}</td>
+                        <td className="py-4 px-6 text-slate-500 dark:text-slate-450">
+                          {new Date(interview.created_at).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric"
+                          })}
+                        </td>
+                        <td className="py-4 px-6 text-slate-500 dark:text-slate-400 font-bold">
+                          {interview.responses.length} Question(s)
+                        </td>
+                        <td className="py-4 px-6">
+                          {avgScore > 0 ? (
+                            <span className="inline-flex items-center gap-1.5 font-bold text-[#D4AF37]">
+                              ✦ {avgScore}%
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 dark:text-slate-650">Pending Feedback</span>
+                          )}
+                        </td>
+                        <td className="py-4 px-6 text-right">
+                          <button
+                            onClick={() => router.push(`/results/${interview.id}`)}
+                            className="px-4.5 py-1.5 bg-slate-50 hover:bg-violet-600 hover:text-white dark:bg-zinc-900/55 dark:hover:bg-violet-600 text-slate-700 dark:text-slate-350 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent rounded-lg font-bold transition-all duration-200 cursor-pointer"
+                          >
+                            View Report
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

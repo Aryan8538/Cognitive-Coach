@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Shield, Mail, Lock, User, ArrowRight, Loader2, AlertCircle } from "lucide-react";
-import { API_BASE_URL } from "@/utils/config";
+import { supabase } from "@/utils/supabase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -60,57 +60,70 @@ export default function LoginPage() {
 
     try {
       if (activeTab === "login") {
-        // Log in JSON endpoint
-        const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
         });
 
-        const data = await res.json();
-        
-        if (!res.ok) {
-          throw new Error(data.detail || "Authentication failed. Please verify your credentials.");
+        if (error) {
+          throw error;
         }
 
         // Save token to local storage
-        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("token", data.session.access_token);
         
-        // Fetch current user details to save user name
-        const userRes = await fetch(`${API_BASE_URL}/api/auth/me`, {
-          headers: { "Authorization": `Bearer ${data.access_token}` }
-        });
-        
-        if (userRes.ok) {
-          const userData = await userRes.json();
-          localStorage.setItem("user", JSON.stringify(userData));
-        }
+        // Save user profile details
+        const userData = {
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.user_metadata?.full_name || data.user.user_metadata?.name || email.split("@")[0]
+        };
+        localStorage.setItem("user", JSON.stringify(userData));
 
-        router.push("/");
-        router.refresh();
+        setSuccessMsg("Logged in successfully! Redirecting...");
+        setTimeout(() => {
+          router.push("/");
+          router.refresh();
+        }, 1000);
       } else {
         // Sign up
-        const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password })
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              name: name,
+              full_name: name
+            }
+          }
         });
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.detail || "Registration failed. Please try again.");
+        if (error) {
+          throw error;
         }
 
-        setSuccessMsg("Account created successfully! Redirecting to sign in...");
-        
-        // Clear sign up specific inputs and switch to login tab
-        setTimeout(() => {
-          setActiveTab("login");
-          setPassword("");
-          setConfirmPassword("");
-          setSuccessMsg(null);
-        }, 1500);
+        if (data.session) {
+          localStorage.setItem("token", data.session.access_token);
+          const userData = {
+            id: data.user.id,
+            email: data.user.email,
+            name: name
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
+          setSuccessMsg("Account created and logged in successfully!");
+          setTimeout(() => {
+            router.push("/");
+            router.refresh();
+          }, 1500);
+        } else {
+          setSuccessMsg("Registration successful! Please check your email to verify your account.");
+          setTimeout(() => {
+            setActiveTab("login");
+            setPassword("");
+            setConfirmPassword("");
+            setSuccessMsg(null);
+          }, 3000);
+        }
       }
     } catch (err) {
       setErrorMsg(err.message || "An unexpected error occurred. Please try again.");

@@ -121,3 +121,13 @@ def get_dashboard_stats(
         "filler_words_trend": filler_words_trend,
         "average_wpm": round(avg_wpm, 1)
     }
+
+@router.get("/interviews", response_model=List[schemas.InterviewResponse])
+def get_user_interviews(
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_optional)
+):
+    query = db.query(models.Interview)
+    if current_user:
+        query = query.filter(models.Interview.user_id == current_user.id)
+    return query.order_by(models.Interview.created_at.desc()).all()

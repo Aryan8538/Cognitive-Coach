@@ -39,13 +39,30 @@ def get_current_user(token: Optional[str] = Depends(oauth2_scheme), db: Session 
     if token:
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            email: str = payload.get("sub")
+            email = payload.get("email")
+            sub = payload.get("sub")
+            
+            # Backwards compatibility for local tokens where email was 'sub'
+            if not email and sub and "@" in str(sub):
+                email = sub
+                
             if email:
                 user = db.query(models.User).filter(models.User.email == email).first()
-                if user:
-                    return user
+                if not user:
+                    # Dynamically synchronize user from Supabase token metadata
+                    user_metadata = payload.get("user_metadata", {})
+                    name = user_metadata.get("full_name") or user_metadata.get("name") or email.split("@")[0]
+                    user = models.User(
+                        name=name,
+                        email=email,
+                        hashed_password=""  # Authenticated externally via Supabase
+                    )
+                    db.add(user)
+                    db.commit()
+                    db.refresh(user)
+                return user
         except JWTError:
-            pass # Fallback to guest if token is invalid or expired
+            pass  # Fallback to guest if token is invalid or expired
 
     # Fallback to Guest
     user = db.query(models.User).filter(models.User.email == "guest@cognitivecoach.com").first()
