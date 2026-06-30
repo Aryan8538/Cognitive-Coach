@@ -2,7 +2,17 @@
 > **AI-Powered Mock Interview & Communication Diagnostics Platform**
 > *B.Tech Computer Science Capstone Project*
 
-CognitiveCoach is a full-stack web application designed to help students master placement interviews. The platform allows users to choose specific job roles (Software Engineer, Product Manager, Data Analyst, Behavioral), record video responses to practice questions, and receive detailed diagnostics (speech pace, filler word counters, clarity/grammar scores, technical relevance, and AI model suggested answers).
+CognitiveCoach is a full-stack web application designed to help students master technical and behavioral placement interviews. The platform allows users to choose specific job roles (Software Engineer, Product Manager, Data Analyst, Behavioral, etc.), record video responses, and receive real-time diagnostics (speaking pace, filler word counters, clarity/grammar scores, technical relevance, and AI-mode suggested answers).
+
+---
+
+## 🚀 Key Feature Enhancements
+
+1. **Interactive Client-Side Code Execution**: Run Python 3 (compiled directly in the browser via Pyodide WebAssembly runtime) and JavaScript (via a sandboxed runner) to validate coding solutions on mock inputs in real-time.
+2. **On-Demand Microphone Calibration**: Test microphone gain levels and inputs prior to starting active recording.
+3. **Live Speech Subtitles**: Speech recognition events automatically translate spoken responses into visual overlays as you record.
+4. **Restored Member Authentications**: Proper JWT login and signup options to persistent individual user history, with a graceful **"Continue as Guest"** sandbox mode bypass.
+5. **Accessibility Compliant (A11y)**: Built-in ARIA progressbar attributes for screen readers, keyboard focus trap escape instructions (`Ctrl + M`), and spacebar controls (`Space` key to start/stop recordings).
 
 ---
 
@@ -15,7 +25,7 @@ CognitiveCoach is a full-stack web application designed to help students master 
                                 │ WebRTC Video Capture
                                 ▼
                     ┌────────────────────────┐
-                    │    Next.js Frontend    │ (JavaScript, React)
+                    │     Next.js Frontend   │ (React, Monaco Editor, Pyodide WASM)
                     └───────────┬────────────┘
                                 │ Upload WebM File (HTTP Form)
                                 ▼
@@ -34,7 +44,7 @@ CognitiveCoach is a full-stack web application designed to help students master 
                           │ Save Results
                           ▼
                     ┌───────────┐
-                    │SQLite DB  │ (coach.db)
+                    │SQLite DB  │ (configurable database path or PostgreSQL URL)
                     └───────────┘
 ```
 
@@ -44,13 +54,13 @@ CognitiveCoach is a full-stack web application designed to help students master 
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Frontend** | **Next.js (v15)** | Full-stack framework, App Router, JavaScript |
-| **Icons** | **Lucide React** | Premium icon pack |
-| **Styling** | **Vanilla CSS Modules** | Custom theme (Glassmorphism, Indigo/Cyan accents) |
+| **Frontend** | **Next.js (v15/16)** | Full-stack framework, App Router, React |
+| **Code Editor** | **Monaco Editor + Pyodide** | In-browser editor workspace with WebAssembly Python runtime |
+| **Icons & Style**| **Lucide React + Tailwind** | Custom theme (Glassmorphism layout) |
 | **Backend** | **FastAPI** | Fast, asynchronous REST API framework |
-| **Database** | **SQLite + SQLAlchemy** | Local database persistence, migration-free setup |
-| **Media Processing** | **Web Audio API** | Real-time browser audio levels visualization |
-| **AI Integration** | **Google Gemini 1.5 Flash** | Audio-to-Text translation & feedback grading |
+| **Database** | **SQLite / PostgreSQL** | Database persistence with SQLAlchemy support |
+| **Media Processing**| **Web Audio API** | Real-time browser audio levels calibration |
+| **AI Integration** | **Google Gemini 1.5 Flash** | Audio-to-Text translation & evaluation |
 
 ---
 
@@ -60,30 +70,34 @@ CognitiveCoach is a full-stack web application designed to help students master 
 cognitive-coach/
 ├── backend/
 │   ├── main.py            # FastAPI Entrypoint & Database Seeding
-│   ├── database.py        # SQLite SQLAlchemy configuration
+│   ├── database.py        # SQLAlchemy configurations (SQLite or PostgreSQL)
 │   ├── models.py          # SQLAlchemy ORM Tables (Users, Questions, Metrics)
 │   ├── schemas.py         # Pydantic validation schemas
 │   ├── router/
 │   │   ├── interviews.py  # Question queries & stats dashboard endpoints
 │   │   └── analyze.py     # Video upload & AI evaluation endpoint
 │   ├── services/
+│   │   ├── auth.py        # JWT token and guest session middleware
 │   │   ├── transcribe.py  # Audio transcription (Gemini File API or Mock)
 │   │   └── evaluator.py   # AI response grading (Gemini API JSON Mode or Mock)
 │   ├── uploads/           # Directory where recorded WebM videos are stored
-│   ├── .env               # Local environment variables
+│   ├── Dockerfile         # Production API build configurations
 │   └── requirements.txt   # Python packages
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── page.jsx          # Dashboard, SVG charts, and role selector
-│   │   │   ├── interview/        # Interactive interview room with question walk-through
-│   │   │   └── results/[id]/     # Metrics scorecard, video review, and transcripts
+│   │   │   ├── page.jsx          # Dashboard and role selector
+│   │   │   ├── interview/        # Interactive interview room (split-screen code sandbox)
+│   │   │   └── results/[id]/     # Scorecard, video playback, and highlighted transcripts
 │   │   ├── components/
-│   │   │   └── VideoRecorder.jsx # Camera/Microphone recorder & Audio visualizer
+│   │   │   ├── CodeEditor.jsx    # Pyodide script execution playground console
+│   │   │   └── VideoRecorder.jsx # Camera preview, subtitles, and mic calibration check
 │   │   └── styles/
-│   │       └── globals.css       # Core theme styling (Glassmorphism layout)
+│   │       └── globals.css       # Custom theme (Glassmorphism layout)
+│   └── Dockerfile         # Production client container settings
 │
+├── docker-compose.yml     # Multi-container launch configuration orchestrator
 └── README.md              # Project Documentation
 ```
 
@@ -91,27 +105,28 @@ cognitive-coach/
 
 ## ⚡ Setup & Installation
 
-### Prerequisite Checklist
-*   **Python 3.9+** installed on your system.
-*   **Node.js v18.0+** and **npm** installed.
+### Option A: Running Containerized with Docker Compose (Recommended)
+Launch the entire system locally with one command:
+```bash
+docker-compose up --build
+```
+- Frontend will boot up at `http://localhost:3000`.
+- Backend will run at `http://localhost:8000`.
 
----
+### Option B: Local Setup & Manual Run
 
-### Step 1: Set up the Backend
-
-1. Navigate to the `backend/` directory in your terminal:
+#### Step 1: Set up the Backend
+1. Navigate to the `backend/` directory:
    ```bash
    cd backend
    ```
 2. Create and activate a virtual environment:
    ```bash
    python -m venv venv
-   # On Windows (Command Prompt):
-   venv\Scripts\activate
-   # On Windows (PowerShell):
+   # On Windows:
    .\venv\Scripts\Activate.ps1
    ```
-3. Install the backend dependencies:
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
@@ -119,17 +134,13 @@ cognitive-coach/
    ```bash
    uvicorn main:app --reload --port 8000
    ```
-   *The backend will boot up at `http://localhost:8000`. Database tables will automatically initialize and seed standard questions.*
 
----
-
-### Step 2: Set up the Frontend
-
-1. Open a new terminal window and navigate to the `frontend/` directory:
+#### Step 2: Set up the Frontend
+1. Open a new terminal and navigate to the `frontend/` directory:
    ```bash
    cd frontend
    ```
-2. Install npm dependencies:
+2. Install npm packages:
    ```bash
    npm install
    ```
@@ -137,18 +148,17 @@ cognitive-coach/
    ```bash
    npm run dev
    ```
-   *The frontend application will now be running locally at `http://localhost:3000`.*
+   *The client web portal will run locally at `http://localhost:3000`.*
 
 ---
 
 ## 🧠 AI Modes: Sandbox vs. Live Mode
 
-By default, CognitiveCoach starts in **Sandbox Mode** so it can be demonstrated offline with zero setup.
+By default, CognitiveCoach starts in **Sandbox Mode** so it can be demonstrated offline with zero configuration.
 
 ### 1. Sandbox Mode (Zero-Config / Offline)
-*   **Trigger:** When `GEMINI_API_KEY` is empty or omitted from the backend `.env` file.
-*   **Behavior:** Video uploads are processed locally. Speaking rates (WPM) and filler words count are computed using deterministic regex and mathematical formulas. Evaluator diagnostics and exemplar responses are matched contextually to the question.
-*   *Ideal for live college project demonstrations where network connectivity is unpredictable.*
+- **Trigger**: When `GEMINI_API_KEY` is omitted or empty.
+- **Behavior**: Video uploads are processed locally. Speaking rates (WPM) and filler words count are computed using deterministic mathematical algorithms. Evaluator diagnostics and suggested answers are matched contextually to the question.
 
 ### 2. Live Mode (Actual AI Integration)
 *   **Trigger:** Provide your API Key in `backend/.env`.
