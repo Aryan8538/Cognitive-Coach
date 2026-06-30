@@ -63,12 +63,11 @@ export default function Navbar() {
         
         {/* Logo Brand */}
         <a href="/" className="flex items-center gap-2.5 group transition-transform duration-300 active:scale-95">
-          {/* Glowing Icon */}
-          <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-[#7c3aed] to-[#6366f1] shadow-md group-hover:shadow-[#7c3aed]/20 group-hover:scale-105 transition-all duration-300">
-            <Sparkles size={16} className="text-white" />
+          <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-[#C5A030] to-[#F4D472] dark:from-[#D4AF37] dark:to-[#FFE492] shadow-md shadow-[#D4AF37]/15 group-hover:shadow-[#D4AF37]/35 group-hover:scale-105 transition-all duration-300">
+            <Sparkles size={16} className="text-zinc-950" />
           </div>
           
-          <span className="text-lg font-extrabold tracking-tight font-display bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-600 dark:from-white dark:via-purple-100 dark:to-violet-400 bg-clip-text text-transparent transition-all duration-300">
+          <span className="text-lg font-extrabold tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#D4AF37] dark:from-white dark:via-[#F4D472] dark:to-[#D4AF37] bg-clip-text text-transparent transition-all duration-300">
             CognitiveCoach
           </span>
         </a>
