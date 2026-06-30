@@ -17,12 +17,8 @@ export default function RootLayout({ children }) {
       </head>
       <body className="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-slate-50 transition-colors duration-300">
         
-        {/* Subtle grid background & blur blobs */}
+        {/* Subtle grid background */}
         <div className="fixed inset-0 bg-grid pointer-events-none z-[-1]"></div>
-        <div className="background-blobs">
-          <div className="blob blob-1 animate-float-1"></div>
-          <div className="blob blob-2 animate-float-2"></div>
-        </div>
 
         {/* Global sticky navbar */}
         <Navbar />

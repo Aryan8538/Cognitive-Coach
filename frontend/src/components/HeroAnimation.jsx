@@ -209,10 +209,6 @@ export default function HeroAnimation() {
 
   return (
     <div ref={containerRef} className="w-full h-[320px] md:h-[450px] lg:h-[500px] flex items-center justify-center relative select-none pointer-events-none">
-      {/* Background ring accent */}
-      <div className="absolute w-[80%] h-[80%] max-w-[400px] max-h-[400px] rounded-full border border-dashed border-yellow-500/10 animate-[spin_120s_linear_infinite]" />
-      <div className="absolute w-[60%] h-[60%] max-w-[300px] max-h-[300px] rounded-full border border-yellow-500/5 animate-[spin_80s_linear_infinite_reverse]" />
-      
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );

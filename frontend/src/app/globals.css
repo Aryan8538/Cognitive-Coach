@@ -243,7 +243,7 @@ body {
   left: -20%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.4) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.05) 50%, rgba(139, 92, 246, 0) 100%);
 }
 
 .blob-2 {
@@ -251,7 +251,7 @@ body {
   right: -20%;
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.35) 0%, rgba(6, 182, 212, 0.08) 45%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.2) 0%, rgba(6, 182, 212, 0.04) 50%, rgba(6, 182, 212, 0) 100%);
 }
 
 /* Serif Typography Utility */
@@ -329,10 +329,10 @@ code, pre, .font-mono {
 /* Dark-Theme Specific Aura Layout & Component Overrides */
 
 .dark .blob-1 {
-  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 40%, transparent 70%) !important;
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.06) 0%, rgba(212, 175, 55, 0.015) 50%, rgba(212, 175, 55, 0) 100%) !important;
 }
 .dark .blob-2 {
-  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.01) 45%, transparent 70%) !important;
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.04) 0%, rgba(212, 175, 55, 0.01) 50%, rgba(212, 175, 55, 0) 100%) !important;
 }
 
 /* Redefine card styling using Aura specifications in dark mode */
