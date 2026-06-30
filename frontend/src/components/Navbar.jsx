@@ -15,9 +15,9 @@ export default function Navbar() {
 
     // Check local storage or system preferences on mount
     const savedTheme = localStorage.getItem("theme");
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     
-    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
+    // Default to premium dark theme on first visit
+    if (savedTheme === "dark" || !savedTheme) {
       document.documentElement.classList.add("dark");
       setIsDark(true);
     } else {
