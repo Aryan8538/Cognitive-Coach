@@ -11,9 +11,11 @@ services:
       - backend-uploads:/app/uploads
       - sqlite-db:/app/db
     environment:
-      - DATABASE_URL=sqlite:////app/db/coach.db
+      # - DATABASE_URL=sqlite:////app/db/coach.db
       # - GEMINI_API_KEY=your_actual_key_here
       # - ALLOWED_ORIGINS=http://localhost:3000
+    env_file:
+      - ./backend/.env
     restart: always
 
   frontend:
@@ -26,6 +28,8 @@ services:
       - backend
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
+    env_file:
+      - ./frontend/.env.local
     restart: always
 
 volumes:

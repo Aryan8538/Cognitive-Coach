@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Shield, Mail, Lock, User, ArrowRight, Loader2, AlertCircle } from "lucide-react";
-import { supabase } from "@/utils/supabase";
+import { supabase, supabaseUrl } from "@/utils/supabase";
 
 export default function LoginPage() {
   const router = useRouter();
+  const isPlaceholder = supabaseUrl.includes("placeholder-project");
+
   
   // Tabs: "login" or "signup"
   const [activeTab, setActiveTab] = useState("login");
@@ -184,6 +186,21 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           
           {/* Notification Alerts */}
+          {isPlaceholder && (
+            <div className="flex items-start gap-2 bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 p-3.5 rounded-xl text-xs backdrop-blur-sm">
+              <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold">Configuration Warning:</span>
+                <p className="mt-1">
+                  Supabase environment variables are missing or not loaded. The client is using fallback credentials.
+                </p>
+                <p className="mt-1 font-semibold text-[10px] uppercase">
+                  Please check frontend/.env.local and restart Next.js!
+                </p>
+              </div>
+            </div>
+          )}
+
           {errorMsg && (
             <div className="flex items-start gap-2 bg-rose-50/80 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-rose-700 dark:text-rose-450 p-3.5 rounded-xl text-xs backdrop-blur-sm">
               <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
@@ -197,6 +214,7 @@ export default function LoginPage() {
               <span className="font-semibold">{successMsg}</span>
             </div>
           )}
+
 
           {/* Form Input fields */}
           {activeTab === "signup" && (
