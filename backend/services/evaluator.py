@@ -1,17 +1,11 @@
-import os
 import re
 import json
 import random
 import logging
 import requests
-from dotenv import load_dotenv
-
-load_dotenv()
+from config import GEMINI_API_KEY
 
 logger = logging.getLogger(__name__)
-
-# We look for GEMINI_API_KEY
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 FILLER_WORDS = ["like", "um", "uh", "basically", "you know", "actually", "so"]
 
