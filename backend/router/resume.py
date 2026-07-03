@@ -1,5 +1,7 @@
 import os
+import io
 import re
+import logging
 import requests
 import json
 import zipfile
@@ -12,6 +14,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/resume", tags=["resume"])
 
@@ -159,37 +163,21 @@ def check_resume(
             content_bytes = file.file.read()
             resume_text = content_bytes.decode("utf-8", errors="ignore")
         elif file_ext == "pdf":
-            temp_path = f"temp_resume_{os.urandom(4).hex()}.pdf"
-            with open(temp_path, "wb") as buffer:
-                buffer.write(file.file.read())
-            
-            try:
-                reader = PdfReader(temp_path)
-                num_pages = len(reader.pages)
-                pages_text = []
-                for p in reader.pages:
-                    text_extracted = p.extract_text()
-                    if text_extracted:
-                        pages_text.append(text_extracted)
-                resume_text = "\n".join(pages_text)
-            finally:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
+            reader = PdfReader(io.BytesIO(file.file.read()))
+            num_pages = len(reader.pages)
+            pages_text = []
+            for p in reader.pages:
+                text_extracted = p.extract_text()
+                if text_extracted:
+                    pages_text.append(text_extracted)
+            resume_text = "\n".join(pages_text)
         elif file_ext == "docx":
-            temp_path = f"temp_resume_{os.urandom(4).hex()}.docx"
-            with open(temp_path, "wb") as buffer:
-                buffer.write(file.file.read())
-            
-            try:
-                with zipfile.ZipFile(temp_path) as docx:
-                    xml_content = docx.read('word/document.xml')
-                    root = ET.fromstring(xml_content)
-                    namespaces = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
-                    text_elements = root.findall('.//w:t', namespaces)
-                    resume_text = " ".join([elem.text for elem in text_elements if elem.text])
-            finally:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
+            with zipfile.ZipFile(io.BytesIO(file.file.read())) as docx:
+                xml_content = docx.read('word/document.xml')
+                root = ET.fromstring(xml_content)
+                namespaces = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+                text_elements = root.findall('.//w:t', namespaces)
+                resume_text = " ".join([elem.text for elem in text_elements if elem.text])
         else:
             raise HTTPException(status_code=400, detail="Unsupported file format.")
     except Exception as e:
@@ -257,5 +245,5 @@ def check_resume(
             raise Exception(f"Gemini API returned status code {res.status_code}: {res.text}")
             
     except Exception as e:
-        print(f"Error calling live Gemini ATS checker: {e}. Falling back to local scanner.")
+        logger.warning("Live Gemini ATS check failed: %s. Falling back to local scanner.", e)
         return analyze_resume_locally(resume_text, role, num_pages)
