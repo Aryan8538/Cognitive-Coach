@@ -99,8 +99,16 @@ function InterviewRoomContent() {
 
     try {
       const uploadUrl = `${API_BASE_URL}/api/interviews/${interviewId}/questions/${question.id}/respond`;
+      // Send auth so the backend can confirm ownership of this interview.
+      // Do NOT set Content-Type here — the browser sets the multipart boundary.
+      const token = localStorage.getItem("token") || "";
+      const uploadHeaders = {};
+      if (token) {
+        uploadHeaders["Authorization"] = `Bearer ${token}`;
+      }
       const res = await fetch(uploadUrl, {
         method: "POST",
+        headers: uploadHeaders,
         body: formData
       });
 
@@ -119,8 +127,14 @@ function InterviewRoomContent() {
   const handleFinishInterview = async () => {
     if (!interviewId) return;
     try {
+      const token = localStorage.getItem("token") || "";
+      const headers = {};
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
       const res = await fetch(`${API_BASE_URL}/api/interviews/${interviewId}/complete`, {
-        method: "POST"
+        method: "POST",
+        headers
       });
       if (res.ok) {
         router.push(`/results/${interviewId}`);
