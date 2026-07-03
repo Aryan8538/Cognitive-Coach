@@ -167,3 +167,34 @@ By default, CognitiveCoach starts in **Sandbox Mode** so it can be demonstrated 
     GEMINI_API_KEY=AIzaSyD...your_actual_api_key...
     ```
 *   **Behavior:** WebM files are uploaded to the Gemini File API. The platform runs transcription and detailed grading parameters on live LLMs in real-time.
+
+---
+
+## 🌐 Production Deployment
+
+The project is configured for split-tier production deployments of the backend and frontend.
+
+### 1. Backend (FastAPI + Docker) on Render
+The backend is dockerized and ready for **Render** using the provided [render.yaml](file:///render.yaml) blueprint or as a manual Web Service:
+
+- **Root Directory**: `backend`
+- **Environment**: `Docker`
+- **Port**: `8000` (Render automatically routes traffic using the `EXPOSE 8000` instruction in the `Dockerfile`)
+- **Important Environment Variables**:
+  - `DATABASE_URL`: Your PostgreSQL connection string. 
+    > [!IMPORTANT]
+    > Since Render does not support outbound IPv6 connections on standard/free instances, if you are using Supabase, you must use their **Connection Pooler URL** (e.g. `aws-1-ap-northeast-1.pooler.supabase.com` on port `5432`) which resolves to IPv4 instead of the direct connection string.
+  - `GEMINI_API_KEY`: Your Google Gemini API Key.
+  - `JWT_SECRET`: A secure random string for signing backend tokens.
+  - `SUPABASE_JWT_SECRET`: Your Supabase Project JWT Secret to authenticate clients.
+
+### 2. Frontend (Next.js) on Vercel
+The React application can be deployed directly to **Vercel**:
+
+- **Root Directory**: `frontend`
+- **Framework Preset**: `Next.js` (automatically detected)
+- **Environment Variables**:
+  - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase Project URL.
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon publishable key.
+  - `NEXT_PUBLIC_API_URL`: The URL of your deployed Render backend (e.g. `https://cognitive-coach-backend.onrender.com`).
+
