@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -7,10 +6,11 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from config import JWT_SECRET, SUPABASE_JWT_SECRET
 from database import get_db
 import models, schemas
 
-SECRET_KEY = os.getenv("JWT_SECRET", "supersecretkey-for-cognitive-coach-2026")
+SECRET_KEY = JWT_SECRET
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 
@@ -18,7 +18,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 # (Supabase Dashboard -> Project Settings -> API -> JWT Secret). When this is
 # unset, Supabase tokens cannot be verified and are treated as anonymous
 # (guest/sandbox) rather than blindly trusted.
-SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
 SUPABASE_JWT_ALGORITHMS = ["HS256"]
 SUPABASE_JWT_AUDIENCE = "authenticated"
 
