@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from typing import List, Optional
 from database import get_db
 import models, schemas
-from services.auth import get_current_user_optional
+from services.auth import get_current_user_optional, assert_can_access_interview
 
 router = APIRouter()
 
@@ -37,7 +37,9 @@ def create_interview(
     db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(get_current_user_optional)
 ):
-    user_id = current_user.id if current_user else interview.user_id
+    # Ownership is derived from the verified token only; a client-supplied
+    # user_id is never trusted. Anonymous sessions get user_id = None.
+    user_id = current_user.id if current_user else None
     db_interview = models.Interview(role=interview.role, user_id=user_id)
     db.add(db_interview)
     db.commit()
@@ -45,17 +47,29 @@ def create_interview(
     return db_interview
 
 @router.get("/interviews/{interview_id}", response_model=schemas.InterviewResponse)
-def get_interview(interview_id: str, db: Session = Depends(get_db)):
-    db_interview = db.query(models.Interview).filter(models.Interview.id == interview_id).first()
+def get_interview(
+    interview_id: str,
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_optional)
+):
+    db_interview = db.query(models.Interview).options(
+        selectinload(models.Interview.responses).selectinload(models.Response.metrics)
+    ).filter(models.Interview.id == interview_id).first()
     if not db_interview:
         raise HTTPException(status_code=404, detail="Interview session not found")
+    assert_can_access_interview(db_interview, current_user)
     return db_interview
 
 @router.post("/interviews/{interview_id}/complete", response_model=schemas.InterviewResponse)
-def complete_interview(interview_id: str, db: Session = Depends(get_db)):
+def complete_interview(
+    interview_id: str,
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_optional)
+):
     db_interview = db.query(models.Interview).filter(models.Interview.id == interview_id).first()
     if not db_interview:
         raise HTTPException(status_code=404, detail="Interview session not found")
+    assert_can_access_interview(db_interview, current_user)
     db_interview.status = "Completed"
     db.commit()
     db.refresh(db_interview)
@@ -66,16 +80,24 @@ def get_dashboard_stats(
     db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(get_current_user_optional)
 ):
+    # Scope to the authenticated user, or to anonymous sandbox interviews
+    # (user_id IS NULL) when there is no verified user.
+    owner_filter = (
+        models.Interview.user_id == current_user.id
+        if current_user
+        else models.Interview.user_id.is_(None)
+    )
+
     # 1. Total interviews completed
-    interviews_query = db.query(models.Interview).filter(models.Interview.status == "Completed")
-    if current_user:
-        interviews_query = interviews_query.filter(models.Interview.user_id == current_user.id)
+    interviews_query = db.query(models.Interview).filter(
+        models.Interview.status == "Completed", owner_filter
+    )
     total_interviews = interviews_query.count()
-    
+
     # Calculate average metric scores across all completed interviews
-    metrics_query = db.query(models.Metric).join(models.Response).join(models.Interview).filter(models.Interview.status == "Completed")
-    if current_user:
-        metrics_query = metrics_query.filter(models.Interview.user_id == current_user.id)
+    metrics_query = db.query(models.Metric).join(models.Response).join(models.Interview).filter(
+        models.Interview.status == "Completed", owner_filter
+    )
     metrics_list = metrics_query.all()
     
     avg_clarity = 0.0
@@ -90,9 +112,9 @@ def get_dashboard_stats(
         avg_wpm = sum(m.words_per_minute for m in metrics_list) / len(metrics_list)
         
     # Generate filler words trend (last 5 interviews)
-    recent_interviews_query = db.query(models.Interview).filter(models.Interview.status == "Completed")
-    if current_user:
-        recent_interviews_query = recent_interviews_query.filter(models.Interview.user_id == current_user.id)
+    recent_interviews_query = db.query(models.Interview).options(
+        selectinload(models.Interview.responses).selectinload(models.Response.metrics)
+    ).filter(models.Interview.status == "Completed", owner_filter)
     recent_interviews = recent_interviews_query.order_by(models.Interview.created_at.desc()).limit(5).all()
     recent_interviews.reverse()
     
@@ -127,7 +149,12 @@ def get_user_interviews(
     db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(get_current_user_optional)
 ):
-    query = db.query(models.Interview)
-    if current_user:
-        query = query.filter(models.Interview.user_id == current_user.id)
+    owner_filter = (
+        models.Interview.user_id == current_user.id
+        if current_user
+        else models.Interview.user_id.is_(None)
+    )
+    query = db.query(models.Interview).options(
+        selectinload(models.Interview.responses).selectinload(models.Response.metrics)
+    ).filter(owner_filter)
     return query.order_by(models.Interview.created_at.desc()).all()
