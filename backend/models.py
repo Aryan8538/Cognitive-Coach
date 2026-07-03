@@ -31,7 +31,7 @@ class Interview(Base):
     __tablename__ = "interviews"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     role = Column(String, index=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     status = Column(String, default="In Progress") # "In Progress", "Completed"
@@ -43,8 +43,8 @@ class Response(Base):
     __tablename__ = "responses"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    interview_id = Column(String, ForeignKey("interviews.id", ondelete="CASCADE"))
-    question_id = Column(Integer, ForeignKey("questions.id"))
+    interview_id = Column(String, ForeignKey("interviews.id", ondelete="CASCADE"), index=True)
+    question_id = Column(Integer, ForeignKey("questions.id"), index=True)
     video_url = Column(String, nullable=True)
     transcript = Column(Text, nullable=True)
     code = Column(Text, nullable=True)
