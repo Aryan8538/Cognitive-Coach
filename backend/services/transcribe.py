@@ -1,9 +1,12 @@
 import os
+import logging
 import requests
 import random
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
@@ -23,22 +26,25 @@ SAMPLE_TRANSCRIPTS = {
     ]
 }
 
+def _select_mock_transcript(question_text: str) -> str:
+    """Pick a canned transcript by inferring the question topic from its text."""
+    question_text_lower = question_text.lower()
+    if "design" in question_text_lower or "scale" in question_text_lower or "architecture" in question_text_lower:
+        key = "design"
+    elif "conflict" in question_text_lower or "team" in question_text_lower or "describe a time" in question_text_lower:
+        key = "conflict"
+    else:
+        key = "default"
+    return random.choice(SAMPLE_TRANSCRIPTS[key])
+
+
 def transcribe_audio(audio_path: str, question_text: str = "") -> str:
     """
     Transcribes audio. If GEMINI_API_KEY is available, uploads to Gemini for transcription.
     Otherwise, returns a high-fidelity mock transcription based on the question topic.
     """
     if not GEMINI_API_KEY:
-        # Determine topic from question text
-        question_text_lower = question_text.lower()
-        if "design" in question_text_lower or "scale" in question_text_lower or "architecture" in question_text_lower:
-            key = "design"
-        elif "conflict" in question_text_lower or "team" in question_text_lower or "describe a time" in question_text_lower:
-            key = "conflict"
-        else:
-            key = "default"
-        
-        return random.choice(SAMPLE_TRANSCRIPTS[key])
+        return _select_mock_transcript(question_text)
 
     # If GEMINI_API_KEY is present, call Gemini's API to transcribe the audio file
     try:
@@ -69,7 +75,7 @@ def transcribe_audio(audio_path: str, question_text: str = "") -> str:
             }
         }
         
-        res_init = requests.post(upload_url, headers=headers_init, json=payload_init, params={"uploadType": "resumable"})
+        res_init = requests.post(upload_url, headers=headers_init, json=payload_init, params={"uploadType": "resumable"}, timeout=30)
         if res_init.status_code != 200:
             raise Exception(f"Failed to initiate upload: {res_init.text}")
             
@@ -79,7 +85,7 @@ def transcribe_audio(audio_path: str, question_text: str = "") -> str:
         
         # Perform actual upload
         with open(audio_path, "rb") as f:
-            res_upload = requests.put(upload_location, data=f)
+            res_upload = requests.put(upload_location, data=f, timeout=120)
             
         if res_upload.status_code != 200:
             raise Exception(f"Failed to upload file content: {res_upload.text}")
@@ -99,12 +105,12 @@ def transcribe_audio(audio_path: str, question_text: str = "") -> str:
             }]
         }
         
-        res_generate = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload_generate, params={"key": GEMINI_API_KEY})
+        res_generate = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload_generate, params={"key": GEMINI_API_KEY}, timeout=60)
         
         # Clean up file from Gemini server (good practice)
         file_name = file_uri.split("/")[-1]
         delete_url = f"https://generativelanguage.googleapis.com/v1beta/files/{file_name}"
-        requests.delete(delete_url, headers=headers)
+        requests.delete(delete_url, headers=headers, timeout=10)
         
         if res_generate.status_code == 200:
             content = res_generate.json()
@@ -117,13 +123,5 @@ def transcribe_audio(audio_path: str, question_text: str = "") -> str:
             raise Exception(f"Gemini API generation error: {res_generate.text}")
             
     except Exception as e:
-        print(f"Error during live Gemini audio transcription: {e}. Falling back to mock transcript.")
-        # Determine topic from question text
-        question_text_lower = question_text.lower()
-        if "design" in question_text_lower or "scale" in question_text_lower or "architecture" in question_text_lower:
-            key = "design"
-        elif "conflict" in question_text_lower or "team" in question_text_lower or "describe a time" in question_text_lower:
-            key = "conflict"
-        else:
-            key = "default"
-        return random.choice(SAMPLE_TRANSCRIPTS[key])
+        logger.warning("Live Gemini transcription failed: %s. Falling back to mock transcript.", e)
+        return _select_mock_transcript(question_text)
