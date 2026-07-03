@@ -1,7 +1,10 @@
 import os
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+logger = logging.getLogger(__name__)
 
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./coach.db")
 if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
@@ -19,7 +22,7 @@ if SQLALCHEMY_DATABASE_URL.startswith("postgresql://"):
                 encoded_password = quote_plus(password)
                 SQLALCHEMY_DATABASE_URL = f"{prefix}://{user}:{encoded_password}@{host_db}"
     except Exception as e:
-        print(f"Warning: Failed to auto-encode database URL password: {e}")
+        logger.warning("Failed to auto-encode database URL password: %s", e)
 
 # connect_args={"check_same_thread": False} is required only for SQLite
 connect_args = {}
