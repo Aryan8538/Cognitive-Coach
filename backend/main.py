@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.exc import IntegrityError
+from config import ALLOWED_ORIGINS
 from database import engine, Base, SessionLocal
 import models
 from router import interviews, analyze, chat, auth, resume
@@ -27,9 +28,8 @@ allowed_origins = [
     "http://127.0.0.1:3000",
     "http://192.168.29.112:3000",
 ]
-allowed_origins_env = os.getenv("ALLOWED_ORIGINS")
-if allowed_origins_env:
-    for origin in allowed_origins_env.split(","):
+if ALLOWED_ORIGINS:
+    for origin in ALLOWED_ORIGINS.split(","):
         stripped = origin.strip()
         if stripped and stripped != "*":
             allowed_origins.append(stripped)
@@ -181,12 +181,19 @@ def seed_questions():
                 "suggested_keywords": "native development, cross-platform, React Native, Flutter, JS bridge, hot reload, performance, UI rendering"
             }
         ]
+        # Fetch all already-seeded question texts in one query instead of a
+        # per-question SELECT, then bulk-add only the missing ones.
+        all_texts = [q_data["text"] for q_data in default_questions]
+        existing_texts = {
+            row[0]
+            for row in db.query(models.Question.text)
+            .filter(models.Question.text.in_(all_texts))
+            .all()
+        }
         seeded_count = 0
         for q_data in default_questions:
-            exists = db.query(models.Question).filter(models.Question.text == q_data["text"]).first()
-            if not exists:
-                question = models.Question(**q_data)
-                db.add(question)
+            if q_data["text"] not in existing_texts:
+                db.add(models.Question(**q_data))
                 seeded_count += 1
         if seeded_count > 0:
             try:
