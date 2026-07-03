@@ -2,13 +2,9 @@ import os
 import logging
 import requests
 import random
-from dotenv import load_dotenv
-
-load_dotenv()
+from config import GEMINI_API_KEY
 
 logger = logging.getLogger(__name__)
-
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Dictionary of high-quality sample answers containing filler words, grammatical errors, and technical content for testing
 SAMPLE_TRANSCRIPTS = {
