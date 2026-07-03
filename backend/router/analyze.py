@@ -1,10 +1,12 @@
 import os
 import shutil
 import uuid
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from database import get_db
 import models, schemas
+from services.auth import get_current_user_optional, assert_can_access_interview
 from services.transcribe import transcribe_audio
 from services.evaluator import evaluate_response
 
@@ -22,13 +24,17 @@ def respond_to_question(
     video: UploadFile = File(...),
     code: str = Form(None),
     code_language: str = Form(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_optional)
 ):
     # 1. Verify interview and question exist
     interview = db.query(models.Interview).filter(models.Interview.id == interview_id).first()
     if not interview:
         raise HTTPException(status_code=404, detail="Interview session not found")
-        
+
+    # Only the owner (or the holder of an anonymous interview's UUID) may respond.
+    assert_can_access_interview(interview, current_user)
+
     question = db.query(models.Question).filter(models.Question.id == question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
