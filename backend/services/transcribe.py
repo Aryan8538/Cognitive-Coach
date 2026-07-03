@@ -2,7 +2,7 @@ import os
 import logging
 import requests
 import random
-from config import GEMINI_API_KEY
+from config import GEMINI_API_KEY, GEMINI_MODEL
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +89,7 @@ def transcribe_audio(audio_path: str, question_text: str = "") -> str:
         file_uri = res_upload.json().get("file", {}).get("uri")
         
         # 2. Call Gemini to transcribe
-        model = "gemini-1.5-flash"
+        model = GEMINI_MODEL
         generate_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
         
         payload_generate = {

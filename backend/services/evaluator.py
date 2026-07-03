@@ -3,7 +3,7 @@ import json
 import random
 import logging
 import requests
-from config import GEMINI_API_KEY
+from config import GEMINI_API_KEY, GEMINI_MODEL
 
 logger = logging.getLogger(__name__)
 
@@ -185,7 +185,7 @@ def evaluate_response(transcript: str, question_text: str, duration_sec: float, 
         filler_details = filler_data["details"]
         
         # Call Gemini for qualitative evaluation
-        model = "gemini-1.5-flash"
+        model = GEMINI_MODEL
         generate_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
         
         system_prompt = (
