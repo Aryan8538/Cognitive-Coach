@@ -1,8 +1,7 @@
 import os
 import logging
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 logger = logging.getLogger(__name__)
 
@@ -26,11 +25,17 @@ if SQLALCHEMY_DATABASE_URL.startswith("postgresql://"):
 
 # connect_args={"check_same_thread": False} is required only for SQLite
 connect_args = {}
+engine_kwargs = {}
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
+else:
+    # Managed Postgres (e.g. Supabase) silently drops idle connections. Ping
+    # before use and recycle before the server's timeout so pooled connections
+    # never surface as stale-connection 500s.
+    engine_kwargs = {"pool_pre_ping": True, "pool_recycle": 1800}
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args=connect_args
+    SQLALCHEMY_DATABASE_URL, connect_args=connect_args, **engine_kwargs
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
