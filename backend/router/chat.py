@@ -1,4 +1,5 @@
 import os
+import logging
 import requests
 import json
 from fastapi import APIRouter, HTTPException, Header
@@ -8,6 +9,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -398,7 +401,7 @@ def get_chat_response(req: ChatRequest, x_gemini_key: Optional[str] = Header(Non
             }
         }
         
-        res = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload, params={"key": active_key})
+        res = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload, params={"key": active_key}, timeout=30)
         
         if res.status_code == 200:
             content = res.json()
@@ -408,6 +411,6 @@ def get_chat_response(req: ChatRequest, x_gemini_key: Optional[str] = Header(Non
             raise Exception(f"Gemini API error: {res.text}")
             
     except Exception as e:
-        print(f"Error calling live Gemini chatbot: {e}. Falling back to sandbox counselor.")
+        logger.warning("Live Gemini chatbot failed: %s. Falling back to sandbox counselor.", e)
         response_text = generate_advisor_fallback(last_user_message)
         return {"response": response_text}
