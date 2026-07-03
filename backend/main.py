@@ -1,10 +1,15 @@
 import os
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy.exc import IntegrityError
 from database import engine, Base, SessionLocal
 import models
 from router import interviews, analyze, chat, auth, resume
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Initialize database tables
 Base.metadata.create_all(bind=engine)
@@ -184,8 +189,12 @@ def seed_questions():
                 db.add(question)
                 seeded_count += 1
         if seeded_count > 0:
-            db.commit()
-            print(f"Successfully seeded {seeded_count} new questions.")
+            try:
+                db.commit()
+                logger.info("Successfully seeded %d new questions.", seeded_count)
+            except IntegrityError:
+                db.rollback()
+                logger.info("Question seeding skipped (concurrently seeded by another worker).")
     finally:
         db.close()
 
