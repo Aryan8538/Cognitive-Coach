@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 from typing import List, Optional
 from database import get_db
@@ -89,48 +90,56 @@ def get_dashboard_stats(
     )
 
     # 1. Total interviews completed
-    interviews_query = db.query(models.Interview).filter(
+    total_interviews = db.query(func.count(models.Interview.id)).filter(
         models.Interview.status == "Completed", owner_filter
-    )
-    total_interviews = interviews_query.count()
+    ).scalar() or 0
 
-    # Calculate average metric scores across all completed interviews
-    metrics_query = db.query(models.Metric).join(models.Response).join(models.Interview).filter(
-        models.Interview.status == "Completed", owner_filter
+    # 2. Average metric scores across all completed interviews, computed in SQL
+    # (avoids loading every Metric row into memory just to average four columns).
+    avg_row = (
+        db.query(
+            func.avg(models.Metric.clarity_score),
+            func.avg(models.Metric.relevance_score),
+            func.avg(models.Metric.grammar_score),
+            func.avg(models.Metric.words_per_minute),
+        )
+        .join(models.Response, models.Metric.response_id == models.Response.id)
+        .join(models.Interview, models.Response.interview_id == models.Interview.id)
+        .filter(models.Interview.status == "Completed", owner_filter)
+        .one()
     )
-    metrics_list = metrics_query.all()
-    
-    avg_clarity = 0.0
-    avg_relevance = 0.0
-    avg_grammar = 0.0
-    avg_wpm = 0.0
-    
-    if metrics_list:
-        avg_clarity = sum(m.clarity_score for m in metrics_list) / len(metrics_list)
-        avg_relevance = sum(m.relevance_score for m in metrics_list) / len(metrics_list)
-        avg_grammar = sum(m.grammar_score for m in metrics_list) / len(metrics_list)
-        avg_wpm = sum(m.words_per_minute for m in metrics_list) / len(metrics_list)
-        
-    # Generate filler words trend (last 5 interviews)
-    recent_interviews_query = db.query(models.Interview).options(
-        selectinload(models.Interview.responses).selectinload(models.Response.metrics)
-    ).filter(models.Interview.status == "Completed", owner_filter)
-    recent_interviews = recent_interviews_query.order_by(models.Interview.created_at.desc()).limit(5).all()
-    recent_interviews.reverse()
-    
+    avg_clarity = avg_row[0] or 0.0
+    avg_relevance = avg_row[1] or 0.0
+    avg_grammar = avg_row[2] or 0.0
+    avg_wpm = avg_row[3] or 0.0
+
+    # 3. Filler-words trend for the last 5 completed interviews. Sum filler
+    # counts per interview in SQL instead of eager-loading responses + metrics
+    # (which pulls heavy transcript/feedback TEXT only to add one integer).
+    trend_rows = (
+        db.query(
+            models.Interview.created_at,
+            func.coalesce(func.sum(models.Metric.filler_words_count), 0),
+        )
+        .outerjoin(models.Response, models.Response.interview_id == models.Interview.id)
+        .outerjoin(models.Metric, models.Metric.response_id == models.Response.id)
+        .filter(models.Interview.status == "Completed", owner_filter)
+        .group_by(models.Interview.id)
+        .order_by(models.Interview.created_at.desc())
+        .limit(5)
+        .all()
+    )
+    # Reverse to chronological order to match the historical (#1..#N) labeling.
+    trend_rows = list(reversed(trend_rows))
+
     filler_words_trend = []
-    for index, interview in enumerate(recent_interviews):
-        total_fillers = 0
-        for resp in interview.responses:
-            if resp.metrics:
-                total_fillers += resp.metrics.filler_words_count
-        
-        date_str = interview.created_at.strftime("%b %d")
+    for index, (created_at, total_fillers) in enumerate(trend_rows):
+        date_str = created_at.strftime("%b %d")
         filler_words_trend.append({
             "date": f"{date_str} (#{index + 1})",
-            "count": str(total_fillers)
+            "count": str(int(total_fillers)),
         })
-        
+
     # fallback trend if empty
     if not filler_words_trend:
         filler_words_trend = [{"date": "No Data", "count": "0"}]
