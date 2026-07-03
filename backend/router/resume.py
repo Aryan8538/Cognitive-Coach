@@ -1,4 +1,3 @@
-import os
 import io
 import re
 import logging
@@ -10,10 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, H
 from typing import List, Optional, Dict
 from pydantic import BaseModel
 from pypdf import PdfReader
-from dotenv import load_dotenv
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+from config import GEMINI_API_KEY
 
 logger = logging.getLogger(__name__)
 
