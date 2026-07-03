@@ -1,14 +1,10 @@
-import os
 import logging
 import requests
 import json
 from fastapi import APIRouter, HTTPException, Header
 from pydantic import BaseModel
 from typing import List, Optional
-from dotenv import load_dotenv
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+from config import GEMINI_API_KEY
 
 logger = logging.getLogger(__name__)
 
