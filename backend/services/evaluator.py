@@ -1,10 +1,14 @@
 import os
 import re
 import json
+import random
+import logging
 import requests
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 # We look for GEMINI_API_KEY
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -53,7 +57,6 @@ def evaluate_response_offline(transcript: str, question_text: str, duration_sec:
     filler_details = filler_data["details"]
     
     # Determine base scores (randomized slightly for realistic demo)
-    import random
     grammar_score = random.randint(82, 92)
     clarity_score = random.randint(78, 88)
     relevance_score = random.randint(80, 94)
@@ -226,7 +229,7 @@ def evaluate_response(transcript: str, question_text: str, duration_sec: float, 
             }
         }
         
-        res = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload, params={"key": GEMINI_API_KEY})
+        res = requests.post(generate_url, headers={"Content-Type": "application/json"}, json=payload, params={"key": GEMINI_API_KEY}, timeout=60)
         
         if res.status_code == 200:
             content = res.json()
@@ -237,16 +240,23 @@ def evaluate_response(transcript: str, question_text: str, duration_sec: float, 
                 response_text = re.sub(r"^```json\s*|```$", "", response_text, flags=re.MULTILINE)
             
             evaluation_data = json.loads(response_text)
-            
+
+            # Ensure the model returned every field the persistence layer reads;
+            # otherwise fall through to the offline evaluator instead of raising
+            # a KeyError later when saving metrics.
+            required_keys = ["grammar_score", "relevance_score", "clarity_score", "feedback_text", "suggested_answer"]
+            if not all(k in evaluation_data for k in required_keys):
+                raise Exception("Gemini evaluation response missing required fields")
+
             # Merge in the programmatically calculated metrics
             evaluation_data["words_per_minute"] = wpm
             evaluation_data["filler_words_count"] = filler_count
             evaluation_data["filler_words_details"] = filler_details
-            
+
             return evaluation_data
         else:
             raise Exception(f"Gemini evaluation API error: {res.text}")
             
     except Exception as e:
-        print(f"Error calling live Gemini evaluator: {e}. Falling back to offline evaluation.")
+        logger.warning("Live Gemini evaluation failed: %s. Falling back to offline evaluation.", e)
         return evaluate_response_offline(transcript, question_text, duration_sec, code, code_language)
