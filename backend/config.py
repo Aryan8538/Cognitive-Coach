@@ -27,5 +27,14 @@ SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./coach.db")
 
 # --- CORS ---
-# Comma-separated list of additional allowed origins.
+# Comma-separated list of additional allowed origins (exact matches).
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS")
+
+# Regex matching allowed origins by pattern. Defaults to any Vercel domain over
+# HTTPS, which covers both the production *.vercel.app domain and every
+# auto-generated preview deployment (e.g. my-app-git-branch-user.vercel.app)
+# without having to enumerate the ever-changing preview subdomains. Override via
+# env if the frontend also serves from a custom domain.
+ALLOWED_ORIGIN_REGEX = os.getenv(
+    "ALLOWED_ORIGIN_REGEX", r"https://.*\.vercel\.app"
+)

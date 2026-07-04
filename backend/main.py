@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.exc import IntegrityError
-from config import ALLOWED_ORIGINS
+from config import ALLOWED_ORIGINS, ALLOWED_ORIGIN_REGEX
 from database import engine, Base, SessionLocal
 import models
 from router import interviews, analyze, chat, auth, resume
@@ -37,6 +37,9 @@ if ALLOWED_ORIGINS:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    # Regex allows the deployed Vercel frontend (production *.vercel.app) plus
+    # all preview deployment subdomains, which cannot be listed statically.
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
