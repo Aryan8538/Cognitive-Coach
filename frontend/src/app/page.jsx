@@ -29,21 +29,32 @@ export default function Dashboard() {
     }
 
     async function fetchStatsAndInterviews() {
+      const token = localStorage.getItem("token") || "";
+      const headers = {};
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      // 0. Liveness probe. Connectivity is determined by the dedicated,
+      // unauthenticated /health endpoint — not by a data endpoint. A data
+      // endpoint answering with 4xx/5xx means the backend IS reachable (just
+      // erroring), so those responses must not flip the "offline" banner.
+      // Only a failed connection (thrown fetch) or a failed health check is
+      // truly "offline".
       try {
-        const token = localStorage.getItem("token") || "";
-        const headers = {};
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
-        
+        const health = await fetch(`${API_BASE_URL}/health`);
+        setBackendOffline(!health.ok);
+      } catch (err) {
+        console.warn("Backend health check failed", err);
+        setBackendOffline(true);
+      }
+
+      try {
         // 1. Fetch Stats
         const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`, { headers });
         if (res.ok) {
           const data = await res.json();
           setStats(data);
-          setBackendOffline(false);
-        } else {
-          setBackendOffline(true);
         }
 
         // 2. Fetch User Practice Interviews History
@@ -56,7 +67,6 @@ export default function Dashboard() {
         }
       } catch (err) {
         console.warn("Failed to fetch dashboard stats", err);
-        setBackendOffline(true);
       } finally {
         setLoading(false);
       }
