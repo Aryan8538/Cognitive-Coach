@@ -224,8 +224,7 @@ export default function Dashboard() {
                 animationDelay: `${0.6 + idx * 0.15}s`
               }}
             >
-              <circle cx={p.x} cy={p.y} r="4.5" fill="#ffffff" stroke="#8b5cf6" strokeWidth="2" className="transition-all duration-300 group-hover/dot:r-5.5 group-hover/dot:stroke-violet-400" />
-              <circle cx={p.x} cy={p.y} r="4.5" fill="#ffffff" stroke="#8b5cf6" strokeWidth="2" className="transition-all duration-300 group-hover/dot:r-5.5 group-hover/dot:stroke-violet-400" />
+              <circle cx={p.x} cy={p.y} r="4.5" fill="#ffffff" stroke="#8b5cf6" strokeWidth="2" className="transition-all duration-300 group-hover/dot:stroke-violet-400" />
               <text x={p.x} y={p.y - 12} fontSize="9" className="fill-slate-900 dark:fill-white font-extrabold" textAnchor="middle">
                 {p.count}
               </text>
@@ -239,12 +238,37 @@ export default function Dashboard() {
     );
   };
 
+  // Derive an honest pacing status for the WPM card instead of always showing
+  // the "on benchmark" message (which was misleading for guests with no data).
+  const pacingWpm = stats ? parseFloat(stats.average_wpm) : 0;
+  const hasPacingData = !loading && stats && pacingWpm > 0;
+  const pacingOnTarget = pacingWpm >= 110 && pacingWpm <= 140;
+  const pacingNote = !hasPacingData
+    ? {
+        style: "bg-slate-50 dark:bg-zinc-800/40 border-slate-100 dark:border-zinc-800/55 text-slate-500 dark:text-slate-400",
+        iconClass: "text-slate-400",
+        text: "Complete an interview to measure your speaking pace."
+      }
+    : pacingOnTarget
+    ? {
+        style: "bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-100/60 dark:border-emerald-900/30 text-emerald-800 dark:text-emerald-400",
+        iconClass: "text-emerald-500",
+        text: "Pacing rate aligns with conversational fluency benchmarks."
+      }
+    : {
+        style: "bg-amber-50/60 dark:bg-amber-950/20 border-amber-100/60 dark:border-amber-900/30 text-amber-800 dark:text-amber-400",
+        iconClass: "text-amber-500",
+        text: pacingWpm < 110
+          ? "Slightly under the 110–140 WPM target — try picking up the pace."
+          : "Slightly over the 110–140 WPM target — try slowing down."
+      };
+
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 w-full flex-grow font-sans">
       
       {/* Offline Warning Banner */}
       {backendOffline && (
-        <div className="flex items-start gap-3.5 bg-rose-50/80 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 p-4 rounded-xl mb-8 text-sm shadow-sm backdrop-blur-sm animate-fade-in-up">
+        <div role="alert" className="flex items-start gap-3.5 bg-rose-50/80 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 p-4 rounded-xl mb-8 text-sm shadow-sm backdrop-blur-sm animate-fade-in-up">
           <AlertTriangle size={18} className="flex-shrink-0 mt-0.5" />
           <div>
             <strong className="font-semibold font-display">FastAPI Backend Offline:</strong> The client cannot connect to the server at <code>{resolvedApiUrl}</code>. 
@@ -254,7 +278,7 @@ export default function Dashboard() {
       )}
 
       {/* Hero Welcome Header */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-24 min-h-[70vh] py-8 lg:py-12 animate-fade-in-up">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16 lg:min-h-[58vh] py-6 lg:py-10 animate-fade-in-up">
         <div className="lg:col-span-7 flex flex-col gap-6 text-left">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-slate-900 dark:text-white font-display">
             Everything you need to ace your <em className="text-yellow-600 dark:text-[#D4AF37] font-serif not-italic">dream</em> tech interview.
@@ -265,19 +289,21 @@ export default function Dashboard() {
           </p>
 
           <div className="flex flex-wrap gap-4 mt-2">
-            <button 
+            <button
               onClick={() => {
                 document.getElementById("roles")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="px-8 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-extrabold rounded-full shadow-lg shadow-yellow-500/20 transition-all duration-300 hover:scale-102 flex items-center gap-2 text-sm"
+              aria-label="Jump to interview role selection"
+              className="px-8 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-extrabold rounded-full shadow-lg shadow-yellow-500/20 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent flex items-center gap-2 text-sm"
             >
               Start Mock Interview — Free <ArrowRight size={16} />
             </button>
-            <button 
+            <button
               onClick={() => {
                 document.getElementById("stats-board")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="px-8 py-3.5 bg-white/5 hover:bg-white/10 dark:bg-zinc-900/40 dark:hover:bg-zinc-900/80 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-350 font-extrabold rounded-full transition-all duration-300 hover:scale-102 text-sm"
+              aria-label="Jump to your diagnostics summary"
+              className="px-8 py-3.5 bg-white/5 hover:bg-white/10 dark:bg-zinc-900/40 dark:hover:bg-zinc-900/80 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-400 font-extrabold rounded-full transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 text-sm"
             >
               Check Diagnostics
             </button>
@@ -295,7 +321,7 @@ export default function Dashboard() {
         {/* Core Metrics Summary */}
         <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-violet-500/20 dark:hover:border-violet-500/20 transition-all duration-300 flex flex-col justify-between animate-fade-in-up">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-violet-55 dark:bg-violet-950/20 flex items-center justify-center text-violet-600 dark:text-violet-400 shadow-inner">
+            <div className="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/20 flex items-center justify-center text-violet-600 dark:text-violet-400 shadow-inner">
               <Activity size={18} />
             </div>
             <div>
@@ -305,19 +331,19 @@ export default function Dashboard() {
           </div>
           
           <div className="grid grid-cols-3 gap-3 my-6 text-center">
-            <div className="bg-slate-50/70 dark:bg-zinc-800/40 border border-slate-100 dark:border-zinc-800/55 p-3 rounded-xl hover:scale-102 transition-transform duration-200">
+            <div className="bg-slate-50/70 dark:bg-zinc-800/40 border border-slate-100 dark:border-zinc-800/55 p-3 rounded-xl hover:-translate-y-0.5 transition-transform duration-200">
               <div className="text-lg font-extrabold text-violet-600 dark:text-violet-400 font-outfit">
                 {loading ? "..." : stats ? `${stats.average_clarity}%` : "0%"}
               </div>
               <div className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500 mt-1">Clarity</div>
             </div>
-            <div className="bg-slate-50/70 dark:bg-zinc-800/40 border border-slate-100 dark:border-zinc-800/55 p-3 rounded-xl hover:scale-102 transition-transform duration-200">
+            <div className="bg-slate-50/70 dark:bg-zinc-800/40 border border-slate-100 dark:border-zinc-800/55 p-3 rounded-xl hover:-translate-y-0.5 transition-transform duration-200">
               <div className="text-lg font-extrabold text-cyan-600 dark:text-cyan-400 font-outfit">
                 {loading ? "..." : stats ? `${stats.average_relevance}%` : "0%"}
               </div>
               <div className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500 mt-1">Relevance</div>
             </div>
-            <div className="bg-slate-50/70 dark:bg-zinc-800/40 border border-slate-100 dark:border-zinc-800/55 p-3 rounded-xl hover:scale-102 transition-transform duration-200">
+            <div className="bg-slate-50/70 dark:bg-zinc-800/40 border border-slate-100 dark:border-zinc-800/55 p-3 rounded-xl hover:-translate-y-0.5 transition-transform duration-200">
               <div className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400 font-outfit">
                 {loading ? "..." : stats ? `${stats.average_grammar}%` : "0%"}
               </div>
@@ -345,9 +371,9 @@ export default function Dashboard() {
             <span className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">WPM</span>
           </div>
 
-          <div className="bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-100/60 dark:border-emerald-900/30 p-3 rounded-xl text-xs flex items-center gap-2 text-emerald-800 dark:text-emerald-400">
-            <CheckCircle size={14} className="flex-shrink-0 text-emerald-500" />
-            <span className="font-medium">Pacing rate aligns with conversational fluency benchmarks.</span>
+          <div className={`border p-3 rounded-xl text-xs flex items-center gap-2 ${pacingNote.style}`}>
+            <CheckCircle size={14} className={`flex-shrink-0 ${pacingNote.iconClass}`} />
+            <span className="font-medium">{pacingNote.text}</span>
           </div>
         </div>
 
@@ -409,8 +435,9 @@ export default function Dashboard() {
                   ))}
                 </div>
                 
-                <button 
-                  className="w-full flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-zinc-900/55 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent py-2.5 rounded-xl text-xs font-bold transition-all duration-300 active:scale-98"
+                <button
+                  aria-label={`Start ${role.title} mock interview`}
+                  className="w-full flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-zinc-900/55 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent py-2.5 rounded-xl text-xs font-bold transition-all duration-300 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleStartSession(role.id);
@@ -436,11 +463,11 @@ export default function Dashboard() {
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-850/50 text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-505">
-                    <th className="py-4 px-6">Role Focus</th>
-                    <th className="py-4 px-6">Date Completed</th>
-                    <th className="py-4 px-6">Responses</th>
-                    <th className="py-4 px-6">Average Metric Score</th>
-                    <th className="py-4 px-6 text-right">Actions</th>
+                    <th scope="col" className="py-4 px-6">Role Focus</th>
+                    <th scope="col" className="py-4 px-6">Date Completed</th>
+                    <th scope="col" className="py-4 px-6">Responses</th>
+                    <th scope="col" className="py-4 px-6">Average Metric Score</th>
+                    <th scope="col" className="py-4 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -480,7 +507,8 @@ export default function Dashboard() {
                         <td className="py-4 px-6 text-right">
                           <button
                             onClick={() => router.push(`/results/${interview.id}`)}
-                            className="px-4.5 py-1.5 bg-slate-50 hover:bg-violet-600 hover:text-white dark:bg-zinc-900/55 dark:hover:bg-violet-600 text-slate-700 dark:text-slate-350 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent rounded-lg font-bold transition-all duration-200 cursor-pointer"
+                            aria-label={`View report for ${interview.role} interview`}
+                            className="px-4 py-1.5 bg-slate-50 hover:bg-violet-600 hover:text-white dark:bg-zinc-900/55 dark:hover:bg-violet-600 text-slate-700 dark:text-slate-400 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent rounded-lg font-bold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50"
                           >
                             View Report
                           </button>
