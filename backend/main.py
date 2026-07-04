@@ -222,3 +222,7 @@ app.include_router(resume.router, prefix="/api", tags=["resume"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to CognitiveCoach API. Use /docs for Swagger documentation."}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "message": "Backend is running"}
