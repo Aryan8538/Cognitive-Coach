@@ -14,7 +14,10 @@ export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [interviews, setInterviews] = useState([]);
 
+  const [resolvedApiUrl, setResolvedApiUrl] = useState("http://localhost:8000");
+
   useEffect(() => {
+    setResolvedApiUrl(API_BASE_URL);
     // Load active user session from localStorage
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
@@ -234,7 +237,7 @@ export default function Dashboard() {
         <div className="flex items-start gap-3.5 bg-rose-50/80 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 p-4 rounded-xl mb-8 text-sm shadow-sm backdrop-blur-sm animate-fade-in-up">
           <AlertTriangle size={18} className="flex-shrink-0 mt-0.5" />
           <div>
-            <strong className="font-semibold font-display">FastAPI Backend Offline:</strong> The client cannot connect to the server at <code>{API_BASE_URL}</code>. 
+            <strong className="font-semibold font-display">FastAPI Backend Offline:</strong> The client cannot connect to the server at <code>{resolvedApiUrl}</code>. 
             Ensure your backend is running or that the environment variable <code>NEXT_PUBLIC_API_URL</code> is correctly configured in Vercel.
           </div>
         </div>
