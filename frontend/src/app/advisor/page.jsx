@@ -151,7 +151,7 @@ export default function AdvisorPage() {
                   {c.icon}
                 </span>
                 <div className="min-w-0">
-                  <h4 className="text-[11px] font-bold text-slate-800 dark:text-slate-200 leading-tight">{c.label}</h4>
+                  <h4 className="text-[11px] font-bold text-slate-800 dark:text-white leading-tight">{c.label}</h4>
                   <p className="text-[10px] text-slate-400 dark:text-slate-505 leading-snug">{c.desc}</p>
                 </div>
               </div>
@@ -212,12 +212,12 @@ export default function AdvisorPage() {
 
         {/* Counselor Profile Details Card */}
         <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-4 rounded-2xl shadow-sm flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-violet-650 text-white font-extrabold font-display shadow-md shadow-violet-500/10">
+          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-violet-650 text-white dark:text-zinc-950 font-extrabold font-display shadow-md shadow-violet-500/10">
             AI
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white dark:border-zinc-900 animate-pulse"></span>
           </div>
           <div>
-            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 font-display">Placement Advisor</h4>
+            <h4 className="text-xs font-bold text-slate-800 dark:text-white font-display">Placement Advisor</h4>
             <p className="text-[10px] text-slate-400 dark:text-slate-505 flex items-center gap-1">
               <CheckCircle2 size={10} className="text-emerald-500" /> Always online · no API key needed
             </p>
@@ -232,7 +232,7 @@ export default function AdvisorPage() {
         <div className="px-6 py-4 border-b border-slate-150 dark:border-zinc-800/60 bg-slate-50/50 dark:bg-zinc-950/20 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Sparkles size={16} className="text-violet-650 dark:text-violet-400" />
-            <span className="text-xs font-bold text-slate-800 dark:text-slate-250 font-display">Interactive Career Counselor</span>
+            <span className="text-xs font-bold text-slate-800 dark:text-white font-display">Interactive Career Counselor</span>
           </div>
           <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-450 dark:text-slate-505">Live Session</span>
         </div>
@@ -248,7 +248,7 @@ export default function AdvisorPage() {
               >
                 {/* Profile Icon */}
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm ${
-                  isAssistant ? 'bg-violet-605 text-white font-display' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-350 border border-slate-200/40 dark:border-zinc-800/40'
+                  isAssistant ? 'bg-violet-605 text-white dark:text-zinc-950 font-display' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-400 border border-slate-200/40 dark:border-zinc-800/40'
                 }`}>
                   {isAssistant ? <GraduationCap size={15} /> : "ME"}
                 </div>
@@ -256,7 +256,7 @@ export default function AdvisorPage() {
                 {/* Bubble content */}
                 <div className={`rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-sm ${
                   isAssistant
-                    ? 'bg-white/80 dark:bg-zinc-900/45 text-slate-800 dark:text-slate-250 border border-slate-200/50 dark:border-zinc-805/50 rounded-tl-sm'
+                    ? 'bg-white/80 dark:bg-zinc-900/45 text-slate-800 dark:text-slate-700 border border-slate-200/50 dark:border-zinc-800/50 rounded-tl-sm'
                     : 'bg-violet-605 text-white rounded-tr-sm'
                 }`}>
                   {msg.content.split("\n\n").map((para, pIdx) => {
@@ -269,7 +269,7 @@ export default function AdvisorPage() {
                     }
                     if (para.startsWith("####")) {
                       return (
-                        <h5 key={pIdx} className="font-bold font-display text-slate-800 dark:text-slate-350 mt-3 mb-1.5 text-xs">
+                        <h5 key={pIdx} className="font-bold font-display text-slate-800 dark:text-white mt-3 mb-1.5 text-xs">
                           {para.replace("####", "").trim()}
                         </h5>
                       );
@@ -339,10 +339,10 @@ export default function AdvisorPage() {
 
           {loading && (
             <div className="flex gap-3 items-start self-start">
-              <div className="w-8 h-8 rounded-lg bg-violet-605 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+              <div className="w-8 h-8 rounded-lg bg-violet-605 text-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs shadow-sm">
                 <GraduationCap size={15} />
               </div>
-              <div className="flex items-center gap-1.5 bg-white/80 dark:bg-zinc-900/45 border border-slate-200/50 dark:border-zinc-805/50 p-4 rounded-2xl rounded-tl-sm shadow-sm">
+              <div className="flex items-center gap-1.5 bg-white/80 dark:bg-zinc-900/45 border border-slate-200/50 dark:border-zinc-800/50 p-4 rounded-2xl rounded-tl-sm shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce"></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce" style={{ animationDelay: "0.2s" }}></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-505 animate-bounce" style={{ animationDelay: "0.4s" }}></span>
