@@ -1,9 +1,9 @@
 import logging
 import requests
 import json
-from fastapi import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 from config import GEMINI_API_KEY, GEMINI_MODEL
 
 logger = logging.getLogger(__name__)
@@ -349,15 +349,17 @@ def generate_advisor_fallback(query: str) -> str:
         )
 
 @router.post("/chat", response_model=ChatResponse)
-def get_chat_response(req: ChatRequest, x_gemini_key: Optional[str] = Header(None)):
+def get_chat_response(req: ChatRequest):
     if not req.messages:
         raise HTTPException(status_code=400, detail="Message history cannot be empty")
-        
+
     last_user_message = next((m.content for m in reversed(req.messages) if m.role == "user"), None)
     if not last_user_message:
         raise HTTPException(status_code=400, detail="No user message found in history")
-        
-    active_key = x_gemini_key or GEMINI_API_KEY
+
+    # The Gemini key is sourced exclusively from the server environment
+    # (GEMINI_API_KEY). Clients cannot supply or override it.
+    active_key = GEMINI_API_KEY
     if not active_key:
         response_text = generate_advisor_fallback(last_user_message)
         return {"response": response_text}

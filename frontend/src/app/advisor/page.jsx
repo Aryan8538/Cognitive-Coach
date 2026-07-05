@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, Send, BookOpen, GraduationCap, Trophy, ChevronRight, MessageSquare, Terminal, Users, BarChart3, HelpCircle } from "lucide-react";
+import { Sparkles, Send, BookOpen, GraduationCap, Trophy, ChevronRight, MessageSquare, Terminal, Users, BarChart3, HelpCircle, Code2, FileSpreadsheet, Clock, ArrowRight, CheckCircle2 } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
 export default function AdvisorPage() {
@@ -15,34 +15,13 @@ export default function AdvisorPage() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [apiKey, setApiKey] = useState("");
-  const [apiKeyInput, setApiKeyInput] = useState("");
   const chatEndRef = useRef(null);
-
-  useEffect(() => {
-    const savedKey = localStorage.getItem("gemini_api_key") || "";
-    setApiKey(savedKey);
-    if (savedKey) {
-      setApiKeyInput(savedKey);
-    }
-  }, [router]);
 
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, loading]);
-
-  const handleSaveApiKey = () => {
-    localStorage.setItem("gemini_api_key", apiKeyInput.trim());
-    setApiKey(apiKeyInput.trim());
-  };
-
-  const handleClearApiKey = () => {
-    localStorage.removeItem("gemini_api_key");
-    setApiKey("");
-    setApiKeyInput("");
-  };
 
   const handleSend = async (text) => {
     if (!text.trim()) return;
@@ -53,17 +32,13 @@ export default function AdvisorPage() {
     setLoading(true);
 
     try {
-      const headers = {
-        "Content-Type": "application/json"
-      };
-      const savedKey = localStorage.getItem("gemini_api_key") || "";
-      if (savedKey) {
-        headers["X-Gemini-Key"] = savedKey;
-      }
-
+      // The Gemini API key lives only on the backend (env var). The client never
+      // sends a key — the server authenticates the upstream Gemini call itself.
       const res = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
-        headers,
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           messages: [...messages.filter(m => !m.content.startsWith("👋")), userMessage]
         })
@@ -80,7 +55,7 @@ export default function AdvisorPage() {
         ...prev,
         {
           role: "assistant",
-          content: "⚠️ **Connection Error:** Failed to communicate with the career server. Please ensure the backend is active at `http://localhost:8000`."
+          content: "⚠️ **Connection Error:** Failed to communicate with the career server. Please make sure the backend service is running and try again."
         }
       ]);
     } finally {
@@ -119,11 +94,27 @@ export default function AdvisorPage() {
     }
   ];
 
+  // What the advisor can help with — surfaced so users know the scope up front.
+  const capabilities = [
+    { icon: <BookOpen size={13} />, label: "Personalized study roadmaps", desc: "Week-by-week plans with free resources" },
+    { icon: <MessageSquare size={13} />, label: "Mock interview strategy", desc: "STAR structure & answer framing" },
+    { icon: <FileSpreadsheet size={13} />, label: "Resume & ATS guidance", desc: "Keyword and impact optimization" },
+    { icon: <Code2 size={13} />, label: "DSA patterns & complexity", desc: "Approach, edge cases, Big-O tips" }
+  ];
+
+  // Honest, capability-derived platform stats (not per-user analytics).
+  const platformStats = [
+    { icon: <Users size={13} />, value: "10", label: "Interview Roles" },
+    { icon: <Code2 size={13} />, value: "4", label: "Coding Languages" },
+    { icon: <Sparkles size={13} />, value: "AI", label: "Live Feedback" },
+    { icon: <Clock size={13} />, value: "24/7", label: "Availability" }
+  ];
+
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 w-full flex-grow flex flex-col md:flex-row gap-8 items-stretch h-[calc(100vh-100px)] font-sans">
-      
-      {/* Left Sidebar: Quick Actions Panel */}
-      <div className="md:w-80 flex flex-col gap-6 flex-shrink-0 animate-fade-in-up">
+
+      {/* Left Sidebar: Career Center overview & quick actions */}
+      <div className="md:w-80 flex flex-col gap-6 flex-shrink-0 overflow-y-auto scrollbar-thin pr-1 animate-fade-in-up">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold rounded-full bg-violet-50 text-violet-650 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-100 dark:border-violet-900/55 mb-3 shadow-sm">
             <Trophy size={11} className="text-amber-500" /> Placement Ready
@@ -132,52 +123,46 @@ export default function AdvisorPage() {
             Career Center
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-            Generate customized study roadmaps, review technical concepts, and receive structured career guidance.
+            Your AI placement advisor — generate customized study roadmaps, review technical concepts, and get structured, interview-ready guidance. No setup required; just start chatting.
           </p>
         </div>
 
-        {/* Gemini API Key Configuration Panel */}
-        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-4 shadow-sm flex flex-col gap-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-505 uppercase tracking-wider">
-              Gemini API Settings
-            </span>
-            <span className={`w-1.5 h-1.5 rounded-full ${apiKey ? "bg-emerald-500 animate-pulse-slow" : "bg-amber-500"}`} />
-          </div>
-          <div className="flex flex-col gap-2">
-            <input
-              type="password"
-              placeholder={apiKey ? "••••••••••••••••••••••••" : "Enter GEMINI_API_KEY"}
-              value={apiKeyInput}
-              onChange={(e) => setApiKeyInput(e.target.value)}
-              className="w-full px-3 py-2 text-[10.5px] bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-slate-250 border border-slate-200/80 dark:border-zinc-850/80 rounded-xl focus:outline-none focus:border-violet-500/50 transition-colors"
-            />
-            <div className="flex gap-2.5 justify-end items-center">
-              {apiKey && (
-                <button
-                  onClick={handleClearApiKey}
-                  className="text-[9.5px] font-extrabold text-rose-500 dark:text-rose-450 hover:underline cursor-pointer"
-                >
-                  Reset
-                </button>
-              )}
-              <button
-                onClick={handleSaveApiKey}
-                className="text-[9.5px] font-extrabold text-violet-650 dark:text-violet-400 hover:underline cursor-pointer"
-              >
-                Save Key
-              </button>
+        {/* Platform at a glance */}
+        <div className="grid grid-cols-2 gap-2.5">
+          {platformStats.map((s, i) => (
+            <div key={i} className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-xl p-3 flex flex-col gap-1 shadow-sm">
+              <span className="text-violet-650 dark:text-violet-400">{s.icon}</span>
+              <span className="text-lg font-black text-slate-900 dark:text-white font-outfit leading-none">{s.value}</span>
+              <span className="text-[9px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-505">{s.label}</span>
             </div>
-            <p className="text-[9px] text-slate-400 dark:text-slate-500 leading-normal mt-0.5">
-              Get a free API key from <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="text-violet-500 dark:text-violet-400 underline hover:text-violet-650">Google AI Studio</a> to enable live interactive counseling.
-            </p>
+          ))}
+        </div>
+
+        {/* AI capabilities */}
+        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-4 shadow-sm flex flex-col gap-3">
+          <div className="flex items-center gap-1.5">
+            <Sparkles size={12} className="text-violet-650 dark:text-violet-400" />
+            <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-505 uppercase tracking-wider">What I can help with</span>
+          </div>
+          <div className="flex flex-col gap-2.5">
+            {capabilities.map((c, i) => (
+              <div key={i} className="flex items-start gap-2.5">
+                <span className="mt-0.5 w-6 h-6 rounded-lg bg-violet-500/10 dark:bg-violet-500/15 border border-violet-500/15 flex items-center justify-center text-violet-650 dark:text-violet-400 flex-shrink-0">
+                  {c.icon}
+                </span>
+                <div className="min-w-0">
+                  <h4 className="text-[11px] font-bold text-slate-800 dark:text-slate-200 leading-tight">{c.label}</h4>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-505 leading-snug">{c.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Pre-built roadmaps list */}
+        {/* Suggested prompts / roadmaps */}
         <div className="flex flex-col gap-3">
           <h3 className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
-            Generate Study Roadmaps
+            Suggested Prompts
           </h3>
           <div className="flex flex-col gap-2.5">
             {roadmaps.map((r, index) => (
@@ -185,7 +170,7 @@ export default function AdvisorPage() {
                 key={index}
                 onClick={() => handleSend(r.query)}
                 disabled={loading}
-                className={`w-full flex items-center justify-between border p-3 rounded-xl hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:shadow-none text-left transition-all ${r.color}`}
+                className={`w-full flex items-center justify-between border p-3 rounded-xl hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:shadow-none text-left transition-all disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 ${r.color}`}
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-white dark:bg-zinc-900 border border-current/10 shadow-sm flex items-center justify-center">
@@ -202,6 +187,29 @@ export default function AdvisorPage() {
           </div>
         </div>
 
+        {/* Quick actions */}
+        <div className="flex flex-col gap-3">
+          <h3 className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+            Quick Actions
+          </h3>
+          <div className="flex flex-col gap-2.5">
+            <button
+              onClick={() => router.push("/#roles")}
+              className="w-full flex items-center justify-between bg-slate-50 dark:bg-zinc-900/55 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent p-3 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40"
+            >
+              <span className="flex items-center gap-2.5"><MessageSquare size={14} /> Start a Mock Interview</span>
+              <ArrowRight size={13} />
+            </button>
+            <button
+              onClick={() => router.push("/resume-checker")}
+              className="w-full flex items-center justify-between bg-slate-50 dark:bg-zinc-900/55 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent p-3 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40"
+            >
+              <span className="flex items-center gap-2.5"><FileSpreadsheet size={14} /> Scan Your Resume</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+        </div>
+
         {/* Counselor Profile Details Card */}
         <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-4 rounded-2xl shadow-sm flex items-center gap-3">
           <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-violet-650 text-white font-extrabold font-display shadow-md shadow-violet-500/10">
@@ -210,14 +218,16 @@ export default function AdvisorPage() {
           </div>
           <div>
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 font-display">Placement Advisor</h4>
-            <p className="text-[10px] text-slate-400 dark:text-slate-505">Lorem Ipsum flash</p>
+            <p className="text-[10px] text-slate-400 dark:text-slate-505 flex items-center gap-1">
+              <CheckCircle2 size={10} className="text-emerald-500" /> Always online · no API key needed
+            </p>
           </div>
         </div>
       </div>
 
       {/* Right Main Panel: Advisor Chat Workspace */}
       <div className="flex-grow glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl shadow-sm flex flex-col overflow-hidden h-full">
-        
+
         {/* Chat Header */}
         <div className="px-6 py-4 border-b border-slate-150 dark:border-zinc-800/60 bg-slate-50/50 dark:bg-zinc-950/20 flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -232,7 +242,7 @@ export default function AdvisorPage() {
           {messages.map((msg, index) => {
             const isAssistant = msg.role === "assistant";
             return (
-              <div 
+              <div
                 key={index}
                 className={`flex gap-3 max-w-[85%] animate-message-enter ${isAssistant ? 'self-start items-start' : 'self-end items-end flex-row-reverse'}`}
               >
@@ -242,11 +252,11 @@ export default function AdvisorPage() {
                 }`}>
                   {isAssistant ? <GraduationCap size={15} /> : "ME"}
                 </div>
-                
+
                 {/* Bubble content */}
                 <div className={`rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-sm ${
-                  isAssistant 
-                    ? 'bg-white/80 dark:bg-zinc-900/45 text-slate-800 dark:text-slate-250 border border-slate-200/50 dark:border-zinc-805/50 rounded-tl-sm' 
+                  isAssistant
+                    ? 'bg-white/80 dark:bg-zinc-900/45 text-slate-800 dark:text-slate-250 border border-slate-200/50 dark:border-zinc-805/50 rounded-tl-sm'
                     : 'bg-violet-605 text-white rounded-tr-sm'
                 }`}>
                   {msg.content.split("\n\n").map((para, pIdx) => {
@@ -282,9 +292,9 @@ export default function AdvisorPage() {
                       if (trimmed.startsWith("-") || trimmed.startsWith("*")) {
                         const itemContent = trimmed.substring(1).trim();
                         currentList.push(
-                          <li 
-                            key={`li-${lIdx}`} 
-                            dangerouslySetInnerHTML={{ __html: formatText(itemContent) }} 
+                          <li
+                            key={`li-${lIdx}`}
+                            dangerouslySetInnerHTML={{ __html: formatText(itemContent) }}
                           />
                         );
                       } else {
@@ -298,10 +308,10 @@ export default function AdvisorPage() {
                         }
                         if (line) {
                           elements.push(
-                            <p 
-                              key={`p-${lIdx}`} 
-                              className="mb-1.5 last:mb-0" 
-                              dangerouslySetInnerHTML={{ __html: formatText(line) }} 
+                            <p
+                              key={`p-${lIdx}`}
+                              className="mb-1.5 last:mb-0"
+                              dangerouslySetInnerHTML={{ __html: formatText(line) }}
                             />
                           );
                         }
@@ -326,7 +336,7 @@ export default function AdvisorPage() {
               </div>
             );
           })}
-          
+
           {loading && (
             <div className="flex gap-3 items-start self-start">
               <div className="w-8 h-8 rounded-lg bg-violet-605 text-white flex items-center justify-center font-bold text-xs shadow-sm">
@@ -344,7 +354,7 @@ export default function AdvisorPage() {
         </div>
 
         {/* Input Bar Footer */}
-        <form 
+        <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend(input);
@@ -362,7 +372,7 @@ export default function AdvisorPage() {
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-98 flex items-center gap-1.5 cursor-pointer"
+            className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-98 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={12} fill="currentColor" /> Send
           </button>

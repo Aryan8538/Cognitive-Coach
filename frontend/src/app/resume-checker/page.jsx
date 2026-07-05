@@ -75,16 +75,11 @@ export default function ResumeCheckerPage() {
     formData.append("file", file);
     formData.append("role", role);
 
-    const headers = {};
-    const savedKey = localStorage.getItem("gemini_api_key") || "";
-    if (savedKey) {
-      headers["X-Gemini-Key"] = savedKey;
-    }
-
+    // The Gemini API key lives only on the backend (env var); the client never
+    // sends one. The server authenticates the upstream Gemini call itself.
     try {
       const res = await fetch(`${API_BASE_URL}/api/resume/check`, {
         method: "POST",
-        headers,
         body: formData
       });
 

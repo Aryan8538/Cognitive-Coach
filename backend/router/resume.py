@@ -5,8 +5,8 @@ import requests
 import json
 import zipfile
 import xml.etree.ElementTree as ET
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Header
-from typing import List, Optional, Dict
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from typing import List, Dict
 from pydantic import BaseModel
 from pypdf import PdfReader
 from config import GEMINI_API_KEY
@@ -142,8 +142,7 @@ def analyze_resume_locally(text: str, role: str, num_pages: int) -> dict:
 @router.post("/check", response_model=ResumeAnalysisResponse)
 def check_resume(
     file: UploadFile = File(...),
-    role: str = Form("Software Engineer"),
-    x_gemini_key: Optional[str] = Header(None)
+    role: str = Form("Software Engineer")
 ):
     # Validate file type extension
     file_ext = file.filename.split(".")[-1].lower() if "." in file.filename else ""
@@ -182,7 +181,9 @@ def check_resume(
     if not resume_text.strip():
         raise HTTPException(status_code=400, detail="The uploaded document appears to be empty or lacks extractable text.")
 
-    active_key = x_gemini_key or GEMINI_API_KEY
+    # The Gemini key is sourced exclusively from the server environment
+    # (GEMINI_API_KEY). Clients cannot supply or override it.
+    active_key = GEMINI_API_KEY
     if not active_key:
         return analyze_resume_locally(resume_text, role, num_pages)
         
