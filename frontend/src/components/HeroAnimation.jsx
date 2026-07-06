@@ -81,11 +81,22 @@ export default function HeroAnimation() {
       // Update dynamic radius based on resize width
       const activeRadius = Math.min(width, height, 420) * 0.38;
 
-      // 1. Draw smooth central gold glow behind the sphere
+      // Detect dark theme dynamically from document classList
+      const isDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+      const colorPrefix = isDark ? "212, 175, 55" : "139, 92, 246"; // Gold vs Violet
+      const particleColorPrefix = isDark ? "244, 212, 114" : "139, 92, 246"; // Gold/Yellow vs Violet
+
+      // 1. Draw smooth central ambient glow behind the sphere
       const radialGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, activeRadius * 1.8);
-      radialGlow.addColorStop(0, "rgba(212, 175, 55, 0.16)");
-      radialGlow.addColorStop(0.5, "rgba(212, 175, 55, 0.04)");
-      radialGlow.addColorStop(1, "rgba(212, 175, 55, 0)");
+      if (isDark) {
+        radialGlow.addColorStop(0, "rgba(212, 175, 55, 0.12)");
+        radialGlow.addColorStop(0.5, "rgba(212, 175, 55, 0.03)");
+        radialGlow.addColorStop(1, "rgba(212, 175, 55, 0)");
+      } else {
+        radialGlow.addColorStop(0, "rgba(139, 92, 246, 0.10)");
+        radialGlow.addColorStop(0.5, "rgba(139, 92, 246, 0.02)");
+        radialGlow.addColorStop(1, "rgba(139, 92, 246, 0)");
+      }
       ctx.fillStyle = radialGlow;
       ctx.beginPath();
       ctx.arc(cx, cy, activeRadius * 1.8, 0, Math.PI * 2);
@@ -125,8 +136,11 @@ export default function HeroAnimation() {
       // Project all vertices
       const projectedVertices = vertices.map((v) => project(v));
 
-      // 2. Draw wireframe grid lines
-      // Draw horizontal ring segments
+      // Separate render objects into back side (z > 0) and front side (z <= 0)
+      const backQueue = [];
+      const frontQueue = [];
+
+      // Collect horizontal segments
       for (let r = 0; r <= rings; r++) {
         for (let s = 0; s < sectors; s++) {
           const idx1 = r * sectors + s;
@@ -134,21 +148,18 @@ export default function HeroAnimation() {
 
           const p1 = projectedVertices[idx1];
           const p2 = projectedVertices[idx2];
-
-          // Calculate average depth and alpha
           const avgZ = (p1.z + p2.z) / 2;
-          const alpha = Math.max(0.04, 0.35 - (avgZ + activeRadius) / (activeRadius * 2.5));
 
-          ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
-          ctx.lineWidth = Math.max(0.4, 1.2 - (avgZ + activeRadius) / (activeRadius * 2));
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
+          const item = { type: "line", p1, p2, z: avgZ };
+          if (avgZ > 0) {
+            backQueue.push(item);
+          } else {
+            frontQueue.push(item);
+          }
         }
       }
 
-      // Draw vertical segment lines connecting adjacent rings
+      // Collect vertical segments
       for (let r = 0; r < rings; r++) {
         for (let s = 0; s < sectors; s++) {
           const idx1 = r * sectors + s;
@@ -156,45 +167,138 @@ export default function HeroAnimation() {
 
           const p1 = projectedVertices[idx1];
           const p2 = projectedVertices[idx2];
-
           const avgZ = (p1.z + p2.z) / 2;
-          const alpha = Math.max(0.04, 0.32 - (avgZ + activeRadius) / (activeRadius * 2.5));
 
-          ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
-          ctx.lineWidth = Math.max(0.4, 1.0 - (avgZ + activeRadius) / (activeRadius * 2));
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
+          const item = { type: "line", p1, p2, z: avgZ };
+          if (avgZ > 0) {
+            backQueue.push(item);
+          } else {
+            frontQueue.push(item);
+          }
         }
       }
 
-      // 3. Update and draw particles
+      // Collect vertex nodes on the front-facing hemisphere for network effect
+      projectedVertices.forEach((p, idx) => {
+        if (p.z <= 0) {
+          // Add a grid node dot at a subset of vertices
+          frontQueue.push({
+            type: "node",
+            p,
+            z: p.z,
+            size: (idx % 6 === 0) ? 2.2 : (idx % 3 === 0) ? 1.2 : 0.8
+          });
+        }
+      });
+
+      // Collect particles
       particles.forEach((p) => {
-        // Slow particle drift and phase modulation
         p.phase += p.speed;
-        
-        // Project particle
         const proj = project({
           x: p.x + Math.sin(p.phase) * 0.05,
           y: p.y + Math.cos(p.phase) * 0.05,
           z: p.z,
         });
 
-        const alpha = Math.max(0.1, 0.75 - (proj.z + activeRadius) / (activeRadius * 2));
-        ctx.fillStyle = `rgba(212, 175, 55, ${alpha})`;
-
-        // Glow behind particles
-        ctx.shadowColor = "rgba(212, 175, 55, 0.4)";
-        ctx.shadowBlur = 4;
-        
-        ctx.beginPath();
-        ctx.arc(proj.x, proj.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Reset shadow
-        ctx.shadowBlur = 0;
+        const item = { type: "particle", p: proj, size: p.size, z: proj.z };
+        if (proj.z > 0) {
+          backQueue.push(item);
+        } else {
+          frontQueue.push(item);
+        }
       });
+
+      // Sort both queues from furthest (largest z) to nearest (smallest z)
+      backQueue.sort((a, b) => b.z - a.z);
+      frontQueue.sort((a, b) => b.z - a.z);
+
+      const drawItem = (item) => {
+        if (item.type === "line") {
+          const { p1, p2, z } = item;
+          const isBack = z > 0;
+          // Back-side lines are much thinner and dimmer to emphasize depth
+          const baseAlpha = isBack ? (isDark ? 0.12 : 0.09) : (isDark ? 0.35 : 0.28);
+          const alpha = Math.max(0.015, baseAlpha - (z + activeRadius) / (activeRadius * 3.5));
+
+          ctx.strokeStyle = `rgba(${colorPrefix}, ${alpha})`;
+          ctx.lineWidth = isBack 
+            ? Math.max(0.2, 0.7 - (z + activeRadius) / (activeRadius * 2))
+            : Math.max(0.4, 1.2 - (z + activeRadius) / (activeRadius * 2.5));
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        } else if (item.type === "particle") {
+          const { p: proj, size, z } = item;
+          const alpha = Math.max(0.1, 0.75 - (proj.z + activeRadius) / (activeRadius * 2));
+          
+          ctx.fillStyle = `rgba(${particleColorPrefix}, ${alpha})`;
+          ctx.shadowColor = `rgba(${particleColorPrefix}, 0.5)`;
+          ctx.shadowBlur = 4;
+          
+          ctx.beginPath();
+          ctx.arc(proj.x, proj.y, size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        } else if (item.type === "node") {
+          const { p, size } = item;
+          // Grid intersections have high readability and glowing presence
+          const alpha = Math.max(0.15, 0.85 - (p.z + activeRadius) / (activeRadius * 2.5));
+          ctx.fillStyle = `rgba(${particleColorPrefix}, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (size > 2) {
+            ctx.strokeStyle = `rgba(${colorPrefix}, ${alpha * 0.35})`;
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, size * 2.2, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+      };
+
+      // Pass 1: Render back elements
+      backQueue.forEach(drawItem);
+
+      // Pass 2: Render 3D shaded sphere volume body (glassmorphism/diffuse shading)
+      const sphereGlow = ctx.createRadialGradient(
+        cx - activeRadius * 0.25, 
+        cy - activeRadius * 0.25, 
+        activeRadius * 0.05, 
+        cx, 
+        cy, 
+        activeRadius
+      );
+      if (isDark) {
+        // Dark Theme: specular gold fade into dark canvas/grid backdrop
+        sphereGlow.addColorStop(0, "rgba(212, 175, 55, 0.12)");
+        sphereGlow.addColorStop(0.3, "rgba(8, 8, 8, 0.48)");
+        sphereGlow.addColorStop(0.7, "rgba(3, 3, 3, 0.78)");
+        sphereGlow.addColorStop(1, "rgba(3, 3, 3, 0.94)");
+      } else {
+        // Light Theme: soft violet/indigo fade into light canvas backdrop
+        sphereGlow.addColorStop(0, "rgba(139, 92, 246, 0.09)");
+        sphereGlow.addColorStop(0.3, "rgba(241, 245, 249, 0.48)");
+        sphereGlow.addColorStop(0.7, "rgba(248, 250, 252, 0.78)");
+        sphereGlow.addColorStop(1, "rgba(248, 250, 252, 0.92)");
+      }
+      ctx.fillStyle = sphereGlow;
+      ctx.beginPath();
+      ctx.arc(cx, cy, activeRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Atmospheric outer rim/halo ring
+      ctx.strokeStyle = isDark ? "rgba(212, 175, 55, 0.22)" : "rgba(139, 92, 246, 0.18)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(cx, cy, activeRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Pass 3: Render front elements (drawn on top of the shaded sphere body)
+      frontQueue.forEach(drawItem);
 
       animationId = requestAnimationFrame(render);
     };
