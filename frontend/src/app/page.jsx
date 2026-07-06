@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Terminal, Users, BarChart3, HelpCircle, Activity, AlertTriangle, ArrowRight, Play, CheckCircle, Cpu, Cloud, Shield, Smartphone } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
-import HeroAnimation from "@/components/HeroAnimation";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -278,40 +277,34 @@ export default function Dashboard() {
       )}
 
       {/* Hero Welcome Header */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16 lg:min-h-[58vh] py-6 lg:py-10 animate-fade-in-up">
-        <div className="lg:col-span-7 flex flex-col gap-6 text-left">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-slate-900 dark:text-white font-display">
-            Everything you need to ace your <em className="text-yellow-600 dark:text-[#D4AF37] font-serif not-italic">dream</em> tech interview.
-          </h1>
-          
-          <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base lg:text-lg max-w-2xl leading-relaxed font-sans">
-            CognitiveCoach analyzes your webcam mock interviews and provides real-time intelligent feedback on speech pacing, filler words, grammar correctness, and technical relevance.
-          </p>
+      <section className="flex flex-col gap-6 justify-center items-start mb-16 lg:min-h-[48vh] py-6 lg:py-10 animate-fade-in-up max-w-4xl">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-slate-900 dark:text-white font-display">
+          Everything you need to ace your <em className="text-yellow-600 dark:text-[#D4AF37] font-serif not-italic">dream</em> tech interview.
+        </h1>
+        
+        <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base lg:text-lg max-w-2xl leading-relaxed font-sans">
+          CognitiveCoach analyzes your webcam mock interviews and provides real-time intelligent feedback on speech pacing, filler words, grammar correctness, and technical relevance.
+        </p>
 
-          <div className="flex flex-wrap gap-4 mt-2">
-            <button
-              onClick={() => {
-                document.getElementById("roles")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              aria-label="Jump to interview role selection"
-              className="px-8 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-extrabold rounded-full shadow-lg shadow-yellow-500/20 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent flex items-center gap-2 text-sm"
-            >
-              Start Mock Interview — Free <ArrowRight size={16} />
-            </button>
-            <button
-              onClick={() => {
-                document.getElementById("stats-board")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              aria-label="Jump to your diagnostics summary"
-              className="px-8 py-3.5 bg-white/5 hover:bg-white/10 dark:bg-zinc-900/40 dark:hover:bg-zinc-900/80 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-400 font-extrabold rounded-full transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 text-sm"
-            >
-              Check Diagnostics
-            </button>
-          </div>
-        </div>
-
-        <div className="lg:col-span-5 w-full flex justify-center items-center">
-          <HeroAnimation />
+        <div className="flex flex-wrap gap-4 mt-2">
+          <button
+            onClick={() => {
+              document.getElementById("roles")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            aria-label="Jump to interview role selection"
+            className="px-8 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-extrabold rounded-full shadow-lg shadow-yellow-500/20 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent flex items-center gap-2 text-sm"
+          >
+            Start Mock Interview — Free <ArrowRight size={16} />
+          </button>
+          <button
+            onClick={() => {
+              document.getElementById("stats-board")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            aria-label="Jump to your diagnostics summary"
+            className="px-8 py-3.5 bg-white/5 hover:bg-white/10 dark:bg-zinc-900/40 dark:hover:bg-zinc-900/80 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-400 font-extrabold rounded-full transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 text-sm"
+          >
+            Check Diagnostics
+          </button>
         </div>
       </section>
 
