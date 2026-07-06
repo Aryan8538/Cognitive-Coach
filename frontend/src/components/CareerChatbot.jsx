@@ -236,7 +236,7 @@ export default function CareerChatbot() {
       {/* Floating Bubble Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-650 via-indigo-600 to-indigo-750 flex items-center justify-center text-white shadow-xl shadow-violet-500/10 hover:shadow-violet-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-650 via-indigo-600 to-indigo-750 dark:from-[#D4AF37] dark:via-[#F4D472] dark:to-[#D4AF37] dark:border dark:border-[#D4AF37]/40 flex items-center justify-center text-white dark:text-zinc-950 shadow-xl shadow-violet-500/10 dark:shadow-[#D4AF37]/20 hover:shadow-violet-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         aria-label="Ask Career Bot"
       >
         {isOpen ? <X size={20} /> : <MessageSquare size={20} />}
