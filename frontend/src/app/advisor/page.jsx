@@ -257,7 +257,7 @@ export default function AdvisorPage() {
                 <div className={`rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-sm ${
                   isAssistant
                     ? 'bg-white/80 dark:bg-zinc-900/45 text-slate-800 dark:text-slate-700 border border-slate-200/50 dark:border-zinc-800/50 rounded-tl-sm'
-                    : 'bg-violet-605 text-white rounded-tr-sm'
+                    : 'bg-violet-605 dark:bg-[#D4AF37] text-white dark:text-zinc-950 rounded-tr-sm'
                 }`}>
                   {msg.content.split("\n\n").map((para, pIdx) => {
                     if (para.startsWith("###")) {
