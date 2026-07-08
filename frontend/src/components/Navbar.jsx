@@ -34,6 +34,7 @@ export default function Navbar() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         localStorage.setItem("token", session.access_token);
+        localStorage.setItem("auth_provider", "supabase");
         const userData = {
           id: session.user.id,
           email: session.user.email,
@@ -57,8 +58,20 @@ export default function Navbar() {
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (localStorage.getItem("auth_provider") === "local") {
+        if (event === "SIGNED_OUT") {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          localStorage.removeItem("auth_provider");
+          setUser(null);
+          setStats(null);
+        }
+        return;
+      }
+
       if (session) {
         localStorage.setItem("token", session.access_token);
+        localStorage.setItem("auth_provider", "supabase");
         const userData = {
           id: session.user.id,
           email: session.user.email,
@@ -69,6 +82,7 @@ export default function Navbar() {
       } else {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        localStorage.removeItem("auth_provider");
         setUser(null);
         setStats(null);
       }
@@ -88,13 +102,6 @@ export default function Navbar() {
     };
   }, []);
 
-  // Fetch dashboard stats when user is active
-  useEffect(() => {
-    if (user) {
-      fetchStats();
-    }
-  }, [user]);
-
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -112,10 +119,22 @@ export default function Navbar() {
     }
   };
 
+  // Fetch dashboard stats when user is active
+  useEffect(() => {
+    if (user) {
+      fetchStats();
+    }
+  }, [user]);
+
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.warn("Supabase signOut error", e);
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("auth_provider");
     setUser(null);
     setStats(null);
     setDropdownOpen(false);

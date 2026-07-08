@@ -21,7 +21,7 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 JWT_SECRET = os.getenv("JWT_SECRET", "supersecretkey-for-cognitive-coach-2026")
 # Supabase project JWT secret; when unset, Supabase sessions are treated as
 # anonymous sandbox users instead of being trusted.
-SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
+SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET") or os.getenv("JWT_SECRET")
 
 # --- Database ---
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./coach.db")

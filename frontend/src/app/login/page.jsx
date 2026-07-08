@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Shield, Mail, Lock, User, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { supabase, supabaseUrl } from "@/utils/supabase";
+import { API_BASE_URL } from "@/utils/config";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -62,69 +63,208 @@ export default function LoginPage() {
 
     try {
       if (activeTab === "login") {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
+        let sessionData = null;
+        let useLocalFallback = isPlaceholder;
 
-        if (error) {
-          throw error;
-        }
-
-        // Save token to local storage
-        localStorage.setItem("token", data.session.access_token);
-        
-        // Save user profile details
-        const userData = {
-          id: data.user.id,
-          email: data.user.email,
-          name: data.user.user_metadata?.full_name || data.user.user_metadata?.name || email.split("@")[0]
-        };
-        localStorage.setItem("user", JSON.stringify(userData));
-
-        setSuccessMsg("Logged in successfully! Redirecting...");
-        setTimeout(() => {
-          router.push("/");
-          router.refresh();
-        }, 1000);
-      } else {
-        // Sign up
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              name: name,
-              full_name: name
+        if (!useLocalFallback) {
+          try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+              email,
+              password
+            });
+            if (error) {
+              const msg = error.message || "";
+              if (error.status === 429 || msg.includes("rate limit") || msg.includes("exceeded")) {
+                useLocalFallback = true;
+              } else {
+                throw error;
+              }
+            } else {
+              sessionData = data;
+            }
+          } catch (err) {
+            const msg = err.message || "";
+            if (msg.includes("rate limit") || msg.includes("exceeded") || msg.includes("fetch")) {
+              useLocalFallback = true;
+            } else {
+              throw err;
             }
           }
-        });
-
-        if (error) {
-          throw error;
         }
 
-        if (data.session) {
-          localStorage.setItem("token", data.session.access_token);
+        if (useLocalFallback) {
+          const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const msg = errData.detail || "Invalid email or password";
+            throw new Error(msg);
+          }
+
+          const loginData = await res.json();
+          localStorage.setItem("token", loginData.access_token);
+          localStorage.setItem("auth_provider", "local");
+
+          const meRes = await fetch(`${API_BASE_URL}/api/auth/me`, {
+            headers: {
+              "Authorization": `Bearer ${loginData.access_token}`
+            }
+          });
+          const meData = meRes.ok ? await meRes.json() : {};
+
           const userData = {
-            id: data.user.id,
-            email: data.user.email,
-            name: name
+            id: meData.id || "local-user",
+            email: meData.email || email,
+            name: meData.name || email.split("@")[0]
           };
           localStorage.setItem("user", JSON.stringify(userData));
-          setSuccessMsg("Account created and logged in successfully!");
+
+          setSuccessMsg("Logged in successfully (via Local Database)! Redirecting...");
+          setTimeout(() => {
+            router.push("/");
+            router.refresh();
+          }, 1000);
+        } else {
+          localStorage.setItem("token", sessionData.session.access_token);
+          localStorage.setItem("auth_provider", "supabase");
+          
+          const userData = {
+            id: sessionData.user.id,
+            email: sessionData.user.email,
+            name: sessionData.user.user_metadata?.full_name || sessionData.user.user_metadata?.name || email.split("@")[0]
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
+
+          setSuccessMsg("Logged in successfully (via Supabase)! Redirecting...");
+          setTimeout(() => {
+            router.push("/");
+            router.refresh();
+          }, 1000);
+        }
+      } else {
+        let sessionData = null;
+        let useLocalFallback = isPlaceholder;
+
+        if (!useLocalFallback) {
+          try {
+            const { data, error } = await supabase.auth.signUp({
+              email,
+              password,
+              options: {
+                data: {
+                  name: name,
+                  full_name: name
+                }
+              }
+            });
+
+            if (error) {
+              const msg = error.message || "";
+              if (error.status === 429 || msg.includes("rate limit") || msg.includes("exceeded")) {
+                useLocalFallback = true;
+              } else {
+                throw error;
+              }
+            } else {
+              sessionData = data;
+            }
+          } catch (err) {
+            const msg = err.message || "";
+            if (msg.includes("rate limit") || msg.includes("exceeded") || msg.includes("fetch")) {
+              useLocalFallback = true;
+            } else {
+              throw err;
+            }
+          }
+        }
+
+        if (useLocalFallback) {
+          const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, email, password })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const msg = errData.detail || "Failed to create account on local database.";
+            throw new Error(msg);
+          }
+
+          const loginRes = await fetch(`${API_BASE_URL}/api/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+          });
+
+          if (!loginRes.ok) {
+            setSuccessMsg("Account created successfully (via Local Database)! Please sign in.");
+            setTimeout(() => {
+              setActiveTab("login");
+              setPassword("");
+              setConfirmPassword("");
+              setSuccessMsg(null);
+            }, 2500);
+            return;
+          }
+
+          const loginData = await loginRes.json();
+          localStorage.setItem("token", loginData.access_token);
+          localStorage.setItem("auth_provider", "local");
+
+          const meRes = await fetch(`${API_BASE_URL}/api/auth/me`, {
+            headers: {
+              "Authorization": `Bearer ${loginData.access_token}`
+            }
+          });
+          const meData = meRes.ok ? await meRes.json() : {};
+
+          const userData = {
+            id: meData.id || "local-user",
+            email: meData.email || email,
+            name: meData.name || name
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
+
+          setSuccessMsg("Account created and logged in successfully (via Local Database)!");
           setTimeout(() => {
             router.push("/");
             router.refresh();
           }, 1500);
         } else {
-          setSuccessMsg("Registration successful! Please check your email to verify your account.");
-          setTimeout(() => {
-            setActiveTab("login");
-            setPassword("");
-            setConfirmPassword("");
-            setSuccessMsg(null);
-          }, 3000);
+          if (sessionData.session) {
+            localStorage.setItem("token", sessionData.session.access_token);
+            localStorage.setItem("auth_provider", "supabase");
+            const userData = {
+              id: sessionData.user.id,
+              email: sessionData.user.email,
+              name: name
+            };
+            localStorage.setItem("user", JSON.stringify(userData));
+            setSuccessMsg("Account created and logged in successfully (via Supabase)!");
+            setTimeout(() => {
+              router.push("/");
+              router.refresh();
+            }, 1500);
+          } else {
+            setSuccessMsg("Registration successful! Please check your email to verify your account.");
+            setTimeout(() => {
+              setActiveTab("login");
+              setPassword("");
+              setConfirmPassword("");
+              setSuccessMsg(null);
+            }, 3000);
+          }
         }
       }
     } catch (err) {
