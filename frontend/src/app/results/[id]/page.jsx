@@ -539,7 +539,7 @@ export default function Results({ params }) {
               <FileText size={15} className="text-[#D4AF37]" /> 
               Speech Transcript
             </h3>
-            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50/50 dark:bg-zinc-955/40 p-5 rounded-2xl border border-slate-100/60 dark:border-zinc-850/20 font-medium leading-loose">
+            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50/50 dark:bg-zinc-950/40 p-5 rounded-2xl border border-slate-100/60 dark:border-zinc-850/20 font-medium leading-loose">
               {renderHighlightedTranscript(activeResponse.transcript)}
             </p>
           </div>

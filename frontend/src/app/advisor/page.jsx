@@ -240,7 +240,7 @@ export default function AdvisorPage() {
       
       {/* 1. Left Collapsible Sidebar */}
       <aside 
-        className={`h-full border-r border-slate-200/50 dark:border-zinc-800/50 flex flex-col justify-between transition-all duration-300 ease-in-out bg-white/70 dark:bg-zinc-955/70 backdrop-blur-md z-40 ${
+        className={`h-full border-r border-slate-200/50 dark:border-zinc-800/50 flex flex-col justify-between transition-all duration-300 ease-in-out bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md z-40 ${
           sidebarOpen ? "w-80" : "w-0 overflow-hidden border-r-0"
         }`}
       >
@@ -340,10 +340,10 @@ export default function AdvisorPage() {
       </aside>
 
       {/* 2. Main Conversation Viewport */}
-      <main className="flex-grow flex flex-col justify-between h-full bg-slate-50/20 dark:bg-zinc-955/20 overflow-hidden relative">
+      <main className="flex-grow flex flex-col justify-between h-full bg-slate-50/20 dark:bg-zinc-950/20 overflow-hidden relative">
         
         {/* Workspace Top Header bar */}
-        <header className="px-6 py-3 border-b border-slate-200/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-955/70 backdrop-blur-md flex items-center justify-between z-10">
+        <header className="px-6 py-3 border-b border-slate-200/50 dark:border-zinc-800/50 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             {/* Sidebar toggle button */}
             <button 
@@ -485,7 +485,7 @@ export default function AdvisorPage() {
         </div>
 
         {/* 4. Chat Input footer form */}
-        <footer className="p-4 border-t border-slate-200/50 dark:border-zinc-800/50 bg-white/50 dark:bg-zinc-955/50 backdrop-blur-md">
+        <footer className="p-4 border-t border-slate-200/50 dark:border-zinc-800/50 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md">
           <form
             onSubmit={(e) => {
               e.preventDefault();

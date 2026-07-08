@@ -427,7 +427,7 @@ export default function ResumeCheckerPage() {
                 <FileSpreadsheet size={15} className="text-[#D4AF37]" />
                 Layout & Formatting Check
               </h3>
-              <p className="text-xs md:text-sm leading-relaxed text-slate-655 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-955/30 p-4 rounded-2xl border border-slate-150 dark:border-zinc-850/20 font-medium">
+              <p className="text-xs md:text-sm leading-relaxed text-slate-655 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-950/30 p-4 rounded-2xl border border-slate-150 dark:border-zinc-850/20 font-medium">
                 {result.formatting_check.feedback}
               </p>
             </div>
@@ -477,7 +477,7 @@ export default function ResumeCheckerPage() {
                 <BarChart2 size={15} className="text-[#D4AF37]" />
                 Action Verbs & Impact Check
               </h3>
-              <p className="text-xs md:text-sm leading-relaxed text-slate-655 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-955/30 p-4 rounded-2xl border border-slate-150 dark:border-zinc-850/20 font-medium">
+              <p className="text-xs md:text-sm leading-relaxed text-slate-655 dark:text-slate-400 bg-slate-50/50 dark:bg-zinc-950/30 p-4 rounded-2xl border border-slate-150 dark:border-zinc-850/20 font-medium">
                 {result.impact_check.feedback}
               </p>
             </div>
