@@ -20,7 +20,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
 
-def generate_advisor_fallback(query: str) -> str:
+def _generate_advisor_fallback_raw(query: str) -> str:
     """
     Generates high-fidelity mock placement roadmaps and career guidance
     based on student keywords.
@@ -347,6 +347,17 @@ def generate_advisor_fallback(query: str) -> str:
             "- *'Give me a Full Stack Web Developer study roadmap'*\n\n"
             "Type a query in the chat box to begin!"
         )
+    return res
+
+def generate_advisor_fallback(query: str) -> str:
+    res = _generate_advisor_fallback_raw(query)
+    warning_suffix = "\n\n*(Career Advisor is running in Sandbox mode. Set a live GEMINI_API_KEY in your backend .env file to enable dynamic interactive counseling.)*"
+    if res.endswith(warning_suffix):
+        res = res[:-len(warning_suffix)]
+    elif "*(Career Advisor is running in Sandbox mode" in res:
+        import re
+        res = re.sub(r"\n?\n?\*\(Career Advisor is running in Sandbox mode.*?\)\*", "", res).strip()
+    return res
 
 @router.post("/chat", response_model=ChatResponse)
 def get_chat_response(req: ChatRequest):
