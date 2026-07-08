@@ -15,6 +15,7 @@ export default function Navbar() {
   const [pathname, setPathname] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [stats, setStats] = useState(null);
+  const [isGuestSandbox, setIsGuestSandbox] = useState(false);
 
   useEffect(() => {
     setPathname(window.location.pathname);
@@ -28,6 +29,15 @@ export default function Navbar() {
       document.documentElement.classList.remove("dark");
       setIsDark(false);
     }
+
+    // Check if guest sandbox is active
+    const checkSandbox = () => {
+      setIsGuestSandbox(localStorage.getItem("guest_sandbox") === "true" && !localStorage.getItem("token"));
+    };
+    checkSandbox();
+
+    window.addEventListener("storage", checkSandbox);
+    window.addEventListener("sandbox-change", checkSandbox);
 
     // Load active session on mount
     const loadSession = async () => {
@@ -99,6 +109,8 @@ export default function Navbar() {
     return () => {
       subscription.unsubscribe();
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("storage", checkSandbox);
+      window.removeEventListener("sandbox-change", checkSandbox);
     };
   }, []);
 
@@ -135,6 +147,7 @@ export default function Navbar() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("auth_provider");
+    localStorage.removeItem("guest_sandbox");
     setUser(null);
     setStats(null);
     setDropdownOpen(false);
@@ -182,51 +195,70 @@ export default function Navbar() {
 
         {/* Navigation Actions */}
         <nav className="flex items-center gap-6 md:gap-8">
-          <a 
-            href="/" 
-            className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
-              pathname === "/" 
-                ? "text-violet-650 dark:text-violet-400" 
-                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
-            }`}
-          >
-            Dashboard
-            {pathname === "/" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
-            )}
-          </a>
-          <a 
-            href="/advisor" 
-            className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
-              pathname === "/advisor" 
-                ? "text-violet-650 dark:text-violet-400" 
-                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
-            }`}
-          >
-            Career Center
-            {pathname === "/advisor" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
-            )}
-          </a>
-          <a 
-            href="/resume-checker" 
-            className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
-              pathname === "/resume-checker" 
-                ? "text-violet-650 dark:text-violet-400" 
-                : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
-            }`}
-          >
-            Resume Checker
-            {pathname === "/resume-checker" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
-            )}
-          </a>
-          <a 
-            href="/#roles" 
-            className="text-sm font-semibold text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400 transition-colors duration-200 py-1"
-          >
-            Start Interview
-          </a>
+          {user || isGuestSandbox ? (
+            <>
+              <a 
+                href="/" 
+                className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
+                  pathname === "/" 
+                    ? "text-violet-650 dark:text-violet-400" 
+                    : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
+                }`}
+              >
+                Dashboard
+                {pathname === "/" && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
+                )}
+              </a>
+              <a 
+                href="/advisor" 
+                className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
+                  pathname === "/advisor" 
+                    ? "text-violet-650 dark:text-violet-400" 
+                    : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
+                }`}
+              >
+                Career Center
+                {pathname === "/advisor" && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
+                )}
+              </a>
+              <a 
+                href="/resume-checker" 
+                className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
+                  pathname === "/resume-checker" 
+                    ? "text-violet-650 dark:text-violet-400" 
+                    : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
+                }`}
+              >
+                Resume Checker
+                {pathname === "/resume-checker" && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
+                )}
+              </a>
+            </>
+          ) : (
+            <>
+              <a 
+                href="/#features" 
+                className="text-sm font-semibold text-slate-505 dark:text-slate-400 hover:text-[#D4AF37] dark:hover:text-[#FFE492] transition-colors"
+              >
+                Features
+              </a>
+              <a 
+                href="/#testimonials" 
+                className="text-sm font-semibold text-slate-505 dark:text-slate-400 hover:text-[#D4AF37] dark:hover:text-[#FFE492] transition-colors"
+              >
+                Testimonials
+              </a>
+              <a 
+                href="/#faq" 
+                className="text-sm font-semibold text-slate-505 dark:text-slate-400 hover:text-[#D4AF37] dark:hover:text-[#FFE492] transition-colors"
+              >
+                FAQ
+              </a>
+            </>
+          )}
 
           {/* User profile block */}
           {user ? (
@@ -305,14 +337,32 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 font-sans">
+              {isGuestSandbox && (
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("guest_sandbox");
+                    setIsGuestSandbox(false);
+                    window.dispatchEvent(new Event("sandbox-change"));
+                    router.push("/");
+                    router.refresh();
+                  }}
+                  className="text-xs font-bold text-slate-505 hover:text-slate-805 dark:text-slate-400 dark:hover:text-slate-200 transition-colors mr-2 cursor-pointer"
+                >
+                  Exit Sandbox
+                </button>
+              )}
               <div className="flex flex-col text-right hidden sm:flex">
-                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 leading-tight">Guest Student</span>
-                <span className="text-[9px] text-amber-500 font-extrabold uppercase tracking-wider leading-none">Sandbox</span>
+                <span className="text-xs font-bold text-slate-405 dark:text-slate-550 leading-tight">
+                  {isGuestSandbox ? "Guest Student" : "Visitor"}
+                </span>
+                <span className="text-[9px] text-[#D4AF37] dark:text-[#F4D472] font-extrabold uppercase tracking-wider leading-none">
+                  {isGuestSandbox ? "Sandbox" : "Public"}
+                </span>
               </div>
               <a 
                 href="/login"
-                className="text-xs font-bold text-violet-650 dark:text-violet-400 hover:underline"
+                className="text-xs font-bold text-[#D4AF37] dark:text-[#FFE492] hover:underline"
               >
                 Sign In
               </a>
