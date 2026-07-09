@@ -237,7 +237,7 @@ function InterviewRoomContent() {
                 <select
                   value={codeLanguage}
                   onChange={(e) => setCodeLanguage(e.target.value)}
-                  className="text-xs bg-slate-50 dark:bg-zinc-850 border border-slate-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#D4AF37]/50 cursor-pointer font-bold text-slate-700 dark:text-slate-300"
+                  className="text-xs bg-slate-50 dark:bg-zinc-850 border border-slate-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#D4AF37]/50 cursor-pointer font-bold text-slate-700 dark:text-slate-800"
                 >
                   <option value="python">Python 3</option>
                   <option value="javascript">JavaScript</option>
@@ -283,7 +283,7 @@ function InterviewRoomContent() {
           <p className="text-xs text-slate-500 dark:text-slate-405 mb-6 leading-relaxed">
             {errorMsg}
           </p>
-          <button className="w-full flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer" onClick={() => router.push("/")}>
+          <button className="w-full flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-800 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer" onClick={() => router.push("/")}>
             <ArrowLeft size={13} /> Return to Dashboard
           </button>
         </div>

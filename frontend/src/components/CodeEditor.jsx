@@ -171,7 +171,7 @@ except Exception as e:
           <select 
             value={language}
             onChange={(e) => handleLanguageSelect(e.target.value)}
-            className="text-[11px] font-bold bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 border border-slate-200/40 dark:border-zinc-800/40 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-violet-500/50 cursor-pointer"
+            className="text-[11px] font-bold bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-800 border border-slate-200/40 dark:border-zinc-800/40 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-violet-500/50 cursor-pointer"
             aria-label="Coding Language Selection"
           >
             {LANGUAGES.map((l) => (

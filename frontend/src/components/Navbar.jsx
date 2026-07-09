@@ -310,7 +310,7 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/#roles");
                       }}
-                      className="flex items-center gap-2.5 w-full text-left px-2.5 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-850 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center gap-2.5 w-full text-left px-2.5 py-2 text-xs font-bold text-slate-600 dark:text-slate-800 hover:bg-slate-50 dark:hover:bg-zinc-850 rounded-lg transition-colors cursor-pointer"
                     >
                       <History size={13} className="text-slate-400" />
                       <span>Start New Mock</span>
@@ -320,7 +320,7 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/resume-checker");
                       }}
-                      className="flex items-center gap-2.5 w-full text-left px-2.5 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-850 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center gap-2.5 w-full text-left px-2.5 py-2 text-xs font-bold text-slate-600 dark:text-slate-800 hover:bg-slate-50 dark:hover:bg-zinc-850 rounded-lg transition-colors cursor-pointer"
                     >
                       <User size={13} className="text-slate-400" />
                       <span>Resume Checker</span>
@@ -372,7 +372,7 @@ export default function Navbar() {
           {/* Theme Switcher Button */}
           <button 
             onClick={toggleTheme}
-            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200/60 dark:border-zinc-800/60 text-slate-700 dark:text-slate-300 hover:scale-105 active:scale-95 transition-all duration-300"
+            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200/60 dark:border-zinc-800/60 text-slate-700 dark:text-slate-800 hover:scale-105 active:scale-95 transition-all duration-300"
             aria-label="Toggle theme"
           >
             {isDark ? (

@@ -456,7 +456,7 @@ export default function AdvisorPage() {
                     {/* Chat Bubble container */}
                     <div className={`rounded-2xl px-5 py-3.5 text-xs leading-relaxed shadow-sm ${
                       isAssistant
-                        ? "bg-white/80 dark:bg-zinc-900/45 text-slate-800 dark:text-slate-300 border border-slate-200/40 dark:border-zinc-800/40 rounded-tl-sm"
+                        ? "bg-white/80 dark:bg-zinc-900/75 text-slate-800 dark:text-slate-800 border border-slate-200/40 dark:border-zinc-800/60 rounded-tl-sm"
                         : "bg-slate-900 dark:bg-zinc-800 text-white dark:text-white rounded-tr-sm"
                     }`}>
                       {renderMessageContent(msg.content)}

@@ -544,7 +544,7 @@ export default function Dashboard() {
                         <Video size={13} />
                         <span>Real-Time Transcript Capture</span>
                       </div>
-                      <p className="text-xs text-slate-800 dark:text-slate-300 leading-relaxed bg-slate-100/30 dark:bg-zinc-850/20 p-3 rounded-lg border border-slate-200/40 dark:border-zinc-800/40 font-mono">
+                      <p className="text-xs text-slate-800 dark:text-slate-800 leading-relaxed bg-slate-100/30 dark:bg-zinc-850/20 p-3 rounded-lg border border-slate-200/40 dark:border-zinc-800/40 font-mono">
                         &ldquo;For an LRU, we want ... <span className="bg-red-500/20 text-red-700 dark:text-red-400 px-1 rounded font-bold">uh</span> ... O(1) lookups. We can use a hash map and a ... <span className="bg-red-500/20 text-red-700 dark:text-red-400 px-1 rounded font-bold">um</span> ... doubly linked list.&rdquo;
                       </p>
                     </div>
