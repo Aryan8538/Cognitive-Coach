@@ -179,126 +179,109 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md border-b border-slate-200/50 dark:border-zinc-800/50 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[672px] bg-[#0a0a0a]/75 border border-white/10 backdrop-blur-xl rounded-full transition-all duration-300 shadow-lg shadow-black/40">
+      <div className="px-4 h-12 flex items-center justify-between relative">
         
-        {/* Logo Brand */}
-        <a href="/" className="flex items-center gap-2.5 group transition-transform duration-300 active:scale-95">
-          <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-[#C5A030] to-[#F4D472] dark:from-[#D4AF37] dark:to-[#FFE492] shadow-md shadow-[#D4AF37]/15 group-hover:shadow-[#D4AF37]/35 group-hover:scale-105 transition-all duration-300">
-            <Sparkles size={16} className="text-zinc-950" />
-          </div>
-          
-          <span className="text-lg font-extrabold tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#D4AF37] dark:from-white dark:via-[#F4D472] dark:to-[#D4AF37] bg-clip-text text-transparent transition-all duration-300">
+        {/* Left Logo */}
+        <a href="/" className="flex items-center gap-2 group transition-transform duration-300 active:scale-95 flex-shrink-0">
+          <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] shadow-md shadow-[#8B5CF6]/50 group-hover:scale-110 transition-transform duration-300" />
+          <span className="text-xs font-semibold tracking-tight font-serif-heading text-white">
             CognitiveCoach
           </span>
         </a>
 
-        {/* Navigation Actions */}
-        <nav className="flex items-center gap-6 md:gap-8">
+        {/* Center Links */}
+        <nav className="flex items-center gap-3.5 md:gap-4.5 absolute left-1/2 -translate-x-1/2">
           {user || isGuestSandbox ? (
             <>
               <a 
                 href="/" 
-                className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
-                  pathname === "/" 
-                    ? "text-violet-650 dark:text-violet-400" 
-                    : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-450"
+                className={`text-[9px] md:text-[10px] uppercase font-bold tracking-wider transition-colors duration-200 ${
+                  pathname === "/" ? "text-white" : "text-neutral-400 hover:text-white"
                 }`}
               >
                 Dashboard
-                {pathname === "/" && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
-                )}
               </a>
               <a 
                 href="/advisor" 
-                className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
-                  pathname === "/advisor" 
-                    ? "text-violet-650 dark:text-violet-400" 
-                    : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
+                className={`text-[9px] md:text-[10px] uppercase font-bold tracking-wider transition-colors duration-200 ${
+                  pathname === "/advisor" ? "text-white" : "text-neutral-400 hover:text-white"
                 }`}
               >
-                Career Center
-                {pathname === "/advisor" && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
-                )}
+                Advisor
               </a>
               <a 
                 href="/resume-checker" 
-                className={`text-sm font-semibold transition-colors duration-200 relative py-1 ${
-                  pathname === "/resume-checker" 
-                    ? "text-violet-650 dark:text-violet-400" 
-                    : "text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-455"
+                className={`text-[9px] md:text-[10px] uppercase font-bold tracking-wider transition-colors duration-200 ${
+                  pathname === "/resume-checker" ? "text-white" : "text-neutral-400 hover:text-white"
                 }`}
               >
-                Resume Checker
-                {pathname === "/resume-checker" && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-violet-600 dark:bg-violet-400 rounded-full animate-underline-grow" />
-                )}
+                Resume
               </a>
             </>
           ) : (
             <>
               <a 
                 href="/#features" 
-                className="text-sm font-semibold text-slate-505 dark:text-slate-400 hover:text-[#D4AF37] dark:hover:text-[#FFE492] transition-colors"
+                className="text-[9px] md:text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
               >
                 Features
               </a>
               <a 
                 href="/#testimonials" 
-                className="text-sm font-semibold text-slate-505 dark:text-slate-400 hover:text-[#D4AF37] dark:hover:text-[#FFE492] transition-colors"
+                className="text-[9px] md:text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
               >
                 Testimonials
               </a>
               <a 
                 href="/#faq" 
-                className="text-sm font-semibold text-slate-505 dark:text-slate-400 hover:text-[#D4AF37] dark:hover:text-[#FFE492] transition-colors"
+                className="text-[9px] md:text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
               >
                 FAQ
               </a>
             </>
           )}
+        </nav>
 
-          {/* User profile block */}
+        {/* Right CTA / Profile */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 focus:outline-none group cursor-pointer"
+                className="flex items-center gap-1.5 focus:outline-none group cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 px-2.5 py-1 rounded-full text-white text-[10px] font-bold transition-all duration-300"
               >
-                {/* Circular Initial Avatar */}
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#C5A030] to-[#F4D472] dark:from-[#D4AF37] dark:to-[#FFE492] text-zinc-950 font-black text-xs flex items-center justify-center shadow-md shadow-[#D4AF37]/15 group-hover:scale-105 transition-all duration-300">
+                <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] text-white font-black text-[9px] flex items-center justify-center">
                   {getInitials(user.name)}
                 </div>
-                <ChevronDown size={14} className={`text-slate-400 group-hover:text-slate-600 dark:group-hover:text-white transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown size={11} className={`text-slate-400 group-hover:text-white transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {/* Dropdown Menu */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2.5 w-64 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/80 shadow-2xl rounded-2xl p-4 z-50 animate-fade-in-up font-sans">
-                  {/* Dropdown User Info Header */}
-                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-zinc-800">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#C5A030] to-[#F4D472] dark:from-[#D4AF37] dark:to-[#FFE492] text-zinc-950 font-black text-sm flex items-center justify-center">
+                <div className="absolute right-0 mt-3 w-64 bg-[#0a0a0a]/95 border border-white/10 backdrop-blur-xl shadow-2xl rounded-2xl p-4 z-50 animate-fade-in-up font-sans">
+                  {/* User info */}
+                  <div className="flex items-center gap-3 pb-3 border-b border-white/10">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] text-white font-black text-xs flex items-center justify-center">
                       {getInitials(user.name)}
                     </div>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{user.name}</span>
-                      <span className="text-[10px] text-slate-400 truncate">{user.email}</span>
+                    <div className="flex flex-col min-w-0 text-left">
+                      <span className="text-xs font-bold text-white truncate">{user.name}</span>
+                      <span className="text-[10px] text-neutral-450 truncate">{user.email}</span>
                     </div>
                   </div>
 
-                  {/* Dropdown Dashboard stats review */}
-                  <div className="py-3 border-b border-slate-100 dark:border-zinc-800">
-                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2">My Overview</span>
-                    <div className="grid grid-cols-2 gap-2 bg-slate-50 dark:bg-zinc-850 p-2.5 rounded-xl border border-slate-100 dark:border-zinc-800/40">
-                      <div className="flex flex-col">
-                        <span className="text-[10px] text-slate-400 leading-none">Interviews</span>
-                        <span className="text-sm font-black text-slate-800 dark:text-slate-100 mt-1">{stats?.total_interviews || 0}</span>
+                  {/* Overview Stats */}
+                  <div className="py-3 border-b border-white/10">
+                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-neutral-500 block mb-2 text-left">My Overview</span>
+                    <div className="grid grid-cols-2 gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
+                      <div className="flex flex-col text-left">
+                        <span className="text-[9px] text-neutral-450 leading-none">Interviews</span>
+                        <span className="text-xs font-black text-white mt-1">{stats?.total_interviews || 0}</span>
                       </div>
-                      <div className="flex flex-col border-l border-slate-200/50 dark:border-zinc-800/60 pl-2">
-                        <span className="text-[10px] text-slate-400 leading-none">Avg Clarity</span>
-                        <span className="text-sm font-black text-slate-850 dark:text-[#D4AF37] mt-1">{stats?.average_clarity || 0}%</span>
+                      <div className="flex flex-col border-l border-white/10 pl-2 text-left">
+                        <span className="text-[9px] text-neutral-450 leading-none">Avg Clarity</span>
+                        <span className="text-xs font-black text-[#06B6D4] mt-1">{stats?.average_clarity || 0}%</span>
                       </div>
                     </div>
                   </div>
@@ -310,9 +293,9 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/#roles");
                       }}
-                      className="flex items-center gap-2.5 w-full text-left px-2.5 py-2 text-xs font-bold text-slate-600 dark:text-slate-800 hover:bg-slate-50 dark:hover:bg-zinc-850 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
                     >
-                      <History size={13} className="text-slate-400" />
+                      <History size={12} className="text-neutral-500" />
                       <span>Start New Mock</span>
                     </button>
                     <button
@@ -320,16 +303,16 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/resume-checker");
                       }}
-                      className="flex items-center gap-2.5 w-full text-left px-2.5 py-2 text-xs font-bold text-slate-600 dark:text-slate-800 hover:bg-slate-50 dark:hover:bg-zinc-850 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
                     >
-                      <User size={13} className="text-slate-400" />
+                      <User size={12} className="text-neutral-500" />
                       <span>Resume Checker</span>
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2.5 w-full text-left px-2.5 py-2 text-xs font-bold text-rose-500 hover:bg-rose-50/50 dark:hover:bg-rose-950/10 rounded-lg transition-colors mt-1 border-t border-slate-100 dark:border-zinc-800 pt-3 cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-rose-500 hover:bg-rose-955/10 rounded-lg transition-colors mt-1 border-t border-white/10 pt-2 cursor-pointer"
                     >
-                      <LogOut size={13} />
+                      <LogOut size={12} />
                       <span>Sign Out</span>
                     </button>
                   </div>
@@ -337,7 +320,7 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-3 font-sans">
+            <div className="flex items-center gap-2">
               {isGuestSandbox && (
                 <button
                   onClick={() => {
@@ -347,42 +330,30 @@ export default function Navbar() {
                     router.push("/");
                     router.refresh();
                   }}
-                  className="text-xs font-bold text-slate-505 hover:text-slate-805 dark:text-slate-400 dark:hover:text-slate-200 transition-colors mr-2 cursor-pointer"
+                  className="text-[9px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors mr-1.5 cursor-pointer"
                 >
-                  Exit Sandbox
+                  Exit
                 </button>
               )}
-              <div className="flex flex-col text-right hidden sm:flex">
-                <span className="text-xs font-bold text-slate-405 dark:text-slate-550 leading-tight">
-                  {isGuestSandbox ? "Guest Student" : "Visitor"}
-                </span>
-                <span className="text-[9px] text-[#D4AF37] dark:text-[#F4D472] font-extrabold uppercase tracking-wider leading-none">
-                  {isGuestSandbox ? "Sandbox" : "Public"}
-                </span>
-              </div>
               <a 
                 href="/login"
-                className="text-xs font-bold text-[#D4AF37] dark:text-[#FFE492] hover:underline"
+                className="bg-white hover:bg-neutral-200 text-black text-[9px] md:text-[10px] uppercase font-bold tracking-wider px-3.5 py-1.5 rounded-full transition-snappy active:scale-95 flex-shrink-0"
               >
                 Sign In
               </a>
             </div>
           )}
 
-          {/* Theme Switcher Button */}
+          {/* Theme Toggle */}
           <button 
             onClick={toggleTheme}
-            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200/60 dark:border-zinc-800/60 text-slate-700 dark:text-slate-800 hover:scale-105 active:scale-95 transition-all duration-300"
+            className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-450 hover:text-white transition-all cursor-pointer"
             aria-label="Toggle theme"
           >
-            {isDark ? (
-              <Sun size={15} className="animate-spin-slow" />
-            ) : (
-              <Moon size={15} />
-            )}
+            {isDark ? <Sun size={12} /> : <Moon size={12} />}
           </button>
-        </nav>
-        
+
+        </div>
       </div>
     </header>
   );

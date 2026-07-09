@@ -323,7 +323,7 @@ function InterviewRoomContent() {
   // Split-Screen Layout for Coding Logic Questions
   if (isCodingQuestion) {
     return (
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-8 w-full flex-grow flex flex-col lg:flex-row gap-8 items-start font-sans bg-grid animate-fade-in-up">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-8 w-full flex-grow flex flex-col lg:flex-row gap-8 items-start font-sans bg-grid animate-fade-in-up">
         
         {/* Left Column: Question Statement + Webcam capturing panel */}
         <div className="w-full lg:w-[45%] flex flex-col gap-6 flex-shrink-0">
@@ -425,7 +425,7 @@ function InterviewRoomContent() {
 
   // Standard Layout for General/Behavioral questions
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 py-8 w-full flex-grow flex flex-col gap-4 font-sans bg-grid animate-fade-in-up">
+    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-8 w-full flex-grow flex flex-col gap-4 font-sans bg-grid animate-fade-in-up">
       {renderHeader()}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start w-full">

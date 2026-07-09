@@ -188,7 +188,7 @@ export default function ResumeCheckerPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 w-full flex-grow font-sans bg-grid relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-12 w-full flex-grow font-sans bg-grid relative overflow-hidden">
       
       {/* Glow highlight details */}
       <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-[#D4AF37]/5 dark:bg-[#D4AF37]/5 rounded-full filter blur-[100px] pointer-events-none" />

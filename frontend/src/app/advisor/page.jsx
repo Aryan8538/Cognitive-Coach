@@ -236,7 +236,7 @@ export default function AdvisorPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] w-full flex overflow-hidden bg-grid font-sans relative">
+    <div className="h-screen w-full flex pt-20 overflow-hidden bg-grid font-sans relative">
       
       {/* 1. Left Collapsible Sidebar */}
       <aside 

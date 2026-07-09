@@ -593,5 +593,96 @@ code, pre, .font-mono {
   animation: slideDownIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ==========================================================================
+   Synapse Design System Additions
+   ========================================================================== */
+
+/* Typography Pairings */
+.font-serif-heading {
+  font-family: 'Instrument Serif', Georgia, serif;
+  letter-spacing: -0.03em;
+}
+
+/* Conic Spinning Border for Shiny Border Button */
+@keyframes spin-border {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-border {
+  animation: spin-border 4s linear infinite;
+}
+
+/* Text Shimmer Effect */
+@keyframes text-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.animate-text-shimmer {
+  background: linear-gradient(90deg, #a78bfa 0%, #ffffff 40%, #ffffff 60%, #22d3ee 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 6s linear infinite;
+}
+
+/* Infinite Metrics Scroll Marquee */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Snappy Physics Transitions */
+.transition-snappy {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Floating ambient orbs */
+@keyframes orb-float-slow {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-25px) scale(1.06);
+  }
+}
+@keyframes orb-float-delayed {
+  0%, 100% {
+    transform: translateY(0px) scale(1.06);
+  }
+  50% {
+    transform: translateY(25px) scale(1);
+  }
+}
+.animate-orb-slow {
+  animation: orb-float-slow 12s infinite alternate ease-in-out;
+}
+.animate-orb-delayed {
+  animation: orb-float-delayed 15s infinite alternate ease-in-out;
+}
+
+
 
 

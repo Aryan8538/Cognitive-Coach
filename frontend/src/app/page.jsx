@@ -342,7 +342,7 @@ export default function Dashboard() {
       }
     : pacingOnTarget
     ? {
-        style: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-450",
+        style: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-455",
         iconClass: "text-emerald-500",
         text: "Speech rate meets professional fluency benchmarks."
       }
@@ -357,141 +357,187 @@ export default function Dashboard() {
   // --- RENDER VISITOR LANDING PAGE ---
   if (!inSandbox) {
     return (
-      <div className="w-full flex-grow font-sans bg-grid">
+      <div className="w-full flex-grow font-sans bg-[#030303] text-white select-none">
         
         {/* Subtle glow background blobs */}
         <div className="background-blobs">
-          <div className="blob blob-1"></div>
-          <div className="blob blob-2"></div>
+          <div className="blob blob-1 bg-gradient-to-tr from-[#8B5CF6]/20 to-transparent animate-orb-slow"></div>
+          <div className="blob blob-2 bg-gradient-to-tr from-[#06B6D4]/10 to-transparent animate-orb-delayed"></div>
         </div>
 
         {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-28 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-16 md:pt-40 md:pb-24 flex flex-col items-center text-center relative z-10">
           
-          <div className="flex flex-col gap-6 items-start text-left max-w-xl animate-fade-in-up">
+          <div className="flex flex-col gap-6 items-center text-center max-w-4xl animate-fade-in-up">
             
             {/* Glowing Accent Tag */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/25 text-[#D4AF37] dark:text-[#FFE492] text-[10px] uppercase tracking-wider font-extrabold">
-              <Sparkles size={11} className="animate-pulse" />
-              <span>SaaS Mock Interview Platform</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-[10px] uppercase tracking-wider font-extrabold font-mono">
+              <Sparkles size={11} className="text-[#06B6D4]" />
+              <span>SaaS Mock Interview Calibration</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.08] text-slate-900 dark:text-white font-display">
-              Ace your tech interview with <em className="animate-text-glow font-serif not-italic">real-time AI</em> diagnostics.
+            <h1 className="text-5xl md:text-8xl tracking-tight leading-[0.9] text-white font-serif-heading font-normal">
+              Ace your tech interview with <br />
+              <span className="animate-text-shimmer">real-time AI</span> diagnostics.
             </h1>
             
-            <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base leading-relaxed font-normal">
+            <p className="text-neutral-400 text-sm md:text-base leading-relaxed max-w-2xl font-normal mt-4">
               CognitiveCoach processes your webcam practice logs using speech intelligence. Get instant, visual reports on speech rate, filler words, technical grammar, and overall response grading.
             </p>
 
-            <div className="flex flex-wrap gap-4 mt-4 w-full sm:w-auto">
+            <div className="flex flex-col items-center gap-2 mt-6">
+              {/* Conic Spinning border CTA Button */}
               <button
                 onClick={handleEnterSandbox}
-                className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black rounded-full shadow-lg shadow-yellow-500/10 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm cursor-pointer"
+                className="relative group p-[1px] rounded-full overflow-hidden transition-snappy active:scale-[0.98] cursor-pointer shadow-lg shadow-[#8B5CF6]/10"
               >
-                Launch Sandbox Free <ArrowRight size={16} />
+                <div className="absolute inset-[-1000%] bg-[conic-gradient(from_0deg,transparent_0%,#8b5cf6_40%,#06b6d4_50%,transparent_60%)] animate-spin-border z-0" />
+                <div className="relative px-8 py-3.5 bg-[#0a0a0a] text-white text-xs uppercase font-bold tracking-widest rounded-full z-10 flex items-center justify-center gap-2 group-hover:bg-neutral-900 transition-colors">
+                  Launch Sandbox Free <ArrowRight size={14} />
+                </div>
               </button>
-              <button
-                onClick={() => {
-                  router.push("/login");
-                }}
-                className="w-full sm:w-auto px-8 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900/60 dark:hover:bg-zinc-800/80 border border-slate-200/50 dark:border-zinc-800/60 text-slate-700 dark:text-slate-300 font-extrabold rounded-full transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm cursor-pointer"
+              
+              <a
+                href="/login"
+                className="text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors duration-200 mt-4 block text-center"
               >
-                Sign In <ArrowUpRight size={15} />
-              </button>
-            </div>
-
-            {/* Micro stats banner */}
-            <div className="flex items-center gap-8 mt-8 border-t border-slate-200/50 dark:border-zinc-800/60 pt-6 w-full text-slate-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-wider">
-              <div className="flex flex-col">
-                <span className="text-lg font-black text-slate-900 dark:text-slate-100">99.4%</span>
-                <span>AI Transcript Accuracy</span>
-              </div>
-              <div className="flex flex-col border-l border-slate-200/50 dark:border-zinc-800/60 pl-8">
-                <span className="text-lg font-black text-slate-900 dark:text-slate-100">10+ Roles</span>
-                <span>Ready to Practice</span>
-              </div>
+                Or Sign In to Account <ArrowUpRight size={11} className="inline ml-0.5" />
+              </a>
             </div>
 
           </div>
 
-          {/* Right side: 3D interactive grid sphere animation */}
-          <div className="relative w-full flex items-center justify-center select-none pointer-events-none animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            <HeroAnimation />
-            <div className="absolute inset-0 bg-radial-glow z-[-1] pointer-events-none" />
-          </div>
-
         </section>
 
-        {/* Logo / Trust indicators */}
-        <section className="max-w-7xl mx-auto px-6 border-y border-slate-200/40 dark:border-zinc-800/40 py-10 text-center animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-6">
-            Loved by software engineers preparing for top companies
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-12 md:gap-20 text-slate-400 dark:text-slate-550 font-display text-sm font-black uppercase tracking-wider">
-            <span className="hover:text-slate-600 dark:hover:text-slate-350 transition-colors">Linear</span>
-            <span className="hover:text-slate-600 dark:hover:text-slate-350 transition-colors">Vercel</span>
-            <span className="hover:text-slate-600 dark:hover:text-slate-350 transition-colors">Stripe</span>
-            <span className="hover:text-slate-600 dark:hover:text-slate-350 transition-colors">Supabase</span>
-            <span className="hover:text-slate-600 dark:hover:text-slate-350 transition-colors">OpenAI</span>
+        {/* Metrics Ticker */}
+        <section className="w-full bg-black/40 border-y border-white/5 py-4 overflow-hidden relative select-none">
+          <div className="animate-marquee flex whitespace-nowrap gap-16 md:gap-24">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex gap-16 md:gap-24 items-center">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[9px] font-bold tracking-widest font-mono text-neutral-500 uppercase">accuracy</span>
+                  <span className="text-xs font-mono text-[#06B6D4] font-bold">99.4% AI</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[9px] font-bold tracking-widest font-mono text-neutral-500 uppercase">practice_roles</span>
+                  <span className="text-xs font-mono text-white font-bold">10+ SE/PM</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[9px] font-bold tracking-widest font-mono text-neutral-500 uppercase">latency</span>
+                  <span className="text-xs font-mono text-[#8B5CF6] font-bold">&lt; 1.2s</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[9px] font-bold tracking-widest font-mono text-neutral-500 uppercase">checks</span>
+                  <span className="text-xs font-mono text-[#10B981] font-bold">100K+ RUN</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[9px] font-bold tracking-widest font-mono text-neutral-500 uppercase">framework</span>
+                  <span className="text-xs font-mono text-white font-bold">STAR Model</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Interactive Simulated AI Webcam Demo section */}
-        <section id="demo" className="max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
-          
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white font-display">
-              See the webcam intelligence in action.
+        {/* Feature Card Grid */}
+        <section id="features" className="scroll-mt-24 max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
+          <div className="text-center max-w-2xl mx-auto mb-20">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-[#8b5cf6] font-mono">Redefined Suite</span>
+            <h2 className="text-3xl md:text-5xl font-serif-heading tracking-tight text-white mt-2 mb-4">
+              Designed for SaaS standards.
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm">
+            <p className="text-neutral-400 text-xs md:text-sm max-w-md mx-auto leading-relaxed font-sans">
+              We leverage advanced LLM analysis and localized signal processing to deliver high-quality, actionable results.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="group bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-8 hover:-translate-y-3 hover:border-violet-500/40 hover:bg-white/[0.05] hover:shadow-glow transition-snappy text-left">
+              <div className="w-12 h-12 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-[#8b5cf6] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                <Video size={20} />
+              </div>
+              <h3 className="text-xl font-serif-heading text-white mb-3">Speech Fluency Analyzer</h3>
+              <p className="text-neutral-400 text-xs leading-relaxed font-sans">
+                Record response audio and video directly in your browser. We capture and parse the inputs securely to calculate pacing speed and filler words.
+              </p>
+            </div>
+
+            <div className="group bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-8 hover:-translate-y-3 hover:border-[#06b6d4]/40 hover:bg-white/[0.05] hover:shadow-glow transition-snappy text-left">
+              <div className="w-12 h-12 rounded-2xl bg-[#06b6d4]/10 border border-[#06b6d4]/20 text-[#06b6d4] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300">
+                <GraduationCap size={20} />
+              </div>
+              <h3 className="text-xl font-serif-heading text-white mb-3">AI Mock Advisor</h3>
+              <p className="text-neutral-400 text-xs leading-relaxed font-sans">
+                Interact with a dedicated placement mentor for roadmap construction, technical Q&A reviews, and resume analysis checks.
+              </p>
+            </div>
+
+            <div className="group bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-8 hover:-translate-y-3 hover:border-emerald-500/40 hover:bg-white/[0.05] hover:shadow-glow transition-snappy text-left">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-[#10B981] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                <Activity size={20} />
+              </div>
+              <h3 className="text-xl font-serif-heading text-white mb-3">Behavioral STAR Coaching</h3>
+              <p className="text-neutral-400 text-xs leading-relaxed font-sans">
+                Refine behavioral responses with structured Situation-Task-Action-Result scoring checks and detailed diagnostic insights.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* IDE & Calibration Block */}
+        <section id="demo" className="max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-[#06b6d4] font-mono">Webcam Calibration</span>
+            <h2 className="text-3xl md:text-5xl font-serif-heading tracking-tight text-white mt-2 mb-4">
+              Webcam diagnostics pipeline.
+            </h2>
+            <p className="text-neutral-400 text-xs md:text-sm max-w-md mx-auto leading-relaxed">
               Watch this interactive mock simulation illustrating the real-time analyzer pipeline during a live session.
             </p>
           </div>
 
-          <div className="glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-2xl max-w-4xl mx-auto relative overflow-hidden">
-            
+          <div className="bg-[#080808]/80 border border-white/10 rounded-[24px] p-6 shadow-2xl max-w-4xl mx-auto relative overflow-hidden backdrop-blur-xl">
             {/* Backlight Glow Accent */}
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-tr from-yellow-500/10 to-yellow-600/5 rounded-full filter blur-[80px] pointer-events-none" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-tr from-[#8b5cf6]/10 to-[#06b6d4]/5 rounded-full filter blur-[80px] pointer-events-none" />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               
               {/* Left Column: Simulated Webcam Output */}
-              <div className="flex flex-col justify-between bg-black rounded-xl p-4 min-h-[280px] relative overflow-hidden border border-zinc-850 shadow-inner">
+              <div className="flex flex-col justify-between bg-[#030303] rounded-2xl p-4 min-h-[280px] relative overflow-hidden border border-white/5 shadow-inner">
                 {/* Scanner lines */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(212,175,55,0.06)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none" />
-                <div className="absolute top-0 left-0 right-0 h-1 bg-yellow-500/40 animate-scan pointer-events-none" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(139,92,246,0.06)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-violet-500/40 animate-scan pointer-events-none" />
 
                 {/* Simulated Webcam header */}
-                <div className="flex items-center justify-between text-zinc-400 text-[10px] uppercase font-bold relative z-10">
-                  <div className="flex items-center gap-1.5 bg-zinc-900/80 px-2 py-1 rounded-md border border-zinc-800/40">
+                <div className="flex items-center justify-between text-neutral-400 text-[10px] uppercase font-bold relative z-10 font-mono">
+                  <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-full border border-white/5">
                     <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                     <span>Live Rec 00:34</span>
                   </div>
-                  <span className="text-zinc-550 font-bold bg-zinc-900/80 px-2 py-1 rounded-md border border-zinc-800/40">1080p WebCam</span>
+                  <span className="text-neutral-500 bg-white/5 px-2 py-1 rounded-full border border-white/5">1080p WebCam</span>
                 </div>
 
                 {/* Simulated User / Portrait Overlay */}
                 <div className="flex-grow flex flex-col justify-center items-center relative py-6">
-                  <div className="w-20 h-20 rounded-full border border-yellow-500/30 flex items-center justify-center bg-yellow-500/5 text-yellow-500/80 shadow-lg shadow-yellow-500/5">
+                  <div className="w-20 h-20 rounded-full border border-violet-500/30 flex items-center justify-center bg-violet-500/5 text-violet-400/80 shadow-lg shadow-violet-500/5">
                     <Video size={36} className={demoStep === 2 ? "animate-pulse" : ""} />
                   </div>
                   {/* Speech waveform dots */}
                   {demoStep === 2 && (
                     <div className="flex gap-1.5 mt-6 justify-center items-end h-8">
-                      <div className="w-1 bg-[#D4AF37] rounded-full animate-bounce h-6" style={{ animationDelay: '0.1s' }} />
-                      <div className="w-1 bg-[#D4AF37] rounded-full animate-bounce h-4" style={{ animationDelay: '0.3s' }} />
-                      <div className="w-1 bg-[#D4AF37] rounded-full animate-bounce h-8" style={{ animationDelay: '0.2s' }} />
-                      <div className="w-1 bg-[#D4AF37] rounded-full animate-bounce h-5" style={{ animationDelay: '0.4s' }} />
-                      <div className="w-1 bg-[#D4AF37] rounded-full animate-bounce h-7" style={{ animationDelay: '0.15s' }} />
+                      <div className="w-1 bg-[#8b5cf6] rounded-full animate-bounce h-6" style={{ animationDelay: '0.1s' }} />
+                      <div className="w-1 bg-[#06b6d4] rounded-full animate-bounce h-4" style={{ animationDelay: '0.3s' }} />
+                      <div className="w-1 bg-[#8b5cf6] rounded-full animate-bounce h-8" style={{ animationDelay: '0.2s' }} />
+                      <div className="w-1 bg-[#06b6d4] rounded-full animate-bounce h-5" style={{ animationDelay: '0.4s' }} />
+                      <div className="w-1 bg-[#8b5cf6] rounded-full animate-bounce h-7" style={{ animationDelay: '0.15s' }} />
                     </div>
                   )}
                 </div>
 
                 {/* Simulated live status info footer */}
-                <div className="relative z-10 flex justify-between items-center text-[10px] font-bold text-zinc-400 uppercase bg-zinc-900/80 p-2.5 rounded-lg border border-zinc-800/50">
+                <div className="relative z-10 flex justify-between items-center text-[10px] font-bold text-neutral-400 uppercase bg-white/5 p-2.5 rounded-xl border border-white/5 font-mono">
                   <span>Vocal Status:</span>
-                  <span className="text-[#D4AF37]">
+                  <span className="text-[#06B6D4]">
                     {demoStep === 0 ? "Initializing Device..." : 
                      demoStep === 1 ? "Listening for Prompt..." : 
                      demoStep === 2 ? "Speaking (Vocalizing)..." : 
@@ -501,272 +547,134 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* Right Column: AI Diagnostics Pipeline */}
-              <div className="flex flex-col justify-between font-sans">
-                
-                {/* Title and Step header */}
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200/50 dark:border-zinc-800/60">
-                  <span className="text-[10px] uppercase font-extrabold tracking-widest text-[#D4AF37] dark:text-[#FFE492]">AI Pipeline Stages</span>
-                  <span className="text-[10px] font-extrabold bg-slate-100 dark:bg-zinc-800 text-slate-500 px-2 py-0.5 rounded">
-                    Step {demoStep + 1} of 5
-                  </span>
+              {/* Right Column: Code Integration Block */}
+              <div className="flex flex-col justify-between font-sans bg-[#0c0c0e] rounded-2xl border border-white/5 overflow-hidden text-left">
+                {/* Header toolbar */}
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-black/25">
+                  <div className="flex gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500/30" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500/30" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/30" />
+                  </div>
+                  <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">diagnostics.py</span>
+                  <div className="w-3.5 h-3.5 rounded text-neutral-500 hover:text-white transition-colors cursor-pointer">
+                    <Terminal size={12} />
+                  </div>
                 </div>
 
-                {/* Dynamic cards based on step */}
-                <div className="my-6 flex-grow flex flex-col justify-center gap-4">
-                  {demoStep === 0 && (
-                    <div className="animate-fade-in-up flex flex-col gap-2">
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Connecting Device Calibration</h4>
-                      <p className="text-xs text-slate-400 dark:text-slate-505 leading-relaxed">
-                        Initializing audio/video pipelines. Performing ambient noise suppression checks and webcam resolution adjustments.
-                      </p>
-                      <div className="w-full bg-slate-100 dark:bg-zinc-800/50 rounded-full h-1.5 mt-2">
-                        <div className="bg-[#D4AF37] h-1.5 rounded-full animate-pulse" style={{ width: '45%' }}></div>
-                      </div>
-                    </div>
-                  )}
+                {/* Code viewport */}
+                <pre className="p-5 flex-grow overflow-x-auto text-[11px] font-mono leading-relaxed text-left text-neutral-300">
+                  <code>
+                    <span className="text-[#8B5CF6]">from</span>{" aura "}
+                    <span className="text-[#8B5CF6]">import</span>{" FluencyEngine, STARModel\n\n"}
+                    <span className="text-neutral-500">{"# Calibrate audio signals and parameters\n"}</span>
+                    {"advisor = FluencyEngine(model="}
+                    <span className="text-[#10B981]">{"\"aura-max\""}</span>
+                    {"\n\n"}
+                    <span className="text-neutral-500">{"# Process verbal stream diagnostics\n"}</span>
+                    {"advisor.analyze_speech(wpm="}
+                    {demoStep === 4 ? "128" : "..."}
+                    {")\n\n"}
+                    <span className="text-neutral-500">{"# Output grade verdict metrics\n"}</span>
+                    {"chance = advisor.generate_verdict()\n"}
+                    <span className="text-[#8B5CF6]">{"print"}</span>
+                    {"(f"}
+                    <span className="text-[#10B981]">{"\"Hiring Chance: {chance.score}%\""}</span>
+                    {")"}
+                  </code>
+                </pre>
 
-                  {demoStep === 1 && (
-                    <div className="animate-fade-in-up flex flex-col gap-2">
-                      <div className="flex gap-2 items-center text-xs font-bold text-[#D4AF37] mb-1">
-                        <MessageSquare size={13} />
-                        <span>AI Interviewer Prompting</span>
-                      </div>
-                      <blockquote className="text-xs italic bg-slate-100/50 dark:bg-zinc-850/40 p-3 rounded-lg border-l-2 border-[#D4AF37] text-slate-700 dark:text-slate-350 leading-relaxed font-sans">
-                        &ldquo;Explain how you would design a cache eviction policy like Least Recently Used (LRU). Discuss the backing data structures.&rdquo;
-                      </blockquote>
-                    </div>
-                  )}
-
-                  {demoStep === 2 && (
-                    <div className="animate-fade-in-up flex flex-col gap-2">
-                      <div className="flex gap-2 items-center text-xs font-bold text-slate-500 mb-1">
-                        <Video size={13} />
-                        <span>Real-Time Transcript Capture</span>
-                      </div>
-                      <p className="text-xs text-slate-800 dark:text-slate-800 leading-relaxed bg-slate-100/30 dark:bg-zinc-850/20 p-3 rounded-lg border border-slate-200/40 dark:border-zinc-800/40 font-mono">
-                        &ldquo;For an LRU, we want ... <span className="bg-red-500/20 text-red-700 dark:text-red-400 px-1 rounded font-bold">uh</span> ... O(1) lookups. We can use a hash map and a ... <span className="bg-red-500/20 text-red-700 dark:text-red-400 px-1 rounded font-bold">um</span> ... doubly linked list.&rdquo;
-                      </p>
-                    </div>
-                  )}
-
-                  {demoStep === 3 && (
-                    <div className="animate-fade-in-up flex flex-col gap-2.5">
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Intelligent Signal Diagnostics</h4>
-                      <div className="flex flex-col gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-                        <div className="flex justify-between border-b border-slate-100 dark:border-zinc-850/40 pb-1.5">
-                          <span>Speech Pacing:</span>
-                          <span className="font-extrabold text-slate-800 dark:text-white">Calculating WPM...</span>
-                        </div>
-                        <div className="flex justify-between border-b border-slate-100 dark:border-zinc-850/40 pb-1.5">
-                          <span>Filler Detections:</span>
-                          <span className="font-extrabold text-rose-500">2 warnings flagged</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Grammar Evaluation:</span>
-                          <span className="font-extrabold text-emerald-500">Active syntax checking...</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {demoStep === 4 && (
-                    <div className="animate-fade-in-up flex flex-col gap-2.5">
-                      <div className="flex gap-2 items-center text-xs font-bold text-emerald-500 mb-1">
-                        <CheckCircle size={13} />
-                        <span>Evaluation Report Prepared</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                        <div className="bg-slate-100/50 dark:bg-zinc-850/40 p-2.5 rounded-lg border border-slate-200/40 dark:border-zinc-800/40">
-                          <span className="block text-[9px] uppercase tracking-wider text-slate-400 font-extrabold">Avg Pacing</span>
-                          <span className="text-sm font-black text-slate-900 dark:text-white font-outfit mt-0.5 block">128 WPM</span>
-                        </div>
-                        <div className="bg-slate-100/50 dark:bg-zinc-850/40 p-2.5 rounded-lg border border-slate-200/40 dark:border-zinc-800/40">
-                          <span className="block text-[9px] uppercase tracking-wider text-slate-400 font-extrabold">Relevance</span>
-                          <span className="text-sm font-black text-[#D4AF37] font-outfit mt-0.5 block">94%</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                {/* Simulated live progress bar or status */}
+                <div className="p-4 border-t border-white/5 bg-black/20 text-[10px] text-neutral-450 flex items-center justify-between font-mono">
+                  <span>Engine Pipeline: Active</span>
+                  <span className="text-[#8b5cf6]">Status: OK</span>
                 </div>
-
-                {/* Action button indicator */}
-                <button
-                  onClick={handleEnterSandbox}
-                  className="w-full flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-zinc-900/50 hover:bg-[#D4AF37] hover:text-black dark:hover:bg-[#D4AF37] border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent py-3 rounded-xl text-xs font-bold transition-all duration-300 active:scale-95 cursor-pointer"
-                >
-                  Start Practicing Locally <ArrowRight size={12} />
-                </button>
-
               </div>
 
             </div>
-
           </div>
-
-        </section>
-
-        {/* Premium Features Grid */}
-        <section id="features" className="scroll-mt-24 max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
-          
-          <div className="text-center max-w-2xl mx-auto mb-20">
-            <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white font-display">
-              Feature Suite for SaaS Standards.
-            </h2>
-            <p className="text-slate-505 dark:text-slate-400 text-xs md:text-sm">
-              We leverage advanced LLM analysis and localized signal processing to deliver high-quality, actionable results.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* Card 1: Webcam Analysis */}
-            <div className="group glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/30 dark:hover:border-[#D4AF37]/35 hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-[#D4AF37] flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
-                  <Video size={18} />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 font-display">Webcam AI Diagnostics</h3>
-                <p className="text-slate-505 dark:text-slate-400 text-xs leading-relaxed">
-                  Record response audio and video directly in your browser. We capture and parse the inputs securely.
-                </p>
-              </div>
-              <span className="text-[10px] font-extrabold text-[#D4AF37] mt-6 flex items-center gap-1.5">
-                Learn More <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </div>
-
-            {/* Card 2: Speech Pacing */}
-            <div className="group glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/30 dark:hover:border-[#D4AF37]/35 hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-[#D4AF37] flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
-                  <Activity size={18} />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 font-display">Vocal Pacing Metrics</h3>
-                <p className="text-slate-550 dark:text-slate-400 text-xs leading-relaxed">
-                  Track speaking velocity (WPM) and automatically map filler word occurrences across your history.
-                </p>
-              </div>
-              <span className="text-[10px] font-extrabold text-[#D4AF37] mt-6 flex items-center gap-1.5">
-                Learn More <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </div>
-
-            {/* Card 3: Code & Logic Grading */}
-            <div className="group glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/30 dark:hover:border-[#D4AF37]/35 hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-[#D4AF37] flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
-                  <Terminal size={18} />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 font-display">Code & Answer Grading</h3>
-                <p className="text-slate-505 dark:text-slate-400 text-xs leading-relaxed">
-                  FastAPI backend processes text answers using LLM algorithms to evaluate grammar, technical accuracy, and key terminology.
-                </p>
-              </div>
-              <span className="text-[10px] font-extrabold text-[#D4AF37] mt-6 flex items-center gap-1.5">
-                Learn More <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </div>
-
-            {/* Card 4: Counselor Chat */}
-            <div className="group glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/30 dark:hover:border-[#D4AF37]/35 hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-[#D4AF37] flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
-                  <Users size={18} />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 font-display">Career Advisor Chat</h3>
-                <p className="text-slate-505 dark:text-slate-400 text-xs leading-relaxed">
-                  Interact with an AI career advisor to retrieve study paths, resume recommendations, and mock interview preparations.
-                </p>
-              </div>
-              <span className="text-[10px] font-extrabold text-[#D4AF37] mt-6 flex items-center gap-1.5">
-                Learn More <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </div>
-
-          </div>
-
         </section>
 
         {/* Testimonials Grid */}
         <section id="testimonials" className="scroll-mt-24 max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
           
           <div className="text-center max-w-2xl mx-auto mb-20">
-            <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white font-display">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-[#8b5cf6] font-mono">Testimonials</span>
+            <h2 className="text-3xl md:text-5xl font-serif-heading tracking-tight text-white mt-2 mb-4">
               Endorsed by developers globally.
             </h2>
-            <p className="text-slate-505 dark:text-slate-400 text-xs md:text-sm">
+            <p className="text-neutral-450 text-xs md:text-sm">
               Read how developers used CognitiveCoach diagnostics to improve speaking skills.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             {/* Testimonial 1 */}
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:border-[#D4AF37]/20 transition-all duration-300">
-              <div className="flex gap-1 text-[#D4AF37] mb-4">
+            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-8 hover:-translate-y-2 hover:border-violet-500/30 transition-snappy text-left">
+              <div className="flex gap-1 text-[#8b5cf6] mb-4">
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
               </div>
-              <p className="text-xs text-slate-650 dark:text-slate-350 leading-relaxed mb-6 font-sans italic">
+              <p className="text-xs text-neutral-400 leading-relaxed mb-6 font-sans italic">
                 &ldquo;The filler word diagnostics highlighted exactly where I stammered during LRU cache questions. Re-evaluating with pacing benchmarks helped me speak much more confidently.&rdquo;
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#D4AF37]/15 flex items-center justify-center font-bold text-xs text-[#D4AF37]">
+                <div className="w-8 h-8 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center font-bold text-xs text-[#8b5cf6]">
                   JS
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">Jane Sharma</h4>
-                  <span className="text-[10px] text-slate-450 dark:text-slate-500 font-semibold uppercase tracking-wider">Frontend Lead</span>
+                  <h4 className="text-xs font-bold text-white font-sans">Jane Sharma</h4>
+                  <span className="text-[9px] text-neutral-500 font-bold uppercase tracking-wider block">Frontend Lead</span>
                 </div>
               </div>
             </div>
 
             {/* Testimonial 2 */}
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:border-[#D4AF37]/20 transition-all duration-300">
-              <div className="flex gap-1 text-[#D4AF37] mb-4">
+            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-8 hover:-translate-y-2 hover:border-[#06b6d4]/30 transition-snappy text-left">
+              <div className="flex gap-1 text-[#06b6d4] mb-4">
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
               </div>
-              <p className="text-xs text-slate-650 dark:text-slate-350 leading-relaxed mb-6 font-sans italic">
+              <p className="text-xs text-neutral-400 leading-relaxed mb-6 font-sans italic">
                 &ldquo;FastAPI backend responses are extremely fast. The modular role list covers specific coding limits, and the speech pace (WPM) check accurately tracked my conversational fluency.&rdquo;
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#D4AF37]/15 flex items-center justify-center font-bold text-xs text-[#D4AF37]">
+                <div className="w-8 h-8 rounded-full bg-[#06b6d4]/10 flex items-center justify-center font-bold text-xs text-[#06b6d4]">
                   AM
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">Alex Miller</h4>
-                  <span className="text-[10px] text-slate-450 dark:text-slate-500 font-semibold uppercase tracking-wider">Software Architect</span>
+                  <h4 className="text-xs font-bold text-white font-sans">Alex Miller</h4>
+                  <span className="text-[9px] text-neutral-500 font-bold uppercase tracking-wider block">Software Architect</span>
                 </div>
               </div>
             </div>
 
             {/* Testimonial 3 */}
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:border-[#D4AF37]/20 transition-all duration-300">
-              <div className="flex gap-1 text-[#D4AF37] mb-4">
+            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-8 hover:-translate-y-2 hover:border-emerald-500/30 transition-snappy text-left">
+              <div className="flex gap-1 text-[#10B981] mb-4">
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
                 <Star size={12} fill="currentColor" />
               </div>
-              <p className="text-xs text-slate-650 dark:text-slate-350 leading-relaxed mb-6 font-sans italic">
+              <p className="text-xs text-neutral-400 leading-relaxed mb-6 font-sans italic">
                 &ldquo;The chatbot is incredibly fast, and the dashboard provides high-quality diagnostics that felt customized. This tool replaced mock-interviews with peers entirely.&rdquo;
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#D4AF37]/15 flex items-center justify-center font-bold text-xs text-[#D4AF37]">
+                <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center font-bold text-xs text-[#10B981]">
                   RK
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">Rohan Kapoor</h4>
-                  <span className="text-[10px] text-slate-450 dark:text-slate-500 font-semibold uppercase tracking-wider">PM Lead at OpenAI</span>
+                  <h4 className="text-xs font-bold text-white font-sans">Rohan Kapoor</h4>
+                  <span className="text-[9px] text-neutral-500 font-bold uppercase tracking-wider block">PM Lead at OpenAI</span>
                 </div>
               </div>
             </div>
@@ -778,60 +686,61 @@ export default function Dashboard() {
         {/* FAQ Section */}
         <section id="faq" className="scroll-mt-24 max-w-4xl mx-auto px-6 py-20 md:py-32">
           
-          <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white font-display">
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-[#8b5cf6] font-mono">FAQ</span>
+            <h2 className="text-3xl md:text-5xl font-serif-heading tracking-tight text-white mt-2 mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-slate-550 dark:text-slate-400 text-xs md:text-sm">
+            <p className="text-neutral-450 text-xs md:text-sm">
               Have questions? Find quick guidelines below.
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 font-sans">
+          <div className="flex flex-col gap-4 font-sans text-left">
             
             {/* FAQ 1 */}
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-5 transition-all duration-300">
+            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-2xl p-5 transition-snappy">
               <button 
                 onClick={() => setOpenFaq(openFaq === 0 ? null : 0)}
-                className="w-full flex justify-between items-center font-bold text-slate-800 dark:text-slate-200 text-xs md:text-sm text-left focus:outline-none cursor-pointer"
+                className="w-full flex justify-between items-center font-bold text-white text-xs md:text-sm text-left focus:outline-none cursor-pointer"
               >
                 <span>Do I need to sign up to try mock interviews?</span>
-                <ChevronDown size={16} className={`text-slate-400 transition-transform duration-300 ${openFaq === 0 ? 'rotate-180' : ''}`} />
+                <ChevronDown size={16} className={`text-neutral-500 transition-transform duration-300 ${openFaq === 0 ? 'rotate-180' : ''}`} />
               </button>
               {openFaq === 0 && (
-                <p className="mt-3.5 text-xs text-slate-505 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-zinc-850/50 pt-3 animate-fade-in-up">
+                <p className="mt-3.5 text-xs text-neutral-400 leading-relaxed border-t border-white/5 pt-3 animate-fade-in-up">
                   No! You can click **Launch Sandbox Free** and run mock interviews as a guest immediately. Signing up is optional, but is required to save your metrics across multiple browsers.
                 </p>
               )}
             </div>
 
             {/* FAQ 2 */}
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-5 transition-all duration-300">
+            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-2xl p-5 transition-snappy">
               <button 
                 onClick={() => setOpenFaq(openFaq === 1 ? null : 1)}
-                className="w-full flex justify-between items-center font-bold text-slate-800 dark:text-slate-200 text-xs md:text-sm text-left focus:outline-none cursor-pointer"
+                className="w-full flex justify-between items-center font-bold text-white text-xs md:text-sm text-left focus:outline-none cursor-pointer"
               >
                 <span>How does speech pacing check calculate metrics?</span>
-                <ChevronDown size={16} className={`text-slate-400 transition-transform duration-300 ${openFaq === 1 ? 'rotate-180' : ''}`} />
+                <ChevronDown size={16} className={`text-neutral-500 transition-transform duration-300 ${openFaq === 1 ? 'rotate-180' : ''}`} />
               </button>
               {openFaq === 1 && (
-                <p className="mt-3.5 text-xs text-slate-505 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-zinc-850/50 pt-3 animate-fade-in-up">
+                <p className="mt-3.5 text-xs text-neutral-400 leading-relaxed border-t border-white/5 pt-3 animate-fade-in-up">
                   When you record audio during mock sessions, your browser converts verbal signals into textual transcripts. We compute the speaking speed (Words Per Minute) and flag standard fillers like &quot;uh&quot;, &quot;um&quot;, &quot;like&quot;, or &quot;basically&quot; to score your delivery.
                 </p>
               )}
             </div>
 
             {/* FAQ 3 */}
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-5 transition-all duration-300">
+            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-2xl p-5 transition-snappy">
               <button 
                 onClick={() => setOpenFaq(openFaq === 2 ? null : 2)}
-                className="w-full flex justify-between items-center font-bold text-slate-800 dark:text-slate-200 text-xs md:text-sm text-left focus:outline-none cursor-pointer"
+                className="w-full flex justify-between items-center font-bold text-white text-xs md:text-sm text-left focus:outline-none cursor-pointer"
               >
                 <span>Is my webcam feed saved on the server?</span>
-                <ChevronDown size={16} className={`text-slate-400 transition-transform duration-300 ${openFaq === 2 ? 'rotate-180' : ''}`} />
+                <ChevronDown size={16} className={`text-neutral-500 transition-transform duration-300 ${openFaq === 2 ? 'rotate-180' : ''}`} />
               </button>
               {openFaq === 2 && (
-                <p className="mt-3.5 text-xs text-slate-505 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-zinc-850/50 pt-3 animate-fade-in-up">
+                <p className="mt-3.5 text-xs text-neutral-400 leading-relaxed border-t border-white/5 pt-3 animate-fade-in-up">
                   No. Audio and video recordings are processed directly inside your browser container. The backend only analyzes final transcripts for scoring, keeping your video session private.
                 </p>
               )}
@@ -842,29 +751,70 @@ export default function Dashboard() {
         </section>
 
         {/* Global CTA Section */}
-        <section className="max-w-7xl mx-auto px-6 md:px-12 py-20 mb-20 animate-fade-in-up">
-          <div className="relative glass-panel bg-slate-900/90 dark:bg-zinc-900/60 border border-slate-800 dark:border-zinc-800/50 rounded-3xl p-8 md:p-14 text-center overflow-hidden shadow-2xl">
-            
-            {/* Gradient Backlight */}
-            <div className="absolute inset-0 bg-radial-glow opacity-30 z-[-1] pointer-events-none" />
-
+        <section className="max-w-7xl mx-auto px-6 md:px-12 py-20 mb-20 animate-fade-in-up relative z-10">
+          <div className="relative bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-8 md:p-14 text-center overflow-hidden shadow-2xl">
             <div className="max-w-2xl mx-auto relative z-10 font-sans">
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-6 font-display">
+              <h2 className="text-3xl md:text-5xl font-serif-heading text-white mb-6">
                 Ready to calibrate your interview skills?
               </h2>
-              <p className="text-slate-400 text-xs md:text-sm mb-8 leading-relaxed">
+              <p className="text-neutral-400 text-xs md:text-sm mb-8 leading-relaxed">
                 Launch the sandbox workspace to start selecting practice roles. Zero setup, zero accounts needed.
               </p>
               <button
                 onClick={handleEnterSandbox}
-                className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black rounded-full shadow-lg shadow-yellow-500/10 transition-all duration-300 hover:-translate-y-0.5 inline-flex items-center gap-2 text-sm cursor-pointer"
+                className="px-8 py-4 bg-white hover:bg-neutral-200 text-black text-xs uppercase font-bold tracking-widest rounded-full transition-snappy active:scale-[0.98] inline-flex items-center gap-2 cursor-pointer shadow-lg shadow-white/5"
               >
-                Launch Sandbox Workspace <ArrowRight size={16} />
+                Launch Sandbox Workspace <ArrowRight size={14} />
               </button>
             </div>
-
           </div>
         </section>
+
+        {/* Footer */}
+        <footer className="bg-[#050505] border-t border-white/5 py-16 px-6 md:px-12 text-left font-sans">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div className="flex flex-col gap-4">
+              <span className="text-2xl font-semibold font-serif-heading text-white tracking-wide">
+                CognitiveCoach
+              </span>
+              <p className="text-[11px] text-neutral-400 leading-relaxed font-sans">
+                Futuristic speech diagnostics calibrating your placement performance instantly.
+              </p>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <h4 className="text-[10px] uppercase tracking-widest font-bold text-neutral-500 font-sans">Focus Areas</h4>
+              <a href="/#roles" className="text-xs text-neutral-400 hover:text-white transition-colors font-sans">Software Engineer</a>
+              <a href="/#roles" className="text-xs text-neutral-400 hover:text-white transition-colors font-sans">Product Manager</a>
+              <a href="/#roles" className="text-xs text-neutral-400 hover:text-white transition-colors font-sans">DevOps & Cloud</a>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <h4 className="text-[10px] uppercase tracking-widest font-bold text-neutral-500 font-sans">Capabilities</h4>
+              <a href="/advisor" className="text-xs text-neutral-400 hover:text-white transition-colors font-sans">AI Career Advisor</a>
+              <a href="/resume-checker" className="text-xs text-neutral-400 hover:text-white transition-colors font-sans">Resume ATS Check</a>
+              <a href="/interview" className="text-xs text-neutral-400 hover:text-white transition-colors font-sans">Video Interview Hub</a>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <h4 className="text-[10px] uppercase tracking-widest font-bold text-neutral-500 font-sans">Platform</h4>
+              <a href="/login" className="text-xs text-neutral-400 hover:text-white transition-colors font-sans">Sign In Portal</a>
+              <span className="text-xs text-neutral-450 font-sans">V1.5 (Aura Flash)</span>
+            </div>
+          </div>
+
+          <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <span className="text-[10px] text-neutral-500 font-mono">
+              &copy; {new Date().getFullYear()} CognitiveCoach. All rights reserved.
+            </span>
+            <div className="flex items-center gap-2 bg-emerald-500/5 border border-emerald-500/10 px-3 py-1.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[9px] uppercase tracking-widest font-extrabold text-emerald-500 font-mono">
+                All Systems Operational
+              </span>
+            </div>
+          </div>
+        </footer>
 
       </div>
     );
@@ -872,7 +822,7 @@ export default function Dashboard() {
 
   // --- RENDER PREMIUM DASHBOARD WORKSPACE ---
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 w-full flex-grow font-sans bg-grid animate-fade-in-up">
+    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-12 w-full flex-grow font-sans bg-grid animate-fade-in-up">
       
       {/* Offline Warning Banner */}
       {backendOffline && (
