@@ -43,12 +43,12 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
     } else if (wpm > 145) {
       return {
         label: "Too Fast",
-        colorStyle: "bg-amber-500/15 border-amber-500/25 text-amber-700 dark:text-amber-405"
+        colorStyle: "bg-rose-500/15 border-rose-500/25 text-rose-700 dark:text-rose-450"
       };
     } else {
       return {
         label: "Ideal Pacing",
-        colorStyle: "bg-emerald-500/15 border-emerald-500/25 text-emerald-700 dark:text-[#FFE492]"
+        colorStyle: "bg-emerald-500/15 border-emerald-500/25 text-emerald-700 dark:text-emerald-450"
       };
     }
   };
@@ -252,12 +252,12 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
   const currentWpm = duration > 2 ? Math.round(wordCount / elapsedMinutes) : 0;
 
   return (
-    <div className="glass-panel w-full md:max-w-md bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 rounded-2xl shadow-sm hover:shadow-md hover:border-[#D4AF37]/20 dark:hover:border-[#D4AF37]/20 transition-all duration-300 animate-fade-in-up font-sans">
+    <div className="glass-panel w-full md:max-w-md bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 rounded-2xl shadow-sm hover:shadow-md hover:border-[#8B5CF6]/30 dark:hover:border-[#8B5CF6]/30 transition-all duration-300 animate-fade-in-up font-sans">
       
       {/* Visual Header */}
       <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-zinc-850/50 mb-4">
         <h3 className="flex items-center gap-2 text-xs font-bold text-slate-800 dark:text-slate-200 font-display uppercase tracking-wider">
-          <Video size={16} className="text-[#D4AF37]" />
+          <Video size={16} className="text-[#8B5CF6]" />
           Camera Sandbox
         </h3>
         
@@ -273,29 +273,29 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
             )}
             
             {/* Audio Indicator */}
-            <div className="flex items-center gap-[3px] h-5 px-1.5 py-0.5 rounded-md bg-slate-50 dark:bg-zinc-850/40 border border-slate-150 dark:border-zinc-800/50">
+            <div className="flex items-center gap-[3px] h-5 px-1.5 py-0.5 rounded-md bg-slate-50 dark:bg-zinc-855/40 border border-slate-150 dark:border-zinc-800/50">
               <Volume2 size={12} className="text-slate-400 dark:text-slate-500 mr-0.5" />
-              <div className="w-[3px] rounded-full bg-[#D4AF37] audio-bar" style={{ height: `${Math.max(3, volume * 0.12)}px` }}></div>
-              <div className="w-[3px] rounded-full bg-[#D4AF37] audio-bar" style={{ height: `${Math.max(3, volume * 0.22)}px` }}></div>
-              <div className="w-[3px] rounded-full bg-[#D4AF37] audio-bar" style={{ height: `${Math.max(3, volume * 0.16)}px` }}></div>
-              <div className="w-[3px] rounded-full bg-[#D4AF37] audio-bar" style={{ height: `${Math.max(3, volume * 0.28)}px` }}></div>
-              <div className="w-[3px] rounded-full bg-[#D4AF37] audio-bar" style={{ height: `${Math.max(3, volume * 0.08)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-[#06B6D4] audio-bar" style={{ height: `${Math.max(3, volume * 0.12)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-[#06B6D4] audio-bar" style={{ height: `${Math.max(3, volume * 0.22)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-[#06B6D4] audio-bar" style={{ height: `${Math.max(3, volume * 0.16)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-[#06B6D4] audio-bar" style={{ height: `${Math.max(3, volume * 0.28)}px` }}></div>
+              <div className="w-[3px] rounded-full bg-[#06B6D4] audio-bar" style={{ height: `${Math.max(3, volume * 0.08)}px` }}></div>
             </div>
           </div>
         )}
       </div>
 
       {/* Camera Viewport Frame */}
-      <div className="relative aspect-[4/3] bg-slate-950 rounded-xl overflow-hidden border border-slate-200/50 dark:border-zinc-800/50 flex items-center justify-center shadow-inner">
+      <div className="relative aspect-[4/3] bg-slate-955 rounded-xl overflow-hidden border border-slate-200/50 dark:border-zinc-800/50 flex items-center justify-center shadow-inner">
         {!permission ? (
           <div className="text-center p-6 max-w-sm flex flex-col items-center">
             <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-slate-400 mb-4 shadow-inner">
-              <CameraOff size={20} className="text-slate-500" />
+              <CameraOff size={20} className="text-slate-550" />
             </div>
             <p className="text-xs text-slate-400 mb-5 leading-relaxed font-normal">
               We require camera and microphone permission to analyze speech pacing and filler words.
             </p>
-            <button className="px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all duration-300 flex items-center gap-1.5 cursor-pointer active:scale-95" onClick={getCameraPermission}>
+            <button className="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl shadow-md transition-all duration-300 flex items-center gap-1.5 cursor-pointer active:scale-95" onClick={getCameraPermission}>
               <Camera size={14} /> Enable Sandbox Camera
             </button>
           </div>
@@ -310,14 +310,14 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
             />
             
             {/* Viewport Corners */}
-            <div className="absolute top-3.5 left-3.5 w-4 h-4 border-t-[2px] border-l-[2px] border-[#D4AF37]/80 rounded-tl-sm pointer-events-none z-10 animate-pulse"></div>
-            <div className="absolute top-3.5 right-3.5 w-4 h-4 border-t-[2px] border-r-[2px] border-[#D4AF37]/80 rounded-tr-sm pointer-events-none z-10 animate-pulse"></div>
-            <div className="absolute bottom-3.5 left-3.5 w-4 h-4 border-b-[2px] border-l-[2px] border-[#D4AF37]/80 rounded-bl-sm pointer-events-none z-10 animate-pulse"></div>
-            <div className="absolute bottom-3.5 right-3.5 w-4 h-4 border-b-[2px] border-r-[2px] border-[#D4AF37]/80 rounded-br-sm pointer-events-none z-10 animate-pulse"></div>
+            <div className="absolute top-3.5 left-3.5 w-4 h-4 border-t-[2px] border-l-[2px] border-[#06B6D4]/80 rounded-tl-sm pointer-events-none z-10 animate-pulse"></div>
+            <div className="absolute top-3.5 right-3.5 w-4 h-4 border-t-[2px] border-r-[2px] border-[#06B6D4]/80 rounded-tr-sm pointer-events-none z-10 animate-pulse"></div>
+            <div className="absolute bottom-3.5 left-3.5 w-4 h-4 border-b-[2px] border-l-[2px] border-[#06B6D4]/80 rounded-bl-sm pointer-events-none z-10 animate-pulse"></div>
+            <div className="absolute bottom-3.5 right-3.5 w-4 h-4 border-b-[2px] border-r-[2px] border-[#06B6D4]/80 rounded-br-sm pointer-events-none z-10 animate-pulse"></div>
  
             {/* Sweep Laser Scanner Line */}
             {recording && (
-              <div className="absolute inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37]/75 to-transparent animate-scan pointer-events-none z-10"></div>
+              <div className="absolute inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#06B6D4]/75 to-transparent animate-scan pointer-events-none z-10"></div>
             )}
  
             {/* Real-time Pacing HUD Overlay */}
@@ -345,7 +345,7 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
                   <span className="text-[10px] text-slate-300 font-medium font-outfit">Volume: {volume}%</span>
                   <div className="flex-grow max-w-[120px] h-1.5 bg-zinc-800 rounded-full overflow-hidden border border-white/5">
                     <div 
-                      className={`h-full transition-all duration-75 ${volume > 50 ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                      className={`h-full transition-all duration-75 ${volume > 50 ? 'bg-rose-500' : 'bg-emerald-500'}`} 
                       style={{ width: `${volume}%` }} 
                     />
                   </div>
@@ -362,8 +362,8 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
         {isProcessing && (
           <div className="absolute inset-0 bg-zinc-950/90 backdrop-blur-md flex flex-col items-center justify-center gap-4 text-center p-6 z-25 font-sans">
             <div className="relative flex items-center justify-center">
-              <RefreshCw size={32} className="text-[#D4AF37] animate-spin" />
-              <div className="absolute w-12 h-12 rounded-full border border-[#D4AF37]/35 border-t-transparent animate-ping"></div>
+              <RefreshCw size={32} className="text-[#8B5CF6] animate-spin" />
+              <div className="absolute w-12 h-12 rounded-full border border-[#8B5CF6]/35 border-t-transparent animate-ping"></div>
             </div>
             <h4 className="text-sm font-bold text-white font-display mt-2">AI Diagnostics Analysis...</h4>
             <p className="text-[10px] text-slate-450 max-w-[200px] leading-relaxed">Processing speech velocity indexes, calculating grammar scorecards, and compiling responses.</p>
@@ -383,7 +383,7 @@ export default function VideoRecorder({ onRecordingComplete, isProcessing }) {
             </button>
           ) : (
             <button 
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all duration-300 active:scale-95 flex items-center gap-1.5 cursor-pointer"
+              className="px-6 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl shadow-md transition-all duration-300 active:scale-95 flex items-center gap-1.5 cursor-pointer"
               onClick={stopRecording}
             >
               <Square size={9} fill="black" stroke="transparent" /> Stop & Submit Response

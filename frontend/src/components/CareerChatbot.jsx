@@ -102,7 +102,7 @@ export default function CareerChatbot() {
                   <div className={`rounded-2xl px-4 py-2.5 text-xs leading-relaxed ${
                     isAssistant 
                       ? 'bg-slate-50 dark:bg-zinc-850 text-slate-800 dark:text-slate-250 border border-slate-100 dark:border-zinc-800/40 rounded-tl-sm' 
-                      : 'bg-violet-600 dark:bg-[#D4AF37] text-white dark:text-zinc-950 rounded-tr-sm'
+                      : 'bg-violet-650 dark:bg-[#8B5CF6] text-white dark:text-white rounded-tr-sm'
                   }`}>
                     {/* Render basic markdown-like structures */}
                     {msg.content.split("\n\n").map((para, pIdx) => {
@@ -236,7 +236,7 @@ export default function CareerChatbot() {
       {/* Floating Bubble Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-650 via-indigo-600 to-indigo-750 dark:from-[#D4AF37] dark:via-[#F4D472] dark:to-[#D4AF37] dark:border dark:border-[#D4AF37]/40 flex items-center justify-center text-white dark:text-zinc-950 shadow-xl shadow-violet-500/10 dark:shadow-[#D4AF37]/20 hover:shadow-violet-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-650 via-indigo-600 to-indigo-750 dark:from-[#8B5CF6] dark:via-[#06B6D4] dark:to-[#8B5CF6] dark:border dark:border-[#8B5CF6]/40 flex items-center justify-center text-white dark:text-white shadow-xl shadow-violet-500/10 dark:shadow-[#8B5CF6]/20 hover:shadow-violet-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         aria-label="Ask Career Bot"
       >
         {isOpen ? <X size={20} /> : <MessageSquare size={20} />}

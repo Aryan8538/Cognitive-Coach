@@ -243,7 +243,7 @@ export default function Results({ params }) {
           <span 
             key={idx} 
             onClick={() => handleWordClick(idx, totalWords)}
-            className="inline-block px-2 py-0.5 rounded bg-rose-500/10 dark:bg-rose-500/15 border border-rose-500/20 text-rose-555 text-[10px] font-extrabold mx-1 leading-none uppercase tracking-wide cursor-pointer hover:scale-105 transition-transform font-mono"
+            className="inline-block px-2 py-0.5 rounded bg-rose-500/10 dark:bg-rose-500/15 border border-rose-500/20 text-rose-700 dark:text-rose-400 text-[10px] font-extrabold mx-1 leading-none uppercase tracking-wide cursor-pointer hover:scale-105 transition-transform font-mono"
             title="Click to skip video to this section"
           >
             {word}
@@ -267,12 +267,12 @@ export default function Results({ params }) {
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-10 w-full flex-grow font-sans bg-grid relative overflow-hidden">
       
       {/* Soft backglow */}
-      <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-[#D4AF37]/5 dark:bg-[#D4AF37]/5 rounded-full filter blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-[#8B5CF6]/5 dark:bg-[#8B5CF6]/5 rounded-full filter blur-[100px] pointer-events-none" />
 
       {/* Back to Dashboard & Header */}
       <div className="flex flex-col gap-2 mb-10 relative z-10">
         <button 
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-455 hover:text-[#D4AF37] dark:text-slate-500 dark:hover:text-[#FFE492] transition-colors duration-200 mb-4 w-fit cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-455 hover:text-[#8B5CF6] dark:text-slate-500 dark:hover:text-[#06B6D4] transition-colors duration-205 mb-4 w-fit cursor-pointer"
           onClick={() => router.push("/")}
         >
           <ArrowLeft size={13} /> Back to Dashboard
@@ -290,7 +290,7 @@ export default function Results({ params }) {
       </div>
 
       {/* Overall Performance Summary Scorecard */}
-      <section className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#D4AF37]/15 transition-all duration-300 mb-8 flex flex-col md:flex-row gap-8 justify-between items-stretch animate-fade-in-up relative z-10">
+      <section className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300 mb-8 flex flex-col md:flex-row gap-8 justify-between items-stretch animate-fade-in-up relative z-10">
         {/* Left: Overall Score Circle Gauge */}
         <div className="flex flex-row md:flex-col items-center justify-center gap-6 border-slate-200/40 dark:border-zinc-800/40 pr-0 md:pr-8 md:border-r border-b md:border-b-0 pb-6 md:pb-0">
           <div className="relative flex items-center justify-center w-24 h-24 hover:scale-105 transition-transform duration-300">
@@ -396,19 +396,19 @@ export default function Results({ params }) {
                   key={resp.id}
                   className={`glass-panel border p-4.5 rounded-2xl cursor-pointer transition-all duration-300 flex flex-col gap-2 relative overflow-hidden ${
                     isActive 
-                      ? 'border-[#D4AF37]/50 bg-[#D4AF37]/5 dark:border-[#D4AF37]/50 dark:bg-[#D4AF37]/5 shadow-sm shadow-[#D4AF37]/5' 
-                      : 'border-slate-200/50 dark:border-zinc-850/50 bg-white/70 dark:bg-zinc-900/55 hover:bg-white dark:hover:bg-zinc-900 hover:border-[#D4AF37]/20'
+                      ? 'border-[#8B5CF6]/40 bg-[#8B5CF6]/5 dark:border-[#8B5CF6]/40 dark:bg-[#8B5CF6]/5 shadow-sm shadow-[#8B5CF6]/5' 
+                      : 'border-slate-200/50 dark:border-zinc-850/50 bg-white/70 dark:bg-zinc-900/55 hover:bg-white dark:hover:bg-zinc-900 hover:border-[#06B6D4]/30'
                   }`}
                   onClick={() => setActiveIdx(index)}
                 >
                   {/* Left indicator stroke for active item */}
                   {isActive && (
-                    <div className="absolute left-0 inset-y-0 w-1 bg-[#D4AF37] rounded-r-md" />
+                    <div className="absolute left-0 inset-y-0 w-1 bg-[#8B5CF6] rounded-r-md" />
                   )}
 
                   <div className="flex justify-between items-center text-[9px] text-slate-455 dark:text-slate-500 font-extrabold font-outfit uppercase tracking-wider">
                     <span>Q{index + 1} &bull; {q.topic}</span>
-                    <span className="text-[#D4AF37] font-black">
+                    <span className="text-[#06B6D4] font-black">
                       Score: {resp.metrics ? Math.round((resp.metrics.clarity_score + resp.metrics.relevance_score + resp.metrics.grammar_score) / 3) : 0}%
                     </span>
                   </div>
@@ -422,9 +422,9 @@ export default function Results({ params }) {
 
           {/* Video Player Box */}
           {activeResponse && (
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-5 rounded-3xl shadow-sm hover:shadow-md hover:border-[#D4AF37]/20 transition-all duration-300 flex flex-col gap-3 w-full relative overflow-hidden">
+            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-5 rounded-3xl shadow-sm hover:shadow-md hover:border-[#8B5CF6]/20 transition-all duration-300 flex flex-col gap-3 w-full relative overflow-hidden">
               <h4 className="text-[10px] font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-1.5 uppercase tracking-wider font-display">
-                <Play size={13} className="text-[#D4AF37]" /> Play Back Video Response
+                <Play size={13} className="text-[#8B5CF6]" /> Play Back Video Response
               </h4>
               <div className="relative rounded-xl overflow-hidden border border-slate-200/40 dark:border-zinc-800/50 bg-black aspect-[4/3] flex items-center justify-center shadow-inner">
                 <video
@@ -434,10 +434,10 @@ export default function Results({ params }) {
                   className="w-full h-full object-cover"
                 />
                 {/* Visual corners overlay */}
-                <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-[#D4AF37]/60 rounded-tl-sm pointer-events-none"></div>
-                <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-[#D4AF37]/60 rounded-tr-sm pointer-events-none"></div>
-                <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-[#D4AF37]/60 rounded-bl-sm pointer-events-none"></div>
-                <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-[#D4AF37]/60 rounded-br-sm pointer-events-none"></div>
+                <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-[#06B6D4]/60 rounded-tl-sm pointer-events-none"></div>
+                <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-[#06B6D4]/60 rounded-tr-sm pointer-events-none"></div>
+                <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-[#06B6D4]/60 rounded-bl-sm pointer-events-none"></div>
+                <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-[#06B6D4]/60 rounded-br-sm pointer-events-none"></div>
               </div>
             </div>
           )}
@@ -447,8 +447,8 @@ export default function Results({ params }) {
         <div className="lg:col-span-7 flex flex-col gap-6 w-full animate-fade-in-up">
           
           {/* Main Scorecard */}
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#D4AF37]/15 transition-all duration-300">
-            <h3 className="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest font-display mb-6">AI Evaluation Diagnostics</h3>
+          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
+            <h3 className="text-[10px] font-black text-[#8B5CF6] uppercase tracking-widest font-display mb-6">AI Evaluation Diagnostics</h3>
             
             <div className="flex justify-around items-center border-b border-slate-100 dark:border-zinc-850/50 pb-6 mb-6">
               <CircularGauge score={metrics?.relevance_score || 0} label="Relevance" />
@@ -494,10 +494,10 @@ export default function Results({ params }) {
 
           {/* Submitted Code Block */}
           {activeResponse && activeResponse.code && (
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#D4AF37]/15 transition-all duration-300">
+            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 uppercase tracking-wider font-display">
-                  <Code2 size={15} className="text-[#D4AF37]" />
+                  <Code2 size={15} className="text-[#8B5CF6]" />
                   Submitted Coding Solution
                 </h3>
                 <span className="text-[9px] font-extrabold bg-slate-100 dark:bg-zinc-800/80 border border-slate-200/30 dark:border-zinc-800/40 text-slate-505 dark:text-slate-400 px-3 py-1 rounded-md uppercase tracking-wider font-outfit">
@@ -534,29 +534,29 @@ export default function Results({ params }) {
           )}
 
           {/* Transcript Box */}
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#D4AF37]/15 transition-all duration-300">
+          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
             <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-              <FileText size={15} className="text-[#D4AF37]" /> 
+              <FileText size={15} className="text-[#8B5CF6]" /> 
               Speech Transcript
             </h3>
-            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-800 bg-slate-50/50 dark:bg-zinc-950/40 p-5 rounded-2xl border border-slate-100/60 dark:border-zinc-850/20 font-medium leading-loose">
+            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-200 bg-slate-50/50 dark:bg-zinc-950/40 p-5 rounded-2xl border border-slate-100/60 dark:border-zinc-850/20 font-medium leading-loose">
               {renderHighlightedTranscript(activeResponse.transcript)}
             </p>
           </div>
 
           {/* Qualitative AI Feedback */}
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#D4AF37]/15 transition-all duration-300">
+          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
             <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-              <MessageSquare size={15} className="text-[#D4AF37]" />
+              <MessageSquare size={15} className="text-[#8B5CF6]" />
               AI Evaluator diagnostics
             </h3>
-            <div className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400 flex flex-col gap-4">
+            <div className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-200 flex flex-col gap-4">
               {metrics?.feedback_text.split('\n\n').map((para, i) => {
                 if (para.startsWith('**')) {
                   const match = para.match(/^\*\*(.*?)\*\*(.*)/);
                   if (match) {
                     return (
-                      <div key={i} className="pl-3 border-l-2 border-[#D4AF37]/70">
+                      <div key={i} className="pl-3 border-l-2 border-[#8B5CF6]/70">
                         <strong className="text-slate-905 dark:text-white block text-xs md:text-sm font-bold mb-1 font-display" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[1]) }} />
                         <p className="font-medium" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[2].trim()) }} />
                       </div>
@@ -569,12 +569,12 @@ export default function Results({ params }) {
           </div>
 
           {/* Model suggested answer */}
-          <div className="glass-panel bg-[#D4AF37]/5 dark:bg-zinc-900/40 border border-dashed border-[#D4AF37]/25 dark:border-zinc-800/60 p-6 md:p-8 rounded-3xl shadow-sm hover:border-dashed hover:border-[#D4AF37]/45 transition-all duration-355">
+          <div className="glass-panel bg-[#8B5CF6]/5 dark:bg-zinc-900/40 border border-dashed border-[#8B5CF6]/20 dark:border-zinc-800/60 p-6 md:p-8 rounded-3xl shadow-sm hover:border-dashed hover:border-[#8B5CF6]/40 transition-all duration-355">
             <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-              <Star size={15} className="text-amber-500 fill-amber-500/20" />
+              <Star size={15} className="text-[#8B5CF6] fill-[#8B5CF6]/15" />
               Suggested Model Answer
             </h3>
-            <div className="text-xs md:text-sm leading-relaxed text-slate-555 dark:text-slate-400 bg-white/50 dark:bg-zinc-900/20 p-5 rounded-2xl border border-[#D4AF37]/10 dark:border-zinc-900/15 animate-fade-in-up">
+            <div className="text-xs md:text-sm leading-relaxed text-slate-555 dark:text-slate-200 bg-white/50 dark:bg-zinc-900/20 p-5 rounded-2xl border border-[#8B5CF6]/10 dark:border-zinc-900/15 animate-fade-in-up">
               {metrics?.suggested_answer.split('\n\n').map((para, i) => {
                 if (para.startsWith('**') || para.match(/^\d+\./)) {
                   return <p key={i} className="mb-4 font-bold text-slate-805 dark:text-slate-200 font-display" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;

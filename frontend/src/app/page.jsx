@@ -284,27 +284,27 @@ export default function Dashboard() {
     const areaD = pathD + `L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`;
 
     return (
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden font-sans">
         <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
+              <stop offset="0%" stopColor="#06B6D4" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0" />
             </linearGradient>
             <filter id="pathShadow" x="-10%" y="-10%" width="120%" height="130%">
-              <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="#D4AF37" floodOpacity="0.2" />
+              <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="#06B6D4" floodOpacity="0.2" />
             </filter>
           </defs>
-          <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="rgba(212,175,55,0.06)" strokeDasharray="3" />
-          <line x1={padding} y1={height - padding - chartHeight / 2} x2={width - padding} y2={height - padding - chartHeight / 2} stroke="rgba(212,175,55,0.06)" strokeDasharray="3" />
-          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="rgba(212,175,55,0.12)" />
+          <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="rgba(6,182,212,0.06)" strokeDasharray="3" />
+          <line x1={padding} y1={height - padding - chartHeight / 2} x2={width - padding} y2={height - padding - chartHeight / 2} stroke="rgba(6,182,212,0.06)" strokeDasharray="3" />
+          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="rgba(6,182,212,0.12)" />
           
           {points.map((p, idx) => (
-            <line key={`grid-${idx}`} x1={p.x} y1={p.y} x2={p.x} y2={height - padding} stroke="rgba(212,175,55,0.06)" strokeDasharray="2" />
+            <line key={`grid-${idx}`} x1={p.x} y1={p.y} x2={p.x} y2={height - padding} stroke="rgba(6,182,212,0.06)" strokeDasharray="2" />
           ))}
 
           <path d={areaD} fill="url(#chartGlow)" className="animate-chart-area" />
-          <path d={pathD} fill="none" stroke="#D4AF37" strokeWidth="2" filter="url(#pathShadow)" strokeLinecap="round" strokeLinejoin="round" className="animate-chart-line" />
+          <path d={pathD} fill="none" stroke="#06B6D4" strokeWidth="2" filter="url(#pathShadow)" strokeLinecap="round" strokeLinejoin="round" className="animate-chart-line" />
           {points.map((p, idx) => (
             <g 
               key={idx} 
@@ -314,7 +314,7 @@ export default function Dashboard() {
                 animationDelay: `${0.6 + idx * 0.15}s`
               }}
             >
-              <circle cx={p.x} cy={p.y} r="4" fill="#030303" stroke="#D4AF37" strokeWidth="2" className="transition-all duration-300 group-hover/dot:stroke-yellow-400" />
+              <circle cx={p.x} cy={p.y} r="4" fill="#030303" stroke="#06B6D4" strokeWidth="2" className="transition-all duration-300 group-hover/dot:stroke-[#8B5CF6]" />
               <text x={p.x} y={p.y - 12} fontSize="9" className="fill-slate-900 dark:fill-white font-extrabold" textAnchor="middle">
                 {p.count}
               </text>
@@ -371,38 +371,41 @@ export default function Dashboard() {
           <div className="flex flex-col gap-6 items-center text-center max-w-4xl animate-fade-in-up">
             
             {/* Glowing Accent Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-[10px] uppercase tracking-wider font-extrabold font-mono">
-              <Sparkles size={11} className="text-[#06B6D4]" />
-              <span>SaaS Mock Interview Calibration</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/20 text-[#06B6D4] text-[9px] uppercase tracking-wider font-extrabold font-mono shadow-sm animate-pulse-slow">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse" />
+              <span>COGNITIVECOACH // SPEECH ENGINE ACTIVE</span>
             </div>
 
-            <h1 className="text-5xl md:text-8xl tracking-tight leading-[0.9] text-white font-serif-heading font-normal">
-              Ace your tech interview with <br />
-              <span className="animate-text-shimmer">real-time AI</span> diagnostics.
+            <h1 className="text-5xl md:text-[5.5rem] tracking-tight leading-[0.92] text-white font-black font-sans max-w-5xl">
+              Architecting Speech <br />
+              Intelligence for Tomorr<span className="text-[#06B6D4]">ow</span>
             </h1>
             
-            <p className="text-neutral-400 text-sm md:text-base leading-relaxed max-w-2xl font-normal mt-4">
-              CognitiveCoach processes your webcam practice logs using speech intelligence. Get instant, visual reports on speech rate, filler words, technical grammar, and overall response grading.
+            <p className="text-neutral-450 text-sm md:text-base leading-relaxed max-w-2xl font-normal mt-4 font-sans">
+              Designing modular environments with precision-crafted AI mock intelligence. <br className="hidden md:block" />
+              Standardise and calibrate speech pacing, grammar, and diagnostics in real-time.
             </p>
 
-            <div className="flex flex-col items-center gap-2 mt-6">
+            <div className="flex flex-col sm:flex-row items-center gap-6 mt-10 w-full sm:w-auto justify-center font-mono">
               {/* Conic Spinning border CTA Button */}
               <button
                 onClick={handleEnterSandbox}
-                className="relative group p-[1px] rounded-full overflow-hidden transition-snappy active:scale-[0.98] cursor-pointer shadow-lg shadow-[#8B5CF6]/10"
+                className="relative group p-[1px] rounded-full overflow-hidden transition-snappy active:scale-[0.98] cursor-pointer shadow-lg shadow-[#06B6D4]/15"
               >
                 <div className="absolute inset-[-1000%] bg-[conic-gradient(from_0deg,transparent_0%,#8b5cf6_40%,#06b6d4_50%,transparent_60%)] animate-spin-border z-0" />
-                <div className="relative px-8 py-3.5 bg-[#0a0a0a] text-white text-xs uppercase font-bold tracking-widest rounded-full z-10 flex items-center justify-center gap-2 group-hover:bg-neutral-900 transition-colors">
-                  Launch Sandbox Free <ArrowRight size={14} />
+                <div className="relative px-8 py-3.5 bg-black text-white text-[10px] uppercase font-bold tracking-widest rounded-full z-10 flex items-center justify-center gap-2 group-hover:bg-neutral-900 transition-colors">
+                  Access Free Sandbox
                 </div>
               </button>
               
-              <a
-                href="/login"
-                className="text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors duration-200 mt-4 block text-center"
+              <button
+                onClick={() => {
+                  router.push("/login");
+                }}
+                className="text-[10px] uppercase font-bold tracking-widest text-neutral-450 hover:text-white transition-colors duration-250 flex items-center gap-1 cursor-pointer"
               >
-                Or Sign In to Account <ArrowUpRight size={11} className="inline ml-0.5" />
-              </a>
+                Review Evaluation Schemas //
+              </button>
             </div>
 
           </div>
@@ -837,12 +840,12 @@ export default function Dashboard() {
 
       {/* Hero Welcome Header */}
       <section className="flex flex-col gap-4 justify-center items-start mb-12 animate-fade-in-up max-w-4xl">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-[#D4AF37] dark:text-[#FFE492] text-[9px] uppercase tracking-widest font-black">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/20 text-[#06B6D4] text-[9px] uppercase tracking-widest font-black">
           <GraduationCap size={11} />
           <span>Interactive Aura Workspace</span>
         </div>
         <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none text-slate-900 dark:text-white font-display">
-          Calibrate your speaking <em className="text-[#D4AF37] font-serif not-italic">fluency</em>.
+          Calibrate your speaking <em className="text-[#8B5CF6] font-serif not-italic">fluency</em>.
         </h1>
         <p className="text-slate-550 dark:text-slate-400 text-xs md:text-sm max-w-2xl leading-relaxed">
           Review overall average statistics gathered from your webcam mock diagnostics. Select a target role below to initialize a new session.
@@ -853,9 +856,9 @@ export default function Dashboard() {
       <section id="stats-board" className="scroll-mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
         
         {/* Core Metrics Progress Gauges */}
-        <div className="glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#D4AF37]/20 transition-all duration-300 flex flex-col justify-between animate-fade-in-up">
+        <div className="glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#8B5CF6]/30 transition-all duration-300 flex flex-col justify-between animate-fade-in-up">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-[#D4AF37] shadow-inner">
+            <div className="w-9 h-9 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center text-[#8B5CF6] shadow-inner">
               <Activity size={16} />
             </div>
             <div>
@@ -865,8 +868,8 @@ export default function Dashboard() {
           </div>
           
           <div className="grid grid-cols-3 gap-3 my-6 text-center">
-            <CircularGauge score={loading ? 0 : stats ? stats.average_clarity : 0} label="Clarity" color="#D4AF37" />
-            <CircularGauge score={loading ? 0 : stats ? stats.average_relevance : 0} label="Relevance" color="#45c2ff" />
+            <CircularGauge score={loading ? 0 : stats ? stats.average_clarity : 0} label="Clarity" color="#8B5CF6" />
+            <CircularGauge score={loading ? 0 : stats ? stats.average_relevance : 0} label="Relevance" color="#06B6D4" />
             <CircularGauge score={loading ? 0 : stats ? stats.average_grammar : 0} label="Grammar" color="#10B981" />
           </div>
 
@@ -877,9 +880,9 @@ export default function Dashboard() {
         </div>
 
         {/* WPM Pacing Card */}
-        <div className="glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#D4AF37]/20 transition-all duration-300 flex flex-col justify-between animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <div className="glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#8B5CF6]/30 transition-all duration-300 flex flex-col justify-between animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-[#D4AF37] shadow-inner">
+            <div className="w-9 h-9 rounded-xl bg-[#06B6D4]/10 border border-[#06B6D4]/20 flex items-center justify-center text-[#06B6D4] shadow-inner">
               <Flame size={16} />
             </div>
             <div>
@@ -902,15 +905,15 @@ export default function Dashboard() {
         </div>
 
         {/* Dynamic Trend Chart */}
-        <div className="glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#D4AF37]/20 transition-all duration-300 flex flex-col justify-between animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#8B5CF6]/30 transition-all duration-300 flex flex-col justify-between animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 font-display">Filler Words Trend</h3>
               <p className="text-[10px] text-slate-400 dark:text-slate-500">Average filler count per session</p>
             </div>
             <span className="flex h-1.5 w-1.5 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#D4AF37]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#06B6D4] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#06B6D4]"></span>
             </span>
           </div>
           {loading ? (
@@ -931,13 +934,13 @@ export default function Dashboard() {
           {roles.map((role, idx) => (
             <div 
               key={role.id}
-              className="group glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 flex flex-col justify-between cursor-pointer hover:border-[#D4AF37]/35 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-yellow-500/2 transition-all duration-300 ease-out animate-fade-in-up"
+              className="group glass-panel dark:bg-zinc-900/60 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 flex flex-col justify-between cursor-pointer hover:border-[#8B5CF6]/40 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#8B5CF6]/5 transition-all duration-300 ease-out animate-fade-in-up"
               style={{ animationDelay: `${0.06 * idx}s` }}
               onClick={() => handleStartSession(role.id)}
             >
               <div>
                 {/* Gradient Rounded Icon Container */}
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-zinc-800 to-zinc-900 flex items-center justify-center text-[#D4AF37] mb-5 border border-zinc-800 shadow-inner group-hover:scale-105 transition-transform duration-300">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-zinc-800 to-zinc-900 flex items-center justify-center text-[#06B6D4] mb-5 border border-zinc-800 shadow-inner group-hover:scale-105 transition-transform duration-300">
                   {role.icon}
                 </div>
                 
@@ -961,7 +964,7 @@ export default function Dashboard() {
                 
                 <button
                   aria-label={`Start ${role.title} mock interview`}
-                  className="w-full flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-zinc-900/55 hover:bg-[#D4AF37] hover:text-black dark:hover:bg-[#D4AF37] border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent py-2.5 rounded-xl text-xs font-bold transition-all duration-300 active:scale-95 cursor-pointer"
+                  className="w-full flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-zinc-900/55 hover:bg-[#8B5CF6] hover:text-white dark:hover:bg-[#8B5CF6] border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent py-2.5 rounded-xl text-xs font-bold transition-all duration-300 active:scale-95 cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleStartSession(role.id);

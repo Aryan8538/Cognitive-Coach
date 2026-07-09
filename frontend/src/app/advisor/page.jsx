@@ -245,10 +245,9 @@ export default function AdvisorPage() {
         }`}
       >
         <div className="p-6 flex flex-col gap-6 flex-grow overflow-y-auto scrollbar-thin">
-          {/* Header Title info */}
-          <div className="flex flex-col gap-1.5">
-            <div className="inline-flex items-center gap-1.5 w-max px-3 py-1 text-[10px] font-bold rounded-full bg-violet-50 text-violet-650 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-105 dark:border-violet-900/55 shadow-sm">
-              <Trophy size={11} className="text-amber-500" /> Placement Ready
+          {/* Header Title info           <div className="flex flex-col gap-1.5">
+            <div className="inline-flex items-center gap-1.5 w-max px-3 py-1 text-[10px] font-bold rounded-full bg-violet-50 text-violet-650 dark:bg-violet-955/30 dark:text-violet-400 border border-violet-105 dark:border-violet-900/55 shadow-sm">
+              <Trophy size={11} className="text-[#8B5CF6]" /> Placement Ready
             </div>
             <h2 className="text-xl font-extrabold text-slate-900 dark:text-white font-display">
               Career Center
@@ -261,7 +260,7 @@ export default function AdvisorPage() {
           {/* New Chat Button */}
           <button
             onClick={handleNewChat}
-            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black py-2.5 rounded-xl text-xs shadow-md transition-all duration-200 cursor-pointer active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black py-2.5 rounded-xl text-xs shadow-md transition-all duration-200 cursor-pointer active:scale-[0.98]"
           >
             <Sparkles size={13} />
             <span>New Chat Session</span>
@@ -270,8 +269,8 @@ export default function AdvisorPage() {
           {/* Platform Stats Panel */}
           <div className="grid grid-cols-2 gap-2.5">
             {PLATFORM_STATS.map((s, i) => (
-              <div key={i} className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-xl p-3 flex flex-col gap-1 shadow-sm hover:border-[#D4AF37]/10 transition-colors">
-                <span className="text-[#D4AF37]">{s.icon}</span>
+              <div key={i} className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-xl p-3 flex flex-col gap-1 shadow-sm hover:border-[#8B5CF6]/10 transition-colors">
+                <span className="text-[#8B5CF6]">{s.icon}</span>
                 <span className="text-base font-black text-slate-900 dark:text-white font-outfit leading-none">{s.value}</span>
                 <span className="text-[9px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-505">{s.label}</span>
               </div>
@@ -281,13 +280,13 @@ export default function AdvisorPage() {
           {/* Advisor Capabilities */}
           <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-4 shadow-sm flex flex-col gap-3">
             <div className="flex items-center gap-1.5">
-              <Sparkles size={12} className="text-[#D4AF37]" />
+              <Sparkles size={12} className="text-[#8B5CF6]" />
               <span className="text-[9px] font-extrabold text-slate-400 dark:text-slate-505 uppercase tracking-wider">Services</span>
             </div>
             <div className="flex flex-col gap-2.5">
               {CAPABILITIES.map((c, i) => (
                 <div key={i} className="flex items-start gap-2.5">
-                  <span className="mt-0.5 w-6 h-6 rounded-lg bg-yellow-500/10 dark:bg-yellow-500/15 border border-yellow-500/15 flex items-center justify-center text-[#D4AF37] flex-shrink-0">
+                  <span className="mt-0.5 w-6 h-6 rounded-lg bg-[#8B5CF6]/10 dark:bg-[#8B5CF6]/15 border border-[#8B5CF6]/15 flex items-center justify-center text-[#8B5CF6] flex-shrink-0">
                     {c.icon}
                   </span>
                   <div className="min-w-0">
@@ -306,14 +305,14 @@ export default function AdvisorPage() {
             </h3>
             <button
               onClick={() => router.push("/#roles")}
-              className="w-full flex items-center justify-between bg-slate-50 dark:bg-zinc-900/55 hover:bg-yellow-500 hover:text-black dark:hover:bg-yellow-500 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent p-3 rounded-xl text-xs font-bold text-slate-705 dark:text-slate-300 transition-all duration-200 cursor-pointer"
+              className="w-full flex items-center justify-between bg-slate-50 dark:bg-zinc-900/55 hover:bg-[#8B5CF6] hover:text-white dark:hover:bg-[#8B5CF6] border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent p-3 rounded-xl text-xs font-bold text-slate-705 dark:text-slate-300 transition-all duration-200 cursor-pointer"
             >
               <span className="flex items-center gap-2.5"><MessageSquare size={13} /> Start Mock Mock</span>
               <ArrowRight size={13} />
             </button>
             <button
               onClick={() => router.push("/resume-checker")}
-              className="w-full flex items-center justify-between bg-slate-50 dark:bg-zinc-900/55 hover:bg-yellow-500 hover:text-black dark:hover:bg-yellow-500 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent p-3 rounded-xl text-xs font-bold text-slate-705 dark:text-slate-300 transition-all duration-200 cursor-pointer"
+              className="w-full flex items-center justify-between bg-slate-50 dark:bg-zinc-900/55 hover:bg-[#8B5CF6] hover:text-white dark:hover:bg-[#8B5CF6] border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent p-3 rounded-xl text-xs font-bold text-slate-705 dark:text-slate-300 transition-all duration-200 cursor-pointer"
             >
               <span className="flex items-center gap-2.5"><FileSpreadsheet size={13} /> ATS Resume Scan</span>
               <ArrowRight size={13} />
@@ -325,7 +324,7 @@ export default function AdvisorPage() {
         {/* Small Info profile card footer */}
         <div className="p-6 border-t border-slate-200/40 dark:border-zinc-800/40 bg-slate-50/20 dark:bg-zinc-950/10">
           <div className="glass-panel bg-white dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800/60 p-3.5 rounded-2xl shadow-inner flex items-center gap-3">
-            <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-[#D4AF37]/15 text-[#D4AF37] font-extrabold text-xs">
+            <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-[#8B5CF6]/15 text-[#8B5CF6] font-extrabold text-xs">
               AI
               <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 border border-white dark:border-zinc-900 animate-pulse"></span>
             </div>
@@ -354,7 +353,7 @@ export default function AdvisorPage() {
               <Menu size={16} />
             </button>
             <div className="flex items-center gap-2">
-              <Sparkles size={15} className="text-[#D4AF37]" />
+              <Sparkles size={15} className="text-[#8B5CF6]" />
               <span className="text-xs font-extrabold text-slate-800 dark:text-white font-display">Advisor Workspace</span>
             </div>
           </div>
@@ -365,7 +364,7 @@ export default function AdvisorPage() {
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-[10px] font-bold text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-850 transition-all cursor-pointer"
             >
-              <Cpu size={12} className="text-[#D4AF37]" />
+              <Cpu size={12} className="text-[#8B5CF6]" />
               <span>{selectedModel}</span>
               <ChevronRight size={10} className="rotate-90 text-slate-400" />
             </button>
@@ -402,11 +401,11 @@ export default function AdvisorPage() {
           {messages.length === 0 ? (
             /* Interactive Welcome screen if log is empty */
             <div className="flex-grow flex flex-col items-center justify-center p-6 text-center max-w-2xl mx-auto animate-fade-in-up">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#C5A030] to-[#F4D472] dark:from-[#D4AF37] dark:to-[#FFE492] text-zinc-950 flex items-center justify-center shadow-lg shadow-yellow-500/10 mb-6 animate-pulse">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] text-white flex items-center justify-center shadow-lg shadow-[#8B5CF6]/10 mb-6 animate-pulse">
                 <Sparkles size={24} />
               </div>
               
-              <h1 className="text-3xl md:text-5xl font-black tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#D4AF37] dark:from-white dark:via-[#F4D472] dark:to-[#D4AF37] bg-clip-text text-transparent mb-4 leading-none">
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#8B5CF6] dark:from-white dark:via-neutral-200 dark:to-[#06B6D4] bg-clip-text text-transparent mb-4 leading-none">
                 How can I help you prepare today?
               </h1>
               <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm max-w-md leading-relaxed mb-10 font-normal">
@@ -419,13 +418,13 @@ export default function AdvisorPage() {
                   <button
                     key={index}
                     onClick={() => handleSend(r.query)}
-                    className="group flex gap-4 border border-slate-200/60 dark:border-zinc-800/80 rounded-2xl p-4 bg-white/50 dark:bg-zinc-900/30 hover:border-[#D4AF37]/35 dark:hover:border-[#D4AF37]/35 hover:-translate-y-0.5 active:translate-y-0 text-left transition-all duration-300 cursor-pointer shadow-sm"
+                    className="group flex gap-4 border border-slate-200/60 dark:border-zinc-800/80 rounded-2xl p-4 bg-white/50 dark:bg-zinc-900/30 hover:border-[#8B5CF6]/35 dark:hover:border-[#8B5CF6]/35 hover:-translate-y-0.5 active:translate-y-0 text-left transition-all duration-300 cursor-pointer shadow-sm"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-zinc-850 border border-slate-200/20 dark:border-zinc-850/40 flex items-center justify-center text-[#D4AF37] group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-zinc-850 border border-slate-200/20 dark:border-zinc-855/40 flex items-center justify-center text-[#06B6D4] group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
                       {r.icon}
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-slate-850 dark:text-white group-hover:text-[#D4AF37] transition-colors leading-tight mb-1">{r.title}</h3>
+                      <h3 className="text-xs font-bold text-slate-850 dark:text-white group-hover:text-[#8B5CF6] transition-colors leading-tight mb-1">{r.title}</h3>
                       <p className="text-[10px] text-slate-405 dark:text-slate-500 leading-snug">{r.topic}</p>
                     </div>
                   </button>
@@ -447,7 +446,7 @@ export default function AdvisorPage() {
                     {/* User / Advisor Avatar icon */}
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm ${
                       isAssistant 
-                        ? "bg-gradient-to-tr from-[#C5A030] to-[#F4D472] dark:from-[#D4AF37] dark:to-[#FFE492] text-zinc-950 font-display" 
+                        ? "bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] text-white font-display" 
                         : "bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-400 border border-slate-200/50 dark:border-zinc-800/60"
                     }`}>
                       {isAssistant ? <GraduationCap size={15} /> : "ME"}
@@ -456,7 +455,7 @@ export default function AdvisorPage() {
                     {/* Chat Bubble container */}
                     <div className={`rounded-2xl px-5 py-3.5 text-xs leading-relaxed shadow-sm ${
                       isAssistant
-                        ? "bg-white/80 dark:bg-zinc-900/75 text-slate-800 dark:text-slate-800 border border-slate-200/40 dark:border-zinc-800/60 rounded-tl-sm"
+                        ? "bg-white/80 dark:bg-zinc-900/75 text-slate-800 dark:text-slate-200 border border-slate-200/40 dark:border-zinc-800/60 rounded-tl-sm"
                         : "bg-slate-900 dark:bg-zinc-800 text-white dark:text-white rounded-tr-sm"
                     }`}>
                       {renderMessageContent(msg.content)}
@@ -468,13 +467,13 @@ export default function AdvisorPage() {
               {/* Pulsing loading state */}
               {loading && (
                 <div className="flex gap-4 items-start self-start">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#C5A030] to-[#F4D472] dark:from-[#D4AF37] dark:to-[#FFE492] text-zinc-950 flex items-center justify-center font-bold text-xs shadow-sm">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] text-white flex items-center justify-center font-bold text-xs shadow-sm">
                     <GraduationCap size={15} />
                   </div>
                   <div className="flex items-center gap-1.5 bg-white/80 dark:bg-zinc-900/45 border border-slate-200/40 dark:border-zinc-800/40 p-4 rounded-2xl rounded-tl-sm shadow-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-bounce"></span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-bounce" style={{ animationDelay: "0.2s" }}></span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce" style={{ animationDelay: "0.2s" }}></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce" style={{ animationDelay: "0.4s" }}></span>
                   </div>
                 </div>
               )}
@@ -493,7 +492,7 @@ export default function AdvisorPage() {
             }}
             className="max-w-3xl mx-auto w-full flex flex-col gap-2 font-sans"
           >
-            <div className="relative flex items-center bg-white dark:bg-zinc-900 border border-slate-250 dark:border-zinc-800/80 rounded-2xl shadow-sm px-4 py-3 focus-within:border-[#D4AF37]/50 focus-within:ring-2 focus-within:ring-[#D4AF37]/10 transition-all duration-300">
+            <div className="relative flex items-center bg-white dark:bg-zinc-900 border border-slate-250 dark:border-zinc-800/80 rounded-2xl shadow-sm px-4 py-3 focus-within:border-[#8B5CF6]/50 focus-within:ring-2 focus-within:ring-[#8B5CF6]/10 transition-all duration-300">
               <MessageSquare size={15} className="text-slate-400 mr-3 flex-shrink-0" />
               <input
                 type="text"
@@ -506,7 +505,7 @@ export default function AdvisorPage() {
               <button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all duration-200 active:scale-95 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl shadow-md transition-all duration-200 active:scale-95 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send size={11} />
                 <span>Send</span>

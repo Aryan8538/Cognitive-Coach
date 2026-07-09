@@ -186,12 +186,12 @@ function InterviewRoomContent() {
       <div className="flex-grow flex flex-col items-center justify-center py-20 px-6 max-w-xl mx-auto font-sans w-full bg-grid animate-fade-in-up">
         
         {/* Glowing aura accent details */}
-        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-80 h-80 bg-[#D4AF37]/5 dark:bg-[#D4AF37]/5 rounded-full filter blur-[90px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-80 h-80 bg-[#8B5CF6]/5 dark:bg-[#8B5CF6]/5 rounded-full filter blur-[90px] pointer-events-none" />
 
-        <div className="glass-panel w-full bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-8 rounded-3xl shadow-xl hover:border-[#D4AF37]/25 transition-all duration-300 relative overflow-hidden">
+        <div className="glass-panel w-full bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-8 rounded-3xl shadow-xl hover:border-[#8B5CF6]/25 transition-all duration-300 relative overflow-hidden">
           
           <div className="flex items-center gap-2 mb-3">
-            <Sparkles size={16} className="text-[#D4AF37] animate-pulse" />
+            <Sparkles size={16} className="text-[#8B5CF6] animate-pulse" />
             <span className="text-[10px] uppercase tracking-widest font-black text-slate-400 dark:text-slate-500">Configure Sandbox</span>
           </div>
 
@@ -220,7 +220,7 @@ function InterviewRoomContent() {
                   type="checkbox" 
                   checked={useAdaptive} 
                   onChange={(e) => setUseAdaptive(e.target.checked)}
-                  className="w-4 h-4 rounded text-[#D4AF37] bg-slate-100 border-slate-350 focus:ring-[#D4AF37]/50 cursor-pointer accent-[#D4AF37]"
+                  className="w-4 h-4 rounded text-[#8B5CF6] bg-slate-100 border-slate-350 focus:ring-[#8B5CF6]/50 cursor-pointer accent-[#8B5CF6]"
                 />
               </div>
             ) : (
@@ -237,7 +237,7 @@ function InterviewRoomContent() {
                 <select
                   value={codeLanguage}
                   onChange={(e) => setCodeLanguage(e.target.value)}
-                  className="text-xs bg-slate-50 dark:bg-zinc-850 border border-slate-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#D4AF37]/50 cursor-pointer font-bold text-slate-700 dark:text-slate-800"
+                  className="text-xs bg-slate-50 dark:bg-zinc-855 border border-slate-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#8B5CF6]/50 cursor-pointer font-bold text-slate-700 dark:text-slate-800"
                 >
                   <option value="python">Python 3</option>
                   <option value="javascript">JavaScript</option>
@@ -248,7 +248,7 @@ function InterviewRoomContent() {
             )}
 
             <button 
-              className="mt-4 w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black py-3.5 rounded-xl text-xs shadow-md shadow-yellow-500/10 transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+              className="mt-4 w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black py-3.5 rounded-xl text-xs shadow-md shadow-violet-600/10 transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
               onClick={handleLaunch}
             >
               Launch Interview Room <ArrowRight size={14} />
@@ -264,8 +264,8 @@ function InterviewRoomContent() {
     return (
       <div className="flex-grow flex flex-col items-center justify-center py-24 px-6 bg-grid animate-fade-in-up font-sans">
         <div className="relative flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-[#D4AF37] animate-spin" />
-          <div className="absolute w-16 h-16 rounded-full border border-[#D4AF37]/10 animate-pulse-slow" />
+          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-[#8B5CF6] animate-spin" />
+          <div className="absolute w-16 h-16 rounded-full border border-[#8B5CF6]/10 animate-pulse-slow" />
         </div>
         <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display">Setting up interview room...</h3>
         <p className="text-xs text-slate-405 dark:text-slate-500 mt-2 text-center max-w-[280px]">Initializing virtual camera feeds and seeding question databases</p>
@@ -302,7 +302,7 @@ function InterviewRoomContent() {
   const renderHeader = () => (
     <div className="flex justify-between items-center w-full pb-4 border-b border-slate-200/50 dark:border-zinc-800/50 mb-6 font-sans">
       <button 
-        className="flex items-center gap-1.5 text-xs font-bold text-slate-450 hover:text-[#D4AF37] dark:text-slate-500 dark:hover:text-[#FFE492] transition-colors duration-205 cursor-pointer"
+        className="flex items-center gap-1.5 text-xs font-bold text-slate-450 hover:text-[#8B5CF6] dark:text-slate-500 dark:hover:text-[#06B6D4] transition-colors duration-205 cursor-pointer"
         onClick={() => {
           if (confirm("Are you sure you want to exit? Current progress will be discarded.")) {
             router.push("/");
@@ -314,7 +314,7 @@ function InterviewRoomContent() {
 
       {/* Live stopwatch cap */}
       <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-zinc-900 border border-slate-200/30 dark:border-zinc-800 text-[10px] font-black uppercase text-slate-500 dark:text-slate-400">
-        <Clock size={11} className="text-[#D4AF37]" />
+        <Clock size={11} className="text-[#8B5CF6]" />
         <span>Session Time &bull; {formatSessionTime(elapsedTime)}</span>
       </div>
     </div>
@@ -329,7 +329,7 @@ function InterviewRoomContent() {
         <div className="w-full lg:w-[45%] flex flex-col gap-6 flex-shrink-0">
           {renderHeader()}
 
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 rounded-2xl shadow-sm flex flex-col gap-4 hover:border-[#D4AF37]/15 transition-all duration-300">
+          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 rounded-2xl shadow-sm flex flex-col gap-4 hover:border-[#8B5CF6]/20 transition-all duration-300">
             <div className="flex justify-between items-center">
               <span className="text-[9px] font-black bg-slate-100 dark:bg-zinc-800/80 border border-slate-250 dark:border-zinc-800/40 text-slate-505 dark:text-slate-400 px-3 py-1 rounded-lg uppercase tracking-widest font-outfit">
                 QUESTION {currentIdx + 1} OF {totalQuestions}
@@ -343,18 +343,18 @@ function InterviewRoomContent() {
               </span>
             </div>
 
-            <h2 className="text-sm md:text-base font-bold leading-relaxed text-slate-900 dark:text-white font-display">
+            <h2 className="text-base md:text-lg font-extrabold leading-relaxed text-slate-950 dark:text-white font-display">
               {currentQuestion.text}
             </h2>
 
             <div className="flex flex-col gap-2 border-t border-slate-150 dark:border-zinc-800/40 pt-4 mt-1">
-              <h4 className="text-[10px] font-bold text-slate-450 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
-                <HelpCircle size={13} className="text-[#D4AF37]" /> Key Topics to Touch Upon
+              <h4 className="text-[10px] font-bold text-slate-455 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+                <HelpCircle size={13} className="text-[#06B6D4]" /> Key Topics to Touch Upon
               </h4>
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {currentQuestion.suggested_keywords.split(",").map((kw, i) => (
-                  <span key={i} className="text-[9px] font-bold bg-slate-100 dark:bg-zinc-850/60 text-slate-600 dark:text-slate-350 border border-slate-205 dark:border-zinc-800/50 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 transition-colors hover:border-[#D4AF37]/30">
-                    <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+                  <span key={i} className="text-[9px] font-bold bg-slate-100 dark:bg-zinc-850/60 text-slate-650 dark:text-slate-350 border border-slate-205 dark:border-zinc-800/50 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 transition-colors hover:border-[#06B6D4]/30">
+                    <span className="w-1 h-1 rounded-full bg-[#06B6D4]" />
                     {kw.trim()}
                   </span>
                 ))}
@@ -362,7 +362,7 @@ function InterviewRoomContent() {
             </div>
             
             {isCurrentAnswered && (
-              <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl flex items-center gap-2 text-[11px] font-bold text-emerald-700 dark:text-emerald-450 animate-fade-in-up">
+              <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl flex items-center gap-2 text-[11px] font-bold text-emerald-700 dark:text-emerald-455 animate-fade-in-up">
                 <Check size={14} className="flex-shrink-0 text-emerald-500" />
                 <span>Coding answer submitted successfully.</span>
               </div>
@@ -390,7 +390,7 @@ function InterviewRoomContent() {
                 </button>
               ) : (
                 <button 
-                  className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black disabled:opacity-40 text-xs font-bold rounded-xl shadow-md transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black disabled:opacity-40 text-xs font-bold rounded-xl shadow-md transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
                   onClick={handleFinishInterview}
                   disabled={!allAnswered}
                 >
@@ -431,7 +431,7 @@ function InterviewRoomContent() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start w-full">
         {/* Left Column: Question Details */}
         <div className="flex flex-col gap-5 w-full">
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm flex flex-col gap-5 hover:border-[#D4AF37]/15 transition-all duration-300">
+          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-2xl shadow-sm flex flex-col gap-5 hover:border-[#8B5CF6]/20 transition-all duration-300">
             <div className="flex justify-between items-center">
               <span className="text-[9px] font-black bg-slate-100 dark:bg-zinc-800/80 border border-slate-250 dark:border-zinc-800/40 text-slate-505 dark:text-slate-400 px-3 py-1 rounded-lg uppercase tracking-widest font-outfit">
                 QUESTION {currentIdx + 1} OF {totalQuestions}
@@ -445,18 +445,18 @@ function InterviewRoomContent() {
               </span>
             </div>
 
-            <h2 className="text-base md:text-lg font-bold leading-relaxed text-slate-900 dark:text-white font-display">
+            <h2 className="text-lg md:text-xl font-extrabold leading-relaxed text-slate-950 dark:text-white font-display">
               {currentQuestion.text}
             </h2>
 
             <div className="flex flex-col gap-2 border-t border-slate-150 dark:border-zinc-800/40 pt-5 mt-2">
-              <h4 className="text-[10px] font-bold text-slate-450 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
-                <HelpCircle size={13} className="text-[#D4AF37]" /> Key Topics to Touch Upon
+              <h4 className="text-[10px] font-bold text-slate-455 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+                <HelpCircle size={13} className="text-[#06B6D4]" /> Key Topics to Touch Upon
               </h4>
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {currentQuestion.suggested_keywords.split(",").map((kw, i) => (
-                  <span key={i} className="text-[9px] font-bold bg-slate-100 dark:bg-zinc-850/60 text-slate-650 dark:text-slate-350 border border-slate-205 dark:border-zinc-800/50 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 transition-colors hover:border-[#D4AF37]/35">
-                    <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+                  <span key={i} className="text-[9px] font-bold bg-slate-100 dark:bg-zinc-850/60 text-slate-650 dark:text-slate-350 border border-slate-205 dark:border-zinc-800/50 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 transition-colors hover:border-[#06B6D4]/35">
+                    <span className="w-1 h-1 rounded-full bg-[#06B6D4]" />
                     {kw.trim()}
                   </span>
                 ))}
@@ -492,7 +492,7 @@ function InterviewRoomContent() {
                 </button>
               ) : (
                 <button 
-                  className="px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-950 font-black disabled:opacity-40 text-xs font-bold rounded-xl shadow-md transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black disabled:opacity-40 text-xs font-bold rounded-xl shadow-md transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
                   onClick={handleFinishInterview}
                   disabled={!allAnswered}
                 >
@@ -520,8 +520,8 @@ export default function InterviewRoom() {
   return (
     <Suspense fallback={
       <div className="flex-grow flex flex-col items-center justify-center py-24 font-sans bg-grid">
-        <div className="w-10 h-10 border-4 border-slate-205 border-t-[#D4AF37] rounded-full animate-spin mb-4" />
-        <h3 className="text-sm font-bold text-slate-450 dark:text-slate-400">Loading interview components...</h3>
+        <div className="w-10 h-10 border-4 border-slate-205 border-t-[#8B5CF6] rounded-full animate-spin mb-4" />
+        <h3 className="text-sm font-bold text-slate-455 dark:text-slate-400">Loading interview components...</h3>
       </div>
     }>
       <InterviewRoomContent />

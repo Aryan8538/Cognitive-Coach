@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from typing import List, Dict
 from pydantic import BaseModel
 from pypdf import PdfReader
-from config import GEMINI_API_KEY
+from config import GEMINI_API_KEY, GEMINI_MODEL
 
 logger = logging.getLogger(__name__)
 
@@ -188,7 +188,7 @@ def check_resume(
         return analyze_resume_locally(resume_text, role, num_pages)
         
     try:
-        model = "gemini-1.5-flash"
+        model = GEMINI_MODEL
         generate_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
         
         system_prompt = (

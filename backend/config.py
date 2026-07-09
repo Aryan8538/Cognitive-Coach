@@ -15,7 +15,7 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 # Model used for transcription, evaluation and chat. Overridable via env so it
 # can be bumped without a code change when Google rotates model availability.
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
 
 # --- Auth ---
 JWT_SECRET = os.getenv("JWT_SECRET", "supersecretkey-for-cognitive-coach-2026")
