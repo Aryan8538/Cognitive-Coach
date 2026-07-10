@@ -178,13 +178,13 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[720px] bg-[#0a0a0a]/75 border border-white/10 backdrop-blur-xl rounded-full transition-all duration-300 shadow-lg shadow-black/40">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[720px] bg-[#181818]/90 border border-[#66473B] backdrop-blur-md rounded-[4px] transition-all duration-300">
       <div className="px-5 h-14 flex items-center justify-between relative">
         
         {/* Left Logo */}
         <a href="/" className="flex items-center gap-2 group transition-transform duration-300 active:scale-95 flex-shrink-0">
-          <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] shadow-md shadow-[#8B5CF6]/50 group-hover:scale-110 transition-transform duration-300" />
-          <span className="text-[11px] font-black uppercase tracking-[0.12em] font-sans text-white">
+          <div className="w-2.5 h-2.5 rounded-[2px] bg-[#DC9F85] transition-transform duration-300 group-hover:scale-110" />
+          <span className="text-[11px] font-bold uppercase tracking-[0.15em] font-display text-[#EBDCC4]">
             CognitiveCoach
           </span>
         </a>
@@ -196,7 +196,7 @@ export default function Navbar() {
               <a 
                 href="/" 
                 className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
-                  pathname === "/" ? "text-white" : "text-neutral-400 hover:text-white"
+                  pathname === "/" ? "text-[#DC9F85]" : "text-[#B6A596] hover:text-[#DC9F85]"
                 }`}
               >
                 Dashboard
@@ -204,7 +204,7 @@ export default function Navbar() {
               <a 
                 href="/advisor" 
                 className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
-                  pathname === "/advisor" ? "text-white" : "text-neutral-400 hover:text-white"
+                  pathname === "/advisor" ? "text-[#DC9F85]" : "text-[#B6A596] hover:text-[#DC9F85]"
                 }`}
               >
                 Advisor
@@ -212,7 +212,7 @@ export default function Navbar() {
               <a 
                 href="/resume-checker" 
                 className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
-                  pathname === "/resume-checker" ? "text-white" : "text-neutral-400 hover:text-white"
+                  pathname === "/resume-checker" ? "text-[#DC9F85]" : "text-[#B6A596] hover:text-[#DC9F85]"
                 }`}
               >
                 Resume
@@ -222,19 +222,19 @@ export default function Navbar() {
             <>
               <a 
                 href="/#features" 
-                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-400 hover:text-white transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-[#B6A596] hover:text-[#DC9F85] transition-colors"
               >
                 Features
               </a>
               <a 
                 href="/#testimonials" 
-                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-400 hover:text-white transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-[#B6A596] hover:text-[#DC9F85] transition-colors"
               >
                 Testimonials
               </a>
               <a 
                 href="/#faq" 
-                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-400 hover:text-white transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-[#B6A596] hover:text-[#DC9F85] transition-colors"
               >
                 FAQ
               </a>
@@ -248,39 +248,39 @@ export default function Navbar() {
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-1.5 focus:outline-none group cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 px-2.5 py-1 rounded-full text-white text-[10px] font-bold transition-all duration-300"
+                className="flex items-center gap-1.5 focus:outline-none group cursor-pointer bg-[#35211A]/20 hover:bg-[#35211A]/40 border border-[#66473B] px-2.5 py-1.5 rounded-[4px] text-[#EBDCC4] text-[10px] font-mono tracking-wider transition-all duration-300"
               >
-                <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] text-white font-black text-[9px] flex items-center justify-center">
+                <div className="w-5 h-5 rounded-[2px] bg-[#DC9F85] text-[#181818] font-bold text-[9px] flex items-center justify-center">
                   {getInitials(user.name)}
                 </div>
-                <ChevronDown size={11} className={`text-slate-400 group-hover:text-white transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown size={11} className="text-[#B6A596] group-hover:text-[#EBDCC4] transition-transform duration-300" />
               </button>
 
               {/* Dropdown Menu */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-3 w-64 bg-[#0a0a0a]/95 border border-white/10 backdrop-blur-xl shadow-2xl rounded-2xl p-4 z-50 animate-fade-in-up font-sans">
+                <div className="absolute right-0 mt-3 w-64 bg-[#181818] border border-[#66473B] shadow-2xl rounded-[4px] p-4 z-50 animate-fade-in-up font-sans">
                   {/* User info */}
-                  <div className="flex items-center gap-3 pb-3 border-b border-white/10">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] text-white font-black text-xs flex items-center justify-center">
+                  <div className="flex items-center gap-3 pb-3 border-b border-[#35211A]">
+                    <div className="w-8 h-8 rounded-[2px] bg-[#DC9F85] text-[#181818] font-bold text-xs flex items-center justify-center">
                       {getInitials(user.name)}
                     </div>
                     <div className="flex flex-col min-w-0 text-left">
-                      <span className="text-xs font-bold text-white truncate">{user.name}</span>
-                      <span className="text-[10px] text-neutral-450 truncate">{user.email}</span>
+                      <span className="text-xs font-bold text-[#EBDCC4] truncate">{user.name}</span>
+                      <span className="text-[10px] text-[#B6A596] truncate">{user.email}</span>
                     </div>
                   </div>
 
                   {/* Overview Stats */}
-                  <div className="py-3 border-b border-white/10">
-                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-neutral-500 block mb-2 text-left">My Overview</span>
-                    <div className="grid grid-cols-2 gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
+                  <div className="py-3 border-b border-[#35211A]">
+                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-[#66473B] block mb-2 text-left">My Overview</span>
+                    <div className="grid grid-cols-2 gap-2 bg-[#35211A]/20 p-2 rounded-[2px] border border-[#66473B]/50">
                       <div className="flex flex-col text-left">
-                        <span className="text-[9px] text-neutral-450 leading-none">Interviews</span>
-                        <span className="text-xs font-black text-white mt-1">{stats?.total_interviews || 0}</span>
+                        <span className="text-[9px] text-[#B6A596] leading-none">Interviews</span>
+                        <span className="text-xs font-black text-[#EBDCC4] mt-1">{stats?.total_interviews || 0}</span>
                       </div>
-                      <div className="flex flex-col border-l border-white/10 pl-2 text-left">
-                        <span className="text-[9px] text-neutral-450 leading-none">Avg Clarity</span>
-                        <span className="text-xs font-black text-[#06B6D4] mt-1">{stats?.average_clarity || 0}%</span>
+                      <div className="flex flex-col border-l border-[#66473B] pl-2 text-left">
+                        <span className="text-[9px] text-[#B6A596] leading-none">Avg Clarity</span>
+                        <span className="text-xs font-black text-[#DC9F85] mt-1">{stats?.average_clarity || 0}%</span>
                       </div>
                     </div>
                   </div>
@@ -292,9 +292,9 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/#roles");
                       }}
-                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-[#B6A596] hover:text-[#DC9F85] hover:bg-[#35211A]/30 rounded-[2px] transition-colors cursor-pointer"
                     >
-                      <History size={12} className="text-neutral-500" />
+                      <History size={12} className="text-[#66473B]" />
                       <span>Start New Mock</span>
                     </button>
                     <button
@@ -302,14 +302,14 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/resume-checker");
                       }}
-                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-[#B6A596] hover:text-[#DC9F85] hover:bg-[#35211A]/30 rounded-[2px] transition-colors cursor-pointer"
                     >
-                      <User size={12} className="text-neutral-500" />
+                      <User size={12} className="text-[#66473B]" />
                       <span>Resume Checker</span>
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-rose-500 hover:bg-rose-955/10 rounded-lg transition-colors mt-1 border-t border-white/10 pt-2 cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-rose-500 hover:bg-rose-950/20 rounded-[2px] transition-colors mt-1 border-t border-[#35211A] pt-2 cursor-pointer"
                     >
                       <LogOut size={12} />
                       <span>Sign Out</span>
@@ -329,14 +329,14 @@ export default function Navbar() {
                     router.push("/");
                     router.refresh();
                   }}
-                  className="text-[9px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors mr-1.5 cursor-pointer"
+                  className="text-[9.5px] font-mono uppercase font-bold tracking-wider text-[#B6A596] hover:text-[#DC9F85] transition-colors mr-1.5 cursor-pointer"
                 >
                   Exit
                 </button>
               )}
               <a 
                 href="/login"
-                className="bg-white hover:bg-neutral-100 text-black font-mono text-[9.5px] md:text-[10px] uppercase tracking-[0.2em] px-4 py-2 rounded-full transition-snappy active:scale-95 flex-shrink-0 font-extrabold"
+                className="bg-[#DC9F85] hover:bg-[#EBDCC4] text-[#181818] font-mono text-[9.5px] md:text-[10px] uppercase tracking-[0.2em] px-4 py-2 rounded-[4px] transition-all duration-250 active:scale-95 flex-shrink-0 font-extrabold"
               >
                 Sign In
               </a>
@@ -346,7 +346,7 @@ export default function Navbar() {
           {/* Theme Toggle */}
           <button 
             onClick={toggleTheme}
-            className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-450 hover:text-white transition-all cursor-pointer"
+            className="p-1.5 rounded-[4px] bg-[#35211A]/20 hover:bg-[#35211A]/40 border border-[#66473B] text-[#B6A596] hover:text-[#DC9F85] transition-all cursor-pointer"
             aria-label="Toggle theme"
           >
             {isDark ? <Sun size={12} /> : <Moon size={12} />}

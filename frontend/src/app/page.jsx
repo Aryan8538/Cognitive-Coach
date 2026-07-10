@@ -18,16 +18,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#181818] text-[#EBDCC4] font-sans flex flex-col justify-between p-6 md:p-12 relative overflow-hidden select-none">
       
-      {/* 1. Minimal Navigation Bar */}
-      <nav className="w-full flex items-center justify-between z-50 text-[10px] md:text-xs font-mono font-bold tracking-[0.25em] text-[#B6A596]">
-        <div className="flex-shrink-0 uppercase">
-          SD—PROTOCOL 01
-        </div>
-        <div className="flex-grow mx-8 h-[1px] bg-[#35211A]" />
-        <div className="flex-shrink-0 text-[#35211A] font-extrabold uppercase">
-          INVITE ONLY
-        </div>
-      </nav>
+      {/* Header spacer to prevent overlay clashes with the floating menu box */}
+      <div className="w-full h-16 md:h-20 flex-shrink-0" />
 
       {/* 2. Central Hero Headline Section */}
       <main className="flex-grow flex flex-col justify-center items-start my-20 md:my-0 z-10 relative">
