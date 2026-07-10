@@ -1,24 +1,23 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Sun, Moon, Sparkles, ChevronDown, User, Award, History, LogOut } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import { API_BASE_URL } from "@/utils/config";
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const dropdownRef = useRef(null);
   
   const [isDark, setIsDark] = useState(false);
   const [user, setUser] = useState(null);
-  const [pathname, setPathname] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [stats, setStats] = useState(null);
   const [isGuestSandbox, setIsGuestSandbox] = useState(false);
 
   useEffect(() => {
-    setPathname(window.location.pathname);
 
     // Check theme
     const savedTheme = localStorage.getItem("theme");

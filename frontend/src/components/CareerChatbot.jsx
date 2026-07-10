@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { Sparkles, X, MessageSquare, Send, BookOpen, FileSpreadsheet, ListChecks } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
 
 export default function CareerChatbot() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {

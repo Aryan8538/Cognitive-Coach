@@ -13,22 +13,22 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-slate-50 transition-colors duration-300">
+      <body className="antialiased bg-[#181818] text-[#EBDCC4] min-h-screen overflow-x-hidden relative font-sans select-none">
         
-        {/* Subtle grid background */}
-        <div className="fixed inset-0 bg-grid pointer-events-none z-[-1]"></div>
+        {/* Global 3% fractal noise texture overlay */}
+        <div className="noise-overlay" />
 
-        {/* Global sticky navbar */}
+        {/* Global sticky navbar (hidden on home path) */}
         <Navbar />
 
         {/* Main Content Area */}
-        <main className="min-h-[calc(100vh-64px)] flex flex-col">
+        <main className="min-h-screen flex flex-col">
           {children}
         </main>
 
-        {/* Global floating career advisor bot */}
+        {/* Global floating career advisor bot (hidden on home path) */}
         <CareerChatbot />
 
       </body>
