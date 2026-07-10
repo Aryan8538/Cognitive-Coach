@@ -1,12 +1,16 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { 
   Terminal, Users, Cpu, BarChart3, Activity, Cloud, Shield, Play, HelpCircle 
 } from "lucide-react";
+import { API_BASE_URL } from "@/utils/config";
 
 export default function Home() {
   const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [interviews, setInterviews] = useState([]);
 
   // Define practice mock interview focus roles
   const roles = [
@@ -74,6 +78,36 @@ export default function Home() {
       topics: ["STAR Method", "Cultural Fit"]
     }
   ];
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (savedUser && token) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.warn("Failed to parse user session", e);
+      }
+    }
+
+    async function fetchInterviews() {
+      const token = localStorage.getItem("token") || "";
+      if (token) {
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/interviews`, {
+            headers: { "Authorization": `Bearer ${token}` }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setInterviews(data);
+          }
+        } catch (e) {
+          console.warn("Failed to fetch interviews history", e);
+        }
+      }
+    }
+    fetchInterviews();
+  }, []);
 
   const handleStartSession = (roleName) => {
     router.push(`/interview?role=${encodeURIComponent(roleName)}`);
@@ -160,7 +194,10 @@ export default function Home() {
             {/* Columns 7-12: Action Launcher Call-to-Action */}
             <div className="md:col-span-6 flex flex-col gap-3">
               <button
-                onClick={() => document.getElementById("roles")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => {
+                  const targetId = (user && interviews && interviews.length > 0) ? "history" : "roles";
+                  document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="editorial-btn-primary w-full py-4.5 px-8 text-xs font-bold tracking-[0.25em] uppercase rounded-[4px] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer"
               >
                 LAUNCH EVALUATION SANDBOX
@@ -177,6 +214,81 @@ export default function Home() {
         </footer>
 
       </div>
+
+      {/* SECTION 1.5: Historical Practice Performance Analysis */}
+      {user && interviews && interviews.length > 0 && (
+        <section id="history" className="w-full flex flex-col gap-6 py-20 mt-20 border-t border-[#35211A] scroll-mt-28 text-left z-20 relative animate-fade-in-up">
+          <div className="w-full flex flex-col gap-2.5">
+            <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
+              Analytics Archive
+            </span>
+            <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-[#EBDCC4] pb-4 border-b border-[#35211A]">
+              Calibrated Performance History
+            </h2>
+          </div>
+
+          <div className="bg-[#181818] border border-[#66473B] rounded-[4px] overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-[#35211A] bg-[#35211A]/10 text-[9px] uppercase tracking-wider font-mono font-bold text-[#66473B]">
+                    <th scope="col" className="py-4 px-6">Role Focus</th>
+                    <th scope="col" className="py-4 px-6">Date Completed</th>
+                    <th scope="col" className="py-4 px-6">Responses</th>
+                    <th scope="col" className="py-4 px-6">Average Metric Score</th>
+                    <th scope="col" className="py-4 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {interviews.map((interview) => {
+                    const completedResponses = interview.responses.filter(r => r.metrics);
+                    let avgScore = 0;
+                    if (completedResponses.length > 0) {
+                      const totalScore = completedResponses.reduce((sum, r) => {
+                        return sum + (r.metrics.clarity_score + r.metrics.relevance_score + r.metrics.grammar_score) / 3;
+                      }, 0);
+                      avgScore = Math.round(totalScore / completedResponses.length);
+                    }
+                    
+                    return (
+                      <tr key={interview.id} className="border-b border-[#35211A]/60 hover:bg-[#35211A]/15 transition-colors">
+                        <td className="py-4 px-6 font-bold text-[#EBDCC4] font-mono uppercase text-xs">{interview.role}</td>
+                        <td className="py-4 px-6 text-[#B6A596] font-light">
+                          {new Date(interview.created_at).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric"
+                          })}
+                        </td>
+                        <td className="py-4 px-6 text-[#B6A596] font-mono">
+                          {interview.responses.length} Question(s)
+                        </td>
+                        <td className="py-4 px-6">
+                          {avgScore > 0 ? (
+                            <span className="inline-flex items-center gap-1 font-mono font-bold text-[#DC9F85]">
+                              ★ {avgScore}%
+                            </span>
+                          ) : (
+                            <span className="text-[#66473B] font-mono uppercase tracking-wider text-[10px]">Pending Diagnostics</span>
+                          )}
+                        </td>
+                        <td className="py-4 px-6 text-right">
+                          <button
+                            onClick={() => router.push(`/results/${interview.id}`)}
+                            className="px-4 py-1.5 border border-[#66473B] hover:border-[#DC9F85] hover:text-[#DC9F85] bg-transparent text-[#EBDCC4] rounded-[4px] text-[10px] font-mono font-bold uppercase tracking-widest transition-all duration-200 cursor-pointer"
+                          >
+                            View Report
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* SECTION 2: Scroll-Down Role Practice Selection Grid */}
       <section id="roles" className="w-full flex flex-col gap-10 py-20 mt-20 border-t border-[#35211A] scroll-mt-28 text-left z-20 relative">
