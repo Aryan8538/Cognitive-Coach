@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Sun, Moon, Sparkles, ChevronDown, User, Award, History, LogOut } from "lucide-react";
+import { Sun, Moon, Sparkles, ChevronDown, User, Award, History, LogOut, Menu, X } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import { API_BASE_URL } from "@/utils/config";
 
@@ -16,6 +16,7 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [stats, setStats] = useState(null);
   const [isGuestSandbox, setIsGuestSandbox] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
 
@@ -137,6 +138,11 @@ export default function Navbar() {
     }
   }, [user]);
 
+  // Auto close mobile menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -190,7 +196,7 @@ export default function Navbar() {
         </a>
 
         {/* Center Links */}
-        <nav className="flex items-center gap-4.5 md:gap-6 absolute left-1/2 -translate-x-1/2">
+        <nav className="hidden md:flex items-center gap-4.5 md:gap-6 absolute left-1/2 -translate-x-1/2">
           {user || isGuestSandbox ? (
             <>
               <a 
@@ -352,8 +358,72 @@ export default function Navbar() {
             {isDark ? <Sun size={12} /> : <Moon size={12} />}
           </button>
 
+          {/* Mobile Menu Toggle */}
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-1.5 rounded-[4px] bg-[#35211A]/10 hover:bg-[#35211A]/25 dark:bg-[#35211A]/20 dark:hover:bg-[#35211A]/40 border border-neutral-300 dark:border-[#66473B] text-neutral-500 dark:text-[#B6A596] hover:text-[#DC9F85] md:hidden transition-all cursor-pointer"
+            aria-label="Toggle navigation menu"
+          >
+            {menuOpen ? <X size={12} /> : <Menu size={12} />}
+          </button>
+
         </div>
       </div>
+
+      {/* Mobile Slide-Down Menu Overlay */}
+      {menuOpen && (
+        <div className="md:hidden border-t border-neutral-200 dark:border-[#35211A] bg-white dark:bg-[#181818] p-4 flex flex-col gap-2 font-sans rounded-b-[4px] animate-fade-in-up">
+          {user || isGuestSandbox ? (
+            <>
+              <a 
+                href="/" 
+                className={`font-mono text-[10px] uppercase tracking-[0.2em] font-extrabold px-3 py-2 rounded-[2px] transition-colors ${
+                  pathname === "/" ? "bg-[#35211A]/10 text-[#DC9F85]" : "text-neutral-600 dark:text-[#B6A596] hover:bg-neutral-100 dark:hover:bg-[#35211A]/20 hover:text-[#DC9F85]"
+                }`}
+              >
+                Dashboard
+              </a>
+              <a 
+                href="/advisor" 
+                className={`font-mono text-[10px] uppercase tracking-[0.2em] font-extrabold px-3 py-2 rounded-[2px] transition-colors ${
+                  pathname === "/advisor" ? "bg-[#35211A]/10 text-[#DC9F85]" : "text-neutral-600 dark:text-[#B6A596] hover:bg-neutral-100 dark:hover:bg-[#35211A]/20 hover:text-[#DC9F85]"
+                }`}
+              >
+                Advisor
+              </a>
+              <a 
+                href="/resume-checker" 
+                className={`font-mono text-[10px] uppercase tracking-[0.2em] font-extrabold px-3 py-2 rounded-[2px] transition-colors ${
+                  pathname === "/resume-checker" ? "bg-[#35211A]/10 text-[#DC9F85]" : "text-neutral-600 dark:text-[#B6A596] hover:bg-neutral-100 dark:hover:bg-[#35211A]/20 hover:text-[#DC9F85]"
+                }`}
+              >
+                Resume
+              </a>
+            </>
+          ) : (
+            <>
+              <a 
+                href="/#features" 
+                className="font-mono text-[10px] uppercase tracking-[0.2em] font-extrabold text-neutral-600 dark:text-[#B6A596] hover:bg-neutral-100 dark:hover:bg-[#35211A]/20 hover:text-[#DC9F85] px-3 py-2 rounded-[2px] transition-colors"
+              >
+                Features
+              </a>
+              <a 
+                href="/#testimonials" 
+                className="font-mono text-[10px] uppercase tracking-[0.2em] font-extrabold text-neutral-600 dark:text-[#B6A596] hover:bg-neutral-100 dark:hover:bg-[#35211A]/20 hover:text-[#DC9F85] px-3 py-2 rounded-[2px] transition-colors"
+              >
+                Testimonials
+              </a>
+              <a 
+                href="/#faq" 
+                className="font-mono text-[10px] uppercase tracking-[0.2em] font-extrabold text-neutral-600 dark:text-[#B6A596] hover:bg-neutral-100 dark:hover:bg-[#35211A]/20 hover:text-[#DC9F85] px-3 py-2 rounded-[2px] transition-colors"
+              >
+                FAQ
+              </a>
+            </>
+          )}
+        </div>
+      )}
     </header>
   );
 }

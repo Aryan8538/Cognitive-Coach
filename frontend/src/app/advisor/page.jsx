@@ -240,10 +240,18 @@ export default function AdvisorPage() {
   return (
     <div className="h-screen w-full flex pt-20 overflow-hidden bg-[#181818] font-sans relative select-none">
       
+      {/* Sidebar Backdrop Overlay on Mobile */}
+      {sidebarOpen && (
+        <div 
+          onClick={() => setSidebarOpen(false)}
+          className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30 transition-opacity duration-300"
+        />
+      )}
+
       {/* 1. Left Collapsible Sidebar */}
       <aside 
-        className={`h-full border-r border-[#66473B] flex flex-col justify-between transition-all duration-300 ease-in-out bg-[#181818] z-40 ${
-          sidebarOpen ? "w-80" : "w-0 overflow-hidden border-r-0"
+        className={`h-full border-r border-neutral-300 dark:border-[#66473B] flex flex-col justify-between transition-all duration-300 ease-in-out bg-white dark:bg-[#181818] z-40 md:relative absolute md:inset-auto inset-y-0 left-0 ${
+          sidebarOpen ? "w-80 shadow-2xl md:shadow-none" : "w-0 overflow-hidden border-r-0"
         }`}
       >
         <div className="p-6 flex flex-col gap-6 flex-grow overflow-y-auto scrollbar-thin">
