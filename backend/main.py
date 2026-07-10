@@ -93,6 +93,34 @@ def seed_questions():
                 "suggested_keywords": "STAR method, active listening, compromise, resolution, project delivery, collaboration"
             },
             {
+                "role": "HR & Behavioral",
+                "topic": "Conflict Resolution",
+                "difficulty": "Medium",
+                "text": "Describe a time when you had a severe disagreement with a teammate or project partner. How did you resolve the conflict, and what was the outcome?",
+                "suggested_keywords": "STAR method, active listening, compromise, resolution, project delivery, collaboration"
+            },
+            {
+                "role": "HR & Behavioral",
+                "topic": "Pressure Handling",
+                "difficulty": "Medium",
+                "text": "Tell me about a time you had to deliver a project under a tight deadline and faced unexpected roadblocks. How did you handle it?",
+                "suggested_keywords": "STAR method, time management, prioritization, bottleneck, project delivery"
+            },
+            {
+                "role": "HR & Behavioral",
+                "topic": "Cultural Alignment",
+                "difficulty": "Easy",
+                "text": "Why do you want to join our organization, and how do you align with our core culture of high ownership and continuous iteration?",
+                "suggested_keywords": "ownership, continuous learning, cultural alignment, values, growth mindset"
+            },
+            {
+                "role": "HR & Behavioral",
+                "topic": "Adaptability",
+                "difficulty": "Medium",
+                "text": "Describe a time you failed or made a mistake on a project. What did you learn from the experience, and how did you apply that lesson going forward?",
+                "suggested_keywords": "failing forward, resilience, learning, feedback, accountability"
+            },
+            {
                 "role": "Full Stack Web Developer",
                 "topic": "Coding Logic",
                 "difficulty": "Medium",

@@ -43,7 +43,8 @@ ROLE_KEYWORDS = {
     "IoT Engineer": ["mqtt", "firmware", "esp32", "rtos", "arm", "spi", "i2c", "embedded", "c", "microcontroller", "low power", "sensor", "hardware", "arduino"],
     "DevOps Engineer": ["kubernetes", "docker", "terraform", "ci/cd", "github actions", "aws", "cloud", "linux", "gitops", "prometheus", "grafana", "ansible", "jenkins"],
     "Cybersecurity Engineer": ["penetration testing", "threat modeling", "encryption", "tls", "ssl", "xss", "csrf", "sqli", "firewall", "owasp", "network security", "iam", "vulnerability"],
-    "Mobile Engineer": ["swift", "kotlin", "react native", "flutter", "ios", "android", "xcode", "mobile architecture", "app store", "play store", "cocoapods", "gradle"]
+    "Mobile Engineer": ["swift", "kotlin", "react native", "flutter", "ios", "android", "xcode", "mobile architecture", "app store", "play store", "cocoapods", "gradle"],
+    "HR & Behavioral": ["star method", "behavioral", "communication", "leadership", "conflict resolution", "problem solving", "collaboration", "active listening", "pressure", "cultural fit", "teamwork", "hr"]
 }
 
 def analyze_resume_locally(text: str, role: str, num_pages: int) -> dict:

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { 
-  Terminal, Users, Cpu, BarChart3, Activity, Cloud, Shield, Play 
+  Terminal, Users, Cpu, BarChart3, Activity, Cloud, Shield, Play, HelpCircle 
 } from "lucide-react";
 
 export default function Home() {
@@ -65,6 +65,13 @@ export default function Home() {
       icon: <Shield size={18} />,
       desc: "Evaluate network security protocol design, penetration testing methodology, threat modeling, and encryption standards. Practice cross-site security.",
       topics: ["Threat Modeling", "Penetration Testing"]
+    },
+    {
+      id: "HR & Behavioral",
+      title: "HR & Behavioral",
+      icon: <HelpCircle size={18} />,
+      desc: "Prepare for behavioral and cultural fit interviews. Practice structured STAR method answering models for collaboration, conflict, and pressure.",
+      topics: ["STAR Method", "Cultural Fit"]
     }
   ];
 

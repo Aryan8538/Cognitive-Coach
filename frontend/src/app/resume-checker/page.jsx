@@ -14,7 +14,8 @@ const ROLES = [
   "IoT Engineer",
   "DevOps Engineer",
   "Cybersecurity Engineer",
-  "Mobile Engineer"
+  "Mobile Engineer",
+  "HR & Behavioral"
 ];
 
 const SCAN_STEPS = [
