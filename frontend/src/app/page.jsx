@@ -3,14 +3,60 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { 
-  Terminal, Users, Cpu, BarChart3, Activity, Cloud, Shield, Play, HelpCircle 
+  Terminal, Users, Cpu, BarChart3, Activity, Cloud, Shield, Play, HelpCircle, Flame, TrendingUp 
 } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
+
+const CircularGauge = ({ score, label, color }) => {
+  const radius = 34;
+  const stroke = 5.5;
+  const normalizedRadius = radius - stroke * 2;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (score / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center gap-2.5">
+      <div className="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20">
+        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 80 80">
+          <circle
+            className="text-slate-100 dark:text-zinc-800/60"
+            strokeWidth={stroke}
+            stroke="transparent"
+            fill="transparent"
+            r={normalizedRadius}
+            cx="40"
+            cy="40"
+          />
+          <circle
+            className="progress-ring-circle transition-all duration-1000"
+            strokeWidth={stroke}
+            strokeDasharray={`${circumference} ${circumference}`}
+            style={{ strokeDashoffset }}
+            stroke={color}
+            strokeLinecap="round"
+            fill="transparent"
+            r={normalizedRadius}
+            cx="40"
+            cy="40"
+          />
+        </svg>
+        <span className="absolute text-xs md:text-sm font-bold font-mono text-[#EBDCC4]">
+          {score}%
+        </span>
+      </div>
+      <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-[#B6A596]">
+        {label}
+      </span>
+    </div>
+  );
+};
 
 export default function Home() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [interviews, setInterviews] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Define practice mock interview focus roles
   const roles = [
@@ -90,27 +136,127 @@ export default function Home() {
       }
     }
 
-    async function fetchInterviews() {
+    async function fetchStatsAndInterviews() {
       const token = localStorage.getItem("token") || "";
+      const headers = {};
       if (token) {
-        try {
-          const res = await fetch(`${API_BASE_URL}/api/interviews`, {
-            headers: { "Authorization": `Bearer ${token}` }
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setInterviews(data);
-          }
-        } catch (e) {
-          console.warn("Failed to fetch interviews history", e);
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+      try {
+        const statsRes = await fetch(`${API_BASE_URL}/api/dashboard-stats`, { headers });
+        if (statsRes.ok) {
+          const statsData = await statsRes.json();
+          setStats(statsData);
         }
+        if (token) {
+          const interviewsRes = await fetch(`${API_BASE_URL}/api/interviews`, { headers });
+          if (interviewsRes.ok) {
+            const interviewsData = await interviewsRes.json();
+            setInterviews(interviewsData);
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to fetch dashboard stats", err);
+      } finally {
+        setLoading(false);
       }
     }
-    fetchInterviews();
+    fetchStatsAndInterviews();
   }, []);
 
   const handleStartSession = (roleName) => {
     router.push(`/interview?role=${encodeURIComponent(roleName)}`);
+  };
+
+  // Derive pacing status metrics
+  const pacingWpm = stats ? parseFloat(stats.average_wpm) : 0;
+  const hasPacingData = !loading && stats && pacingWpm > 0;
+  const pacingOnTarget = pacingWpm >= 110 && pacingWpm <= 140;
+  const pacingNote = !hasPacingData
+    ? {
+        style: "bg-[#35211A]/10 border border-dashed border-[#66473B]/50 text-[#B6A596]",
+        iconClass: "text-[#66473B]",
+        text: "Complete an interview to calibrate your pacing rate."
+      }
+    : pacingOnTarget
+    ? {
+        style: "bg-emerald-500/10 border border-emerald-500/20 text-emerald-450",
+        iconClass: "text-emerald-450",
+        text: "Speech velocity meets professional fluency standards."
+      }
+    : {
+        style: "bg-amber-500/10 border border-amber-500/20 text-amber-500",
+        iconClass: "text-amber-500",
+        text: pacingWpm < 110
+          ? "Slightly under conversational standard — try speaking faster."
+          : "Slightly above conversational standard — try speaking slower."
+      };
+
+  // Render diagnostics line graph (SVG)
+  const renderTrendChart = () => {
+    if (!stats || stats.filler_words_trend.length === 0 || stats.filler_words_trend[0].date === "No Data") {
+      return (
+        <div className="flex items-center justify-center h-28 text-[10px] text-[#66473B] font-mono uppercase tracking-wider">
+          No data available.
+        </div>
+      );
+    }
+
+    const trend = [...stats.filler_words_trend].reverse(); // Show oldest to newest
+    const padding = 20;
+    const width = 500;
+    const height = 120;
+    const chartWidth = width - padding * 2;
+    const chartHeight = height - padding * 2;
+
+    const values = trend.map((t) => parseFloat(t.count));
+    const maxValue = Math.max(...values, 8);
+
+    const points = trend.map((t, index) => {
+      const x = padding + (index / (trend.length - 1 || 1)) * chartWidth;
+      const y = height - padding - (parseFloat(t.count) / maxValue) * chartHeight;
+      return { x, y, ...t };
+    });
+
+    const pathD = points.reduce((acc, p, index) => {
+      return acc + `${index === 0 ? "M" : "L"} ${p.x} ${p.y} `;
+    }, "");
+
+    const areaD = pathD + `L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`;
+
+    return (
+      <div className="relative w-full overflow-hidden font-sans">
+        <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#DC9F85" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#DC9F85" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="rgba(220,159,133,0.06)" strokeDasharray="3" />
+          <line x1={padding} y1={height - padding - chartHeight / 2} x2={width - padding} y2={height - padding - chartHeight / 2} stroke="rgba(220,159,133,0.06)" strokeDasharray="3" />
+          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="rgba(220,159,133,0.12)" />
+          
+          {points.map((p, idx) => (
+            <line key={`grid-${idx}`} x1={p.x} y1={p.y} x2={p.x} y2={height - padding} stroke="rgba(220,159,133,0.06)" strokeDasharray="2" />
+          ))}
+
+          <path d={areaD} fill="url(#chartGlow)" />
+          <path d={pathD} fill="none" stroke="#DC9F85" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          {points.map((p, idx) => (
+            <g key={idx}>
+              <circle cx={p.x} cy={p.y} r="3" fill="#181818" stroke="#DC9F85" strokeWidth="1.5" />
+              <text x={p.x} y={p.y - 8} fontSize="8" className="fill-[#EBDCC4] font-mono font-bold" textAnchor="middle">
+                {p.count}
+              </text>
+              <text x={p.x} y={height - padding + 10} fontSize="7" className="fill-[#66473B] font-mono font-bold" textAnchor="middle">
+                {p.date}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+    );
   };
 
   return (
@@ -195,7 +341,7 @@ export default function Home() {
             <div className="md:col-span-6 flex flex-col gap-3">
               <button
                 onClick={() => {
-                  const targetId = (user && interviews && interviews.length > 0) ? "history" : "roles";
+                  const targetId = (user && stats && stats.total_interviews > 0) ? "stats" : "roles";
                   document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className="editorial-btn-primary w-full py-4.5 px-8 text-xs font-bold tracking-[0.25em] uppercase rounded-[4px] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer"
@@ -215,7 +361,155 @@ export default function Home() {
 
       </div>
 
-      {/* SECTION 1.5: Historical Practice Performance Analysis */}
+      {/* SECTION 1.5: Performance Diagnostics Board Grid */}
+      {user && stats && stats.total_interviews > 0 && (
+        <section id="stats" className="w-full flex flex-col gap-6 py-20 mt-20 border-t border-[#35211A] scroll-mt-28 text-left z-20 relative animate-fade-in-up">
+          <div className="w-full flex flex-col gap-2.5">
+            <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
+              Performance Analytics
+            </span>
+            <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-[#EBDCC4] pb-4 border-b border-[#35211A]">
+              Webcam Mock Diagnostics
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+            
+            {/* Card 1: Core Metrics Progress Gauges */}
+            <div className="bg-[#181818] border border-[#66473B] rounded-[4px] p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-[2px] bg-[#35211A]/20 border border-[#66473B] flex items-center justify-center text-[#DC9F85]">
+                  <Activity size={16} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-[#EBDCC4] font-display uppercase tracking-wider">Diagnostics Summary</h3>
+                  <p className="text-[10px] text-[#B6A596] font-mono uppercase tracking-wider">Global Averages</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-3 my-6 text-center">
+                <CircularGauge score={loading ? 0 : stats ? Math.round(stats.average_clarity) : 0} label="Clarity" color="#DC9F85" />
+                <CircularGauge score={loading ? 0 : stats ? Math.round(stats.average_relevance) : 0} label="Relevance" color="#DC9F85" />
+                <CircularGauge score={loading ? 0 : stats ? Math.round(stats.average_grammar) : 0} label="Grammar" color="#DC9F85" />
+              </div>
+
+              <div className="flex items-center justify-between text-xs border-t border-[#35211A] pt-3.5 font-mono uppercase tracking-wider text-[9px] text-[#66473B]">
+                <span>Completed Sessions:</span>
+                <span className="font-bold text-[#EBDCC4]">{loading ? "..." : stats?.total_interviews || 0}</span>
+              </div>
+            </div>
+
+            {/* Card 2: WPM Pacing Card */}
+            <div className="bg-[#181818] border border-[#66473B] rounded-[4px] p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-[2px] bg-[#35211A]/20 border border-[#66473B] flex items-center justify-center text-[#DC9F85]">
+                  <Flame size={16} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-[#EBDCC4] font-display uppercase tracking-wider">Speech Pacing Rate</h3>
+                  <p className="text-[10px] text-[#B6A596] font-mono uppercase tracking-wider">Target: 110 - 140 WPM</p>
+                </div>
+              </div>
+              
+              <div className="flex items-baseline gap-1.5 my-6 font-mono">
+                <span className="text-4xl font-bold tracking-tight text-[#EBDCC4]">
+                  {loading ? "..." : stats ? Math.round(stats.average_wpm) : "0"}
+                </span>
+                <span className="text-[10px] text-[#B6A596] font-bold uppercase tracking-wider">WPM</span>
+              </div>
+
+              <div className={`border p-3 rounded-[4px] text-[10px] flex items-center gap-2 font-mono uppercase tracking-wider ${pacingNote.style}`}>
+                <span className="font-bold">{pacingNote.text}</span>
+              </div>
+            </div>
+
+            {/* Card 3: Dynamic Trend Chart */}
+            <div className="bg-[#181818] border border-[#66473B] rounded-[4px] p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="text-xs font-bold text-[#EBDCC4] font-display uppercase tracking-wider">Filler Words Trend</h3>
+                  <p className="text-[10px] text-[#B6A596] font-mono uppercase tracking-wider">Average Count Per Session</p>
+                </div>
+                <div className="flex h-1.5 w-1.5 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC9F85] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#DC9F85]"></span>
+                </div>
+              </div>
+              <div className="my-2">
+                {renderTrendChart()}
+              </div>
+            </div>
+
+          </div>
+        </section>
+      )}
+
+      {/* SECTION 1.6: Scroll-Down Role Practice Selection Grid */}
+      <section id="roles" className="w-full flex flex-col gap-10 py-20 mt-20 border-t border-[#35211A] scroll-mt-28 text-left z-20 relative">
+        
+        {/* Section Title */}
+        <div className="w-full flex flex-col gap-2.5">
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
+            Interactive Assessment Suite
+          </span>
+          <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-[#EBDCC4] pb-4 border-b border-[#35211A]">
+            Select Practice Interview Focus
+          </h2>
+        </div>
+
+        {/* Role Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+          {roles.map((role) => (
+            <div 
+              key={role.id}
+              className="editorial-card p-6 flex flex-col justify-between cursor-pointer transition-all duration-300"
+              onClick={() => handleStartSession(role.id)}
+            >
+              <div>
+                {/* Minimal Editorial Icon Badge */}
+                <div className="w-10 h-10 border border-[#66473B] rounded-[2px] text-[#DC9F85] flex items-center justify-center bg-[#35211A]/20 mb-5">
+                  {role.icon}
+                </div>
+                
+                {/* Role Title */}
+                <h3 className="text-sm font-bold text-[#EBDCC4] font-display mb-2 uppercase tracking-wider">
+                  {role.title}
+                </h3>
+                
+                {/* Role Description */}
+                <p className="text-[#B6A596] text-[11px] leading-relaxed mb-6 font-light">
+                  {role.desc}
+                </p>
+              </div>
+
+              <div>
+                {/* Topic Badges */}
+                <div className="flex flex-wrap gap-1.5 mb-6">
+                  {role.topics.map((t, i) => (
+                    <span key={i} className="text-[9px] font-mono font-bold bg-[#35211A]/25 border border-[#66473B]/30 text-[#B6A596] px-2 py-0.5 rounded-[2px] uppercase tracking-wider">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                
+                {/* Action button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleStartSession(role.id);
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 border border-[#66473B] hover:border-[#DC9F85] hover:text-[#DC9F85] bg-transparent text-[#EBDCC4] py-2.5 rounded-[4px] text-[10px] font-bold uppercase tracking-widest transition-all duration-300 active:scale-[0.98] cursor-pointer font-mono"
+                >
+                  <Play size={8} className="fill-current" /> Start Mock
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </section>
+
+      {/* SECTION 2: Historical Practice Performance Analysis */}
       {user && interviews && interviews.length > 0 && (
         <section id="history" className="w-full flex flex-col gap-6 py-20 mt-20 border-t border-[#35211A] scroll-mt-28 text-left z-20 relative animate-fade-in-up">
           <div className="w-full flex flex-col gap-2.5">
@@ -289,71 +583,6 @@ export default function Home() {
           </div>
         </section>
       )}
-
-      {/* SECTION 2: Scroll-Down Role Practice Selection Grid */}
-      <section id="roles" className="w-full flex flex-col gap-10 py-20 mt-20 border-t border-[#35211A] scroll-mt-28 text-left z-20 relative">
-        
-        {/* Section Title */}
-        <div className="w-full flex flex-col gap-2.5">
-          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
-            Interactive Assessment Suite
-          </span>
-          <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-[#EBDCC4] pb-4 border-b border-[#35211A]">
-            Select Practice Interview Focus
-          </h2>
-        </div>
-
-        {/* Role Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-          {roles.map((role) => (
-            <div 
-              key={role.id}
-              className="editorial-card p-6 flex flex-col justify-between cursor-pointer transition-all duration-300"
-              onClick={() => handleStartSession(role.id)}
-            >
-              <div>
-                {/* Minimal Editorial Icon Badge */}
-                <div className="w-10 h-10 border border-[#66473B] rounded-[2px] text-[#DC9F85] flex items-center justify-center bg-[#35211A]/20 mb-5">
-                  {role.icon}
-                </div>
-                
-                {/* Role Title */}
-                <h3 className="text-sm font-bold text-[#EBDCC4] font-display mb-2 uppercase tracking-wider">
-                  {role.title}
-                </h3>
-                
-                {/* Role Description */}
-                <p className="text-[#B6A596] text-[11px] leading-relaxed mb-6 font-light">
-                  {role.desc}
-                </p>
-              </div>
-
-              <div>
-                {/* Topic Badges */}
-                <div className="flex flex-wrap gap-1.5 mb-6">
-                  {role.topics.map((t, i) => (
-                    <span key={i} className="text-[9px] font-mono font-bold bg-[#35211A]/25 border border-[#66473B]/30 text-[#B6A596] px-2 py-0.5 rounded-[2px] uppercase tracking-wider">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                
-                {/* Action button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleStartSession(role.id);
-                  }}
-                  className="w-full flex items-center justify-center gap-1.5 border border-[#66473B] hover:border-[#DC9F85] hover:text-[#DC9F85] bg-transparent text-[#EBDCC4] py-2.5 rounded-[4px] text-[10px] font-bold uppercase tracking-widest transition-all duration-300 active:scale-[0.98] cursor-pointer font-mono"
-                >
-                  <Play size={8} className="fill-current" /> Start Mock
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-      </section>
 
       {/* 4. Rotating Waitlist Badge in Bottom Right Corner */}
       <div className="fixed bottom-6 right-6 w-16 h-16 md:w-20 md:h-20 pointer-events-none z-50">
