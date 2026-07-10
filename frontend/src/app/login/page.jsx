@@ -10,7 +10,6 @@ export default function LoginPage() {
   const router = useRouter();
   const isPlaceholder = supabaseUrl.includes("placeholder-project");
 
-  
   // Tabs: "login" or "signup"
   const [activeTab, setActiveTab] = useState("login");
   
@@ -102,18 +101,17 @@ export default function LoginPage() {
           });
 
           if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            const msg = errData.detail || "Invalid email or password";
-            throw new Error(msg);
+            const errData = await res.json();
+            throw new Error(errData.detail || "Authentication failed.");
           }
 
-          const loginData = await res.json();
-          localStorage.setItem("token", loginData.access_token);
+          const data = await res.json();
+          localStorage.setItem("token", data.access_token);
           localStorage.setItem("auth_provider", "local");
 
           const meRes = await fetch(`${API_BASE_URL}/api/auth/me`, {
             headers: {
-              "Authorization": `Bearer ${loginData.access_token}`
+              "Authorization": `Bearer ${data.access_token}`
             }
           });
           const meData = meRes.ok ? await meRes.json() : {};
@@ -121,33 +119,44 @@ export default function LoginPage() {
           const userData = {
             id: meData.id || "local-user",
             email: meData.email || email,
-            name: meData.name || email.split("@")[0]
+            name: meData.name || "Sandbox Candidate"
           };
           localStorage.setItem("user", JSON.stringify(userData));
 
-          setSuccessMsg("Logged in successfully (via Local Database)! Redirecting...");
+          setSuccessMsg("Logged in successfully (via Local Database)!");
           setTimeout(() => {
             router.push("/");
             router.refresh();
-          }, 1000);
+          }, 1500);
         } else {
-          localStorage.setItem("token", sessionData.session.access_token);
-          localStorage.setItem("auth_provider", "supabase");
-          
-          const userData = {
-            id: sessionData.user.id,
-            email: sessionData.user.email,
-            name: sessionData.user.user_metadata?.full_name || sessionData.user.user_metadata?.name || email.split("@")[0]
-          };
-          localStorage.setItem("user", JSON.stringify(userData));
+          if (sessionData && sessionData.session) {
+            localStorage.setItem("token", sessionData.session.access_token);
+            localStorage.setItem("auth_provider", "supabase");
 
-          setSuccessMsg("Logged in successfully (via Supabase)! Redirecting...");
-          setTimeout(() => {
-            router.push("/");
-            router.refresh();
-          }, 1000);
+            const { data: profile } = await supabase
+              .from("profiles")
+              .select("*")
+              .eq("id", sessionData.user.id)
+              .single();
+
+            const userData = {
+              id: sessionData.user.id,
+              email: sessionData.user.email,
+              name: profile?.name || "Candidate"
+            };
+            localStorage.setItem("user", JSON.stringify(userData));
+
+            setSuccessMsg("Logged in successfully (via Supabase)!");
+            setTimeout(() => {
+              router.push("/");
+              router.refresh();
+            }, 1500);
+          } else {
+            throw new Error("Invalid session created.");
+          }
         }
       } else {
+        // Sign Up Flow
         let sessionData = null;
         let useLocalFallback = isPlaceholder;
 
@@ -158,12 +167,10 @@ export default function LoginPage() {
               password,
               options: {
                 data: {
-                  name: name,
-                  full_name: name
+                  name: name
                 }
               }
             });
-
             if (error) {
               const msg = error.message || "";
               if (error.status === 429 || msg.includes("rate limit") || msg.includes("exceeded")) {
@@ -185,18 +192,17 @@ export default function LoginPage() {
         }
 
         if (useLocalFallback) {
-          const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+          const regRes = await fetch(`${API_BASE_URL}/api/auth/register`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({ name, email, password })
+            body: JSON.stringify({ email, password, name })
           });
 
-          if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            const msg = errData.detail || "Failed to create account on local database.";
-            throw new Error(msg);
+          if (!regRes.ok) {
+            const errData = await regRes.json();
+            throw new Error(errData.detail || "Registration failed.");
           }
 
           const loginRes = await fetch(`${API_BASE_URL}/api/auth/login`, {
@@ -242,7 +248,7 @@ export default function LoginPage() {
             router.refresh();
           }, 1500);
         } else {
-          if (sessionData.session) {
+          if (sessionData && sessionData.session) {
             localStorage.setItem("token", sessionData.session.access_token);
             localStorage.setItem("auth_provider", "supabase");
             const userData = {
@@ -275,32 +281,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto px-6 py-20 flex-grow flex flex-col justify-center animate-fade-in-up">
+    <div className="max-w-md w-full mx-auto px-6 py-20 flex-grow flex flex-col justify-center animate-fade-in-up select-none">
       
       {/* Brand Header */}
       <div className="flex flex-col items-center gap-3 mb-10 text-center">
-        <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-[#7c3aed] to-[#6366f1] shadow-md">
-          <Sparkles size={22} className="text-white" />
+        <div className="relative flex items-center justify-center w-12 h-12 rounded-[2px] bg-[#35211A]/20 border border-[#66473B] text-[#DC9F85]">
+          <Sparkles size={22} className="text-[#DC9F85]" />
         </div>
-        <h2 className="text-2xl font-black font-display tracking-tight text-slate-900 dark:text-white uppercase">
+        <h2 className="text-2xl font-bold font-display tracking-wide text-[#EBDCC4] uppercase">
           NeuroSync Workspace
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-[280px]">
+        <p className="text-xs text-[#B6A596] font-light max-w-[280px]">
           Authenticate to start webcam mock sessions and retrieve key communication analytics.
         </p>
       </div>
 
       {/* Tabs Switcher */}
-      <div className="flex bg-slate-100 dark:bg-zinc-800 p-1.5 rounded-xl mb-6 border border-slate-200/40 dark:border-zinc-800/40">
+      <div className="flex bg-[#181818] p-1.5 rounded-[4px] mb-6 border border-[#66473B]">
         <button
           onClick={() => {
             setActiveTab("login");
             setErrorMsg(null);
           }}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${
+          className={`flex-1 py-2 text-xs font-mono font-bold rounded-[2px] transition-all duration-300 ${
             activeTab === "login"
-              ? "bg-white dark:bg-zinc-900/60 text-slate-900 dark:text-white shadow-sm"
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              ? "bg-[#35211A] text-[#DC9F85]"
+              : "text-[#B6A596] hover:text-[#EBDCC4]"
           }`}
         >
           Sign In
@@ -310,31 +316,31 @@ export default function LoginPage() {
             setActiveTab("signup");
             setErrorMsg(null);
           }}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${
+          className={`flex-1 py-2 text-xs font-mono font-bold rounded-[2px] transition-all duration-300 ${
             activeTab === "signup"
-              ? "bg-white dark:bg-zinc-900/60 text-slate-900 dark:text-white shadow-sm"
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              ? "bg-[#35211A] text-[#DC9F85]"
+              : "text-[#B6A596] hover:text-[#EBDCC4]"
           }`}
         >
           Create Account
         </button>
       </div>
 
-      {/* Glass Panel Form Card */}
-      <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl p-6 shadow-sm">
+      {/* Form Card */}
+      <div className="bg-[#181818] border border-[#66473B] rounded-[4px] p-6 shadow-sm text-left">
         
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           
           {/* Notification Alerts */}
           {isPlaceholder && (
-            <div className="flex items-start gap-2 bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 p-3.5 rounded-xl text-xs backdrop-blur-sm">
-              <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 bg-[#35211A]/10 border border-dashed border-[#66473B] text-[#B6A596] p-3.5 rounded-[4px] text-xs font-light">
+              <AlertCircle size={14} className="flex-shrink-0 mt-0.5 text-[#DC9F85]" />
               <div>
-                <span className="font-bold">Configuration Warning:</span>
+                <span className="font-bold text-[#EBDCC4]">Configuration Warning:</span>
                 <p className="mt-1">
                   Supabase environment variables are missing or not loaded. The client is using fallback credentials.
                 </p>
-                <p className="mt-1 font-semibold text-[10px] uppercase">
+                <p className="mt-1 font-bold text-[9px] uppercase tracking-wider font-mono text-[#DC9F85]">
                   Please check frontend/.env.local and restart Next.js!
                 </p>
               </div>
@@ -342,28 +348,27 @@ export default function LoginPage() {
           )}
 
           {errorMsg && (
-            <div className="flex items-start gap-2 bg-rose-50/80 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 text-rose-700 dark:text-rose-450 p-3.5 rounded-xl text-xs backdrop-blur-sm">
+            <div className="flex items-start gap-2 bg-rose-955/20 border border-rose-900/40 text-rose-400 p-3.5 rounded-[4px] text-xs font-mono">
               <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
-              <span className="font-semibold">{errorMsg}</span>
+              <span>{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="flex items-start gap-2 bg-emerald-50/80 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-450 p-3.5 rounded-xl text-xs backdrop-blur-sm">
+            <div className="flex items-start gap-2 bg-emerald-955/20 border border-emerald-900/40 text-emerald-400 p-3.5 rounded-[4px] text-xs font-mono">
               <Shield size={14} className="flex-shrink-0 mt-0.5" />
-              <span className="font-semibold">{successMsg}</span>
+              <span>{successMsg}</span>
             </div>
           )}
 
-
           {/* Form Input fields */}
           {activeTab === "signup" && (
-            <div className="flex flex-col gap-1.5 animate-form-field">
-              <label className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] uppercase tracking-wider font-mono font-bold text-[#66473B]">
                 Full Name
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-[#66473B] pointer-events-none">
                   <User size={14} />
                 </span>
                 <input
@@ -371,18 +376,18 @@ export default function LoginPage() {
                   placeholder="e.g. John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white border border-slate-200/60 dark:border-zinc-800/80 rounded-xl focus:outline-none focus:border-violet-500/50 transition-colors"
+                  className="w-full pl-9 pr-4 py-2.5 text-xs bg-[#181818] border border-[#66473B] text-[#EBDCC4] rounded-[4px] focus:outline-none focus:border-[#DC9F85] transition-colors placeholder-[#66473B]/50 font-mono"
                 />
               </div>
             </div>
           )}
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
+            <label className="text-[10px] uppercase tracking-wider font-mono font-bold text-[#66473B]">
               Email Address
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-[#66473B] pointer-events-none">
                 <Mail size={14} />
               </span>
               <input
@@ -390,18 +395,18 @@ export default function LoginPage() {
                 placeholder="e.g. john@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white border border-slate-200/60 dark:border-zinc-800/80 rounded-xl focus:outline-none focus:border-violet-500/50 transition-colors"
+                className="w-full pl-9 pr-4 py-2.5 text-xs bg-[#181818] border border-[#66473B] text-[#EBDCC4] rounded-[4px] focus:outline-none focus:border-[#DC9F85] transition-colors placeholder-[#66473B]/50 font-mono"
                 required
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
+            <label className="text-[10px] uppercase tracking-wider font-mono font-bold text-[#66473B]">
               Password
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-[#66473B] pointer-events-none">
                 <Lock size={14} />
               </span>
               <input
@@ -409,7 +414,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white border border-slate-200/60 dark:border-zinc-800/80 rounded-xl focus:outline-none focus:border-violet-500/50 transition-colors"
+                className="w-full pl-9 pr-4 py-2.5 text-xs bg-[#181818] border border-[#66473B] text-[#EBDCC4] rounded-[4px] focus:outline-none focus:border-[#DC9F85] transition-colors placeholder-[#66473B]/50 font-mono"
                 required
               />
             </div>
@@ -417,11 +422,11 @@ export default function LoginPage() {
 
           {activeTab === "signup" && (
             <div className="flex flex-col gap-1.5 animate-form-field">
-              <label className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">
+              <label className="text-[10px] uppercase tracking-wider font-mono font-bold text-[#66473B]">
                 Confirm Password
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-[#66473B] pointer-events-none">
                   <Lock size={14} />
                 </span>
                 <input
@@ -429,7 +434,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 text-xs bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white border border-slate-200/60 dark:border-zinc-800/80 rounded-xl focus:outline-none focus:border-violet-500/50 transition-colors"
+                  className="w-full pl-9 pr-4 py-2.5 text-xs bg-[#181818] border border-[#66473B] text-[#EBDCC4] rounded-[4px] focus:outline-none focus:border-[#DC9F85] transition-colors placeholder-[#66473B]/50 font-mono"
                   required
                 />
               </div>
@@ -440,7 +445,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-violet-500 to-indigo-650 hover:from-violet-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-98 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+            className="editorial-btn-primary w-full mt-4 py-3.5 rounded-[4px] text-xs flex items-center justify-center gap-2 active:scale-98 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? (
               <>
@@ -467,9 +472,9 @@ export default function LoginPage() {
               router.push("/");
               router.refresh();
             }}
-            className="w-full mt-2 flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-slate-200 border border-slate-200/50 dark:border-zinc-750 font-bold py-3 px-4 rounded-xl text-xs transition-all active:scale-98 cursor-pointer"
+            className="w-full mt-2 flex items-center justify-center gap-2 border border-[#66473B] hover:border-[#DC9F85] hover:text-[#DC9F85] bg-transparent text-[#EBDCC4] py-3.5 rounded-[4px] text-xs transition-all active:scale-98 cursor-pointer font-mono uppercase tracking-widest"
           >
-            Continue as Guest <ArrowRight size={13} className="text-slate-400" />
+            Continue as Guest <ArrowRight size={13} />
           </button>
 
         </form>

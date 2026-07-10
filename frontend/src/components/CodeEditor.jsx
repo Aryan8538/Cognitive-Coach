@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
-import { Code2, RefreshCw, Copy, Check, Play, Terminal, ChevronDown, ChevronUp } from "lucide-react";
+import { Code2, RefreshCw, Copy, Check, Play, Terminal } from "lucide-react";
 
 const LANGUAGES = [
   { value: "python", label: "Python 3" },
@@ -26,18 +26,7 @@ export default function CodeEditor({ value, onChange, language, onLanguageChange
   const [showConsole, setShowConsole] = useState(false);
 
   useEffect(() => {
-    // Detect dark mode from root element
-    const isDark = document.documentElement.classList.contains("dark");
-    setEditorTheme(isDark ? "vs-dark" : "light");
-
-    // MutationObserver to listen to class changes on documentElement
-    const observer = new MutationObserver(() => {
-      const darkActive = document.documentElement.classList.contains("dark");
-      setEditorTheme(darkActive ? "vs-dark" : "light");
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-
-    return () => observer.disconnect();
+    setEditorTheme("vs-dark");
   }, []);
 
   const handleLanguageSelect = (lang) => {
@@ -155,15 +144,15 @@ except Exception as e:
   };
 
   return (
-    <div className="glass-panel w-full bg-white/80 dark:bg-zinc-900/60 backdrop-blur-lg border border-slate-200/50 dark:border-zinc-800/50 rounded-2xl shadow-sm overflow-hidden flex flex-col h-[520px]">
+    <div className="editorial-card w-full h-[520px] flex flex-col z-20 relative">
       
       {/* Editor Title Bar */}
-      <div className="flex justify-between items-center px-4 py-3 border-b border-slate-100 dark:border-zinc-800/60 bg-slate-50/50 dark:bg-zinc-950/20">
+      <div className="flex justify-between items-center px-4 py-3 border-b border-[#35211A] bg-[#181818]">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-6 h-6 rounded-md bg-violet-500/10 text-violet-600 dark:text-violet-400">
+          <div className="flex items-center justify-center w-6 h-6 rounded-[2px] border border-[#66473B] text-[#DC9F85] bg-[#35211A]/20">
             <Code2 size={13} />
           </div>
-          <span className="text-xs font-bold text-slate-800 dark:text-slate-250 font-display">Code Playground</span>
+          <span className="text-xs font-bold text-[#EBDCC4] font-display uppercase tracking-wider">Code Playground</span>
         </div>
         
         <div className="flex items-center gap-3">
@@ -171,11 +160,11 @@ except Exception as e:
           <select 
             value={language}
             onChange={(e) => handleLanguageSelect(e.target.value)}
-            className="text-[11px] font-bold bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-800 border border-slate-200/40 dark:border-zinc-800/40 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-violet-500/50 cursor-pointer"
+            className="text-[10px] font-mono font-bold bg-[#181818] text-[#EBDCC4] border border-[#66473B] rounded-[4px] px-2.5 py-1.5 focus:outline-none hover:border-[#DC9F85] transition-colors cursor-pointer uppercase"
             aria-label="Coding Language Selection"
           >
             {LANGUAGES.map((l) => (
-              <option key={l.value} value={l.value}>{l.label}</option>
+              <option key={l.value} value={l.value} className="bg-[#181818]">{l.label}</option>
             ))}
           </select>
  
@@ -183,7 +172,7 @@ except Exception as e:
           <button
             onClick={runCode}
             disabled={isRunning}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold transition-all disabled:opacity-50 cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-950/20 border border-emerald-500/35 hover:border-emerald-500 text-emerald-450 rounded-[4px] text-[10px] font-mono font-bold transition-all disabled:opacity-50 cursor-pointer uppercase tracking-widest"
             title="Run Code (Ctrl+Enter)"
             aria-label="Run Code test cases"
           >
@@ -194,7 +183,7 @@ except Exception as e:
           {/* Copy Button */}
           <button
             onClick={handleCopy}
-            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200/60 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-550 dark:text-slate-400 hover:text-slate-750 dark:hover:text-white transition-all"
+            className="p-2 rounded-[4px] bg-[#181818] border border-[#66473B] hover:border-[#DC9F85] text-[#B6A596] hover:text-[#DC9F85] transition-all cursor-pointer"
             title="Copy Solution"
             aria-label="Copy Code to Clipboard"
           >
@@ -204,7 +193,7 @@ except Exception as e:
           {/* Reset Button */}
           <button
             onClick={handleReset}
-            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200/60 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-550 dark:text-slate-400 hover:text-slate-750 dark:hover:text-white transition-all"
+            className="p-2 rounded-[4px] bg-[#181818] border border-[#66473B] hover:border-[#DC9F85] text-[#B6A596] hover:text-[#DC9F85] transition-all cursor-pointer"
             title="Reset to Template"
             aria-label="Reset Code Editor"
           >
@@ -243,14 +232,14 @@ except Exception as e:
 
       {/* Console Output Panel */}
       {showConsole && (
-        <div className="border-t border-slate-200 dark:border-zinc-800/80 bg-slate-900 text-slate-200 flex flex-col h-[150px] flex-shrink-0 font-mono">
-          <div className="flex justify-between items-center px-4 py-1.5 bg-slate-950/80 border-b border-zinc-800 text-[10px] text-slate-400 font-extrabold uppercase">
-            <span className="flex items-center gap-1.5 text-cyan-400">
+        <div className="border-t border-[#66473B] bg-[#181818] text-[#EBDCC4] flex flex-col h-[150px] flex-shrink-0 font-mono">
+          <div className="flex justify-between items-center px-4 py-1.5 bg-[#35211A]/20 border-b border-[#35211A] text-[10px] text-[#B6A596] font-bold uppercase tracking-wider">
+            <span className="flex items-center gap-1.5 text-[#DC9F85]">
               <Terminal size={11} /> Output Console
             </span>
             <button 
               onClick={() => setShowConsole(false)}
-              className="text-slate-505 hover:text-slate-300 font-bold transition-colors cursor-pointer"
+              className="text-[#66473B] hover:text-[#DC9F85] font-bold transition-colors cursor-pointer"
             >
               Clear & Close
             </button>
@@ -262,8 +251,8 @@ except Exception as e:
       )}
 
       {/* Accessibility instruction and Info Footer */}
-      <div className="flex justify-between items-center px-4 py-2 bg-slate-50/50 dark:bg-zinc-950/20 border-t border-slate-100 dark:border-zinc-800/60 text-[9.5px] text-slate-400 dark:text-slate-505 font-semibold font-outfit uppercase">
-        <span className="hidden sm:inline flex items-center gap-1">Press <kbd className="bg-slate-100 dark:bg-zinc-800 px-1 py-0.5 rounded border dark:border-zinc-700">Ctrl + M</kbd> to toggle key tab traps</span>
+      <div className="flex justify-between items-center px-4 py-2 bg-[#181818] border-t border-[#35211A] text-[9.5px] text-[#66473B] font-bold font-mono uppercase tracking-wider">
+        <span className="hidden sm:inline flex items-center gap-1">Press <kbd className="bg-[#35211A]/20 border border-[#66473B]/50 px-1 py-0.5 rounded-[2px]">Ctrl + M</kbd> to toggle key tab traps</span>
         <span>Col 1, Ln 1 &bull; UTF-8</span>
       </div>
       

@@ -72,56 +72,56 @@ export default function CareerChatbot() {
     <div className="fixed bottom-6 right-6 z-55 flex flex-col items-end font-sans">
       {/* Expanded Chat Window */}
       {isOpen && (
-        <div className="w-[360px] sm:w-[400px] h-[500px] bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden mb-4 animate-fade-in-up">
+        <div className="w-[360px] sm:w-[400px] h-[500px] bg-[#181818] border border-[#66473B] rounded-[4px] shadow-2xl flex flex-col overflow-hidden mb-4 animate-fade-in-up">
           
           {/* Header */}
-          <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-indigo-750 p-4 flex justify-between items-center text-white">
+          <div className="bg-[#181818] border-b border-[#35211A] p-4 flex justify-between items-center text-[#EBDCC4]">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                <Sparkles size={16} className="text-violet-200 animate-pulse" />
+              <div className="w-8 h-8 rounded-[2px] bg-[#35211A]/20 border border-[#66473B] flex items-center justify-center">
+                <Sparkles size={16} className="text-[#DC9F85] animate-pulse" />
               </div>
-              <div>
-                <h4 className="text-xs font-bold font-display">Career Advisor Bot</h4>
-                <p className="text-[9px] text-violet-250 font-semibold tracking-wide uppercase">Placement Sandbox Mode</p>
+              <div className="text-left">
+                <h4 className="text-xs font-bold font-display uppercase tracking-wider">Career Advisor Bot</h4>
+                <p className="text-[9px] text-[#B6A596] font-mono tracking-widest uppercase">Placement Sandbox</p>
               </div>
             </div>
             <button 
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-1 rounded-[2px] text-[#B6A596] hover:text-[#DC9F85] transition-colors"
             >
               <X size={15} />
             </button>
           </div>
 
           {/* Messages Body */}
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col gap-3.5 scrollbar-thin">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col gap-3.5 bg-[#181818] scrollbar-thin">
             {messages.map((msg, index) => {
               const isAssistant = msg.role === "assistant";
               return (
                 <div 
                   key={index}
-                  className={`flex flex-col max-w-[85%] ${isAssistant ? 'self-start items-start' : 'self-end items-end'}`}
+                  className={`flex flex-col max-w-[85%] ${isAssistant ? 'self-start items-start text-left' : 'self-end items-end text-right'}`}
                 >
-                  <div className={`rounded-2xl px-4 py-2.5 text-xs leading-relaxed ${
+                  <div className={`rounded-[4px] px-4 py-2.5 text-xs leading-relaxed ${
                     isAssistant 
-                      ? 'bg-slate-50 dark:bg-zinc-850 text-slate-800 dark:text-slate-250 border border-slate-100 dark:border-zinc-800/40 rounded-tl-sm' 
-                      : 'bg-violet-650 dark:bg-[#8B5CF6] text-white dark:text-white rounded-tr-sm'
+                      ? 'bg-[#181818] text-[#EBDCC4] border border-[#66473B] rounded-tl-none' 
+                      : 'bg-[#35211A]/25 text-[#EBDCC4] border border-[#DC9F85]/40 rounded-tr-none'
                   }`}>
                     {/* Render basic markdown-like structures */}
                     {msg.content.split("\n\n").map((para, pIdx) => {
                       if (para.startsWith("###")) {
-                        return <h4 key={pIdx} className="font-bold font-display text-slate-900 dark:text-white mt-2 mb-1 text-xs">{para.replace("###", "").trim()}</h4>;
+                        return <h4 key={pIdx} className="font-bold font-display text-[#EBDCC4] mt-2 mb-1 text-xs uppercase tracking-wider">{para.replace("###", "").trim()}</h4>;
                       }
                       if (para.startsWith("####")) {
-                        return <h5 key={pIdx} className="font-bold font-display text-slate-800 dark:text-slate-355 mt-2 mb-1 text-[11px]">{para.replace("####", "").trim()}</h5>;
+                        return <h5 key={pIdx} className="font-bold font-display text-[#EBDCC4] mt-2 mb-1 text-[11px] uppercase tracking-wider">{para.replace("####", "").trim()}</h5>;
                       }
                       
                       const formatText = (text) => {
                         return text
                           .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
                           .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                          .replace(/`(.*?)`/g, "<code class='bg-slate-200/50 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded text-[10px]'>$1</code>")
-                          .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-violet-550 dark:text-violet-400 hover:underline font-semibold'>$1</a>");
+                          .replace(/`(.*?)`/g, "<code class='bg-[#35211A]/20 border border-[#66473B]/30 px-1.5 py-0.5 rounded-[2px] text-[#DC9F85] font-mono text-[10px]'>$1</code>")
+                          .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-[#DC9F85] hover:underline font-bold'>$1</a>");
                       };
 
                       const lines = para.split("\n");
@@ -135,6 +135,7 @@ export default function CareerChatbot() {
                           currentList.push(
                             <li 
                               key={`li-${lIdx}`} 
+                              className="text-[#B6A596] font-light list-disc pl-1 ml-3"
                               dangerouslySetInnerHTML={{ __html: formatText(itemContent) }} 
                             />
                           );
@@ -151,7 +152,7 @@ export default function CareerChatbot() {
                             elements.push(
                               <p 
                                 key={`p-${lIdx}`} 
-                                className="mb-1 last:mb-0" 
+                                className="mb-1 last:mb-0 text-[#EBDCC4] font-light" 
                                 dangerouslySetInnerHTML={{ __html: formatText(line) }} 
                               />
                             );
@@ -180,10 +181,10 @@ export default function CareerChatbot() {
             
             {/* Typing indicator */}
             {loading && (
-              <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-zinc-850 p-3 rounded-2xl rounded-tl-sm border border-slate-100 dark:border-zinc-800/40 self-start">
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce"></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500 animate-bounce" style={{ animationDelay: "0.2s" }}></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-505 animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+              <div className="flex items-center gap-1.5 bg-[#181818] border border-[#66473B] p-3 rounded-[4px] rounded-tl-none self-start">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DC9F85] animate-bounce"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DC9F85] animate-bounce" style={{ animationDelay: "0.2s" }}></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DC9F85] animate-bounce" style={{ animationDelay: "0.4s" }}></span>
               </div>
             )}
             
@@ -192,16 +193,16 @@ export default function CareerChatbot() {
 
           {/* Quick Prompts Panel */}
           {messages.length === 1 && (
-            <div className="px-4 py-2 border-t border-slate-100 dark:border-zinc-800/60 flex flex-col gap-1.5 bg-slate-50/30">
-              <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-505">Suggested Queries</span>
+            <div className="px-4 py-2 border-t border-[#35211A] flex flex-col gap-1.5 bg-[#35211A]/10 text-left">
+              <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#66473B]">Suggested Queries</span>
               <div className="flex flex-col gap-1.5">
                 {quickPrompts.map((qp, index) => (
                   <button
                     key={index}
                     onClick={() => handleSend(qp.text)}
-                    className="flex items-center gap-2 text-[10px] text-left font-bold text-slate-600 hover:text-violet-600 dark:text-slate-450 dark:hover:text-violet-400 bg-slate-50 dark:bg-zinc-850/60 border border-slate-250/30 dark:border-zinc-800/45 p-2 rounded-xl hover:bg-violet-500/5 dark:hover:bg-violet-500/5 hover:border-violet-500/25 transition-all cursor-pointer"
+                    className="flex items-center gap-2 text-[10px] text-left font-mono font-bold text-[#B6A596] hover:text-[#DC9F85] bg-[#181818] border border-[#66473B] p-2 rounded-[4px] hover:border-[#DC9F85] transition-all cursor-pointer uppercase tracking-wider"
                   >
-                    <span className="text-violet-550 dark:text-violet-455">{qp.icon}</span>
+                    <span className="text-[#DC9F85]">{qp.icon}</span>
                     {qp.label}
                   </button>
                 ))}
@@ -215,7 +216,7 @@ export default function CareerChatbot() {
               e.preventDefault();
               handleSend(input);
             }}
-            className="p-3 border-t border-slate-150 dark:border-zinc-800/80 flex gap-2 bg-slate-50/50 dark:bg-zinc-950/20"
+            className="p-3 border-t border-[#35211A] flex gap-2 bg-[#181818]"
           >
             <input
               type="text"
@@ -223,12 +224,12 @@ export default function CareerChatbot() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about roadmaps, prep, DSA..."
               disabled={loading}
-              className="flex-grow bg-white dark:bg-zinc-800 border border-slate-200/50 dark:border-zinc-800/60 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-violet-500/60 dark:text-white"
+              className="flex-grow bg-[#181818] border border-[#66473B] rounded-[4px] px-3.5 py-2 text-xs focus:outline-none focus:border-[#DC9F85] text-[#EBDCC4] placeholder-[#66473B] font-mono uppercase tracking-wider"
             />
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-650 to-indigo-650 flex items-center justify-center text-white disabled:opacity-40 hover:shadow-md hover:shadow-violet-500/10 active:scale-95 transition-all cursor-pointer"
+              className="w-9 h-9 rounded-[4px] border border-[#66473B] hover:border-[#DC9F85] bg-[#181818] flex items-center justify-center text-[#DC9F85] hover:text-[#DC9F85] hover:shadow-md active:scale-95 transition-all cursor-pointer"
             >
               <Send size={13} fill="currentColor" />
             </button>
@@ -239,7 +240,7 @@ export default function CareerChatbot() {
       {/* Floating Bubble Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full bg-gradient-to-tr from-violet-650 via-indigo-600 to-indigo-750 dark:from-[#8B5CF6] dark:via-[#06B6D4] dark:to-[#8B5CF6] dark:border dark:border-[#8B5CF6]/40 flex items-center justify-center text-white dark:text-white shadow-xl shadow-violet-500/10 dark:shadow-[#8B5CF6]/20 hover:shadow-violet-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        className="w-12 h-12 rounded-[4px] bg-[#181818] border border-[#66473B] hover:border-[#DC9F85] flex items-center justify-center text-[#DC9F85] hover:text-[#DC9F85] shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
         aria-label="Ask Career Bot"
       >
         {isOpen ? <X size={20} /> : <MessageSquare size={20} />}

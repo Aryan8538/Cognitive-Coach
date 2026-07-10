@@ -12,13 +12,13 @@ const formatMarkdown = (text) => {
   return text
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
-    .replace(/`(.*?)`/g, "<code class='bg-slate-100 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded text-[10.5px] font-semibold text-amber-505'>$1</code>")
-    .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-[#06B6D4] hover:underline font-semibold'>$1</a>");
+    .replace(/`(.*?)`/g, "<code class='bg-[#35211A]/20 border border-[#66473B]/30 px-1.5 py-0.5 rounded-[2px] text-[10px] font-mono text-[#DC9F85]'>$1</code>")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-[#DC9F85] hover:underline font-semibold'>$1</a>");
 };
 
 const getScoreColorClass = (score) => {
-  if (score >= 85) return 'text-emerald-500';
-  if (score >= 70) return 'text-amber-500';
+  if (score >= 85) return 'text-emerald-450';
+  if (score >= 70) return 'text-amber-550';
   return 'text-rose-500';
 };
 
@@ -33,7 +33,7 @@ const getHiringVerdict = (score) => {
     return {
       verdict: "Strong Hire (Highly Recommended)",
       description: "Excellent performance! You demonstrated exceptional communication clarity, strong technical relevance, and clear grammatical flow. Your responses are highly structured and aligned with industry SDE expectations.",
-      badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500",
+      badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
       pillColor: "bg-emerald-500",
       chanceText: "Very High hiring probability"
     };
@@ -95,11 +95,11 @@ function CircularGauge({ score, label }) {
             cy={radius}
           />
         </svg>
-        <span className={`absolute text-sm font-extrabold font-outfit ${getScoreColorClass(score)}`}>
+        <span className={`absolute text-sm font-bold font-mono ${getScoreColorClass(score)}`}>
           {score}%
         </span>
       </div>
-      <span className="text-[9px] uppercase tracking-widest font-black text-slate-400 dark:text-slate-500">
+      <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-[#B6A596]">
         {label}
       </span>
     </div>
@@ -119,16 +119,7 @@ export default function Results({ params }) {
   const [editorTheme, setEditorTheme] = useState("vs-dark");
 
   useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setEditorTheme(isDark ? "vs-dark" : "light");
-
-    const observer = new MutationObserver(() => {
-      const darkActive = document.documentElement.classList.contains("dark");
-      setEditorTheme(darkActive ? "vs-dark" : "light");
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-
-    return () => observer.disconnect();
+    setEditorTheme("vs-dark");
   }, []);
 
   useEffect(() => {
@@ -165,27 +156,30 @@ export default function Results({ params }) {
 
   if (loading) {
     return (
-      <div className="flex-grow flex flex-col items-center justify-center py-24 px-6 bg-grid font-sans">
+      <div className="flex-grow flex flex-col items-center justify-center py-24 px-6 font-sans select-none z-10">
         <div className="relative flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-[#8B5CF6] animate-spin" />
-          <div className="absolute w-16 h-16 rounded-full border border-[#8B5CF6]/10 animate-pulse-slow" />
+          <div className="w-12 h-12 rounded-full border-4 border-[#35211A] border-t-[#DC9F85] animate-spin" />
+          <div className="absolute w-16 h-16 rounded-full border border-[#DC9F85]/10 animate-pulse-slow" />
         </div>
-        <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display">Compiling AI Diagnostics...</h3>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 text-center max-w-[280px]">Analyzing speech velocity indexes and calculating metric scorecards</p>
+        <h3 className="text-base font-bold text-[#EBDCC4] font-display uppercase tracking-wider">Compiling AI Diagnostics...</h3>
+        <p className="text-xs text-[#B6A596] mt-2 text-center max-w-[280px] font-light">Analyzing speech velocity indexes and calculating metric scorecards</p>
       </div>
     );
   }
 
   if (!interview || interview.responses.length === 0) {
     return (
-      <div className="flex-grow flex flex-col items-center justify-center py-20 px-6 max-w-lg mx-auto bg-grid font-sans animate-fade-in-up">
-        <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 backdrop-blur-lg border border-slate-200/50 p-8 rounded-2xl text-center shadow-sm w-full">
+      <div className="flex-grow flex flex-col items-center justify-center py-20 px-6 max-w-lg mx-auto animate-fade-in-up font-sans select-none z-10">
+        <div className="bg-[#181818] border border-rose-955/20 p-8 rounded-[4px] text-center shadow-sm w-full">
           <ShieldAlert size={40} className="text-rose-500 mx-auto mb-4" />
-          <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display mb-2.5">Report Not Found</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
+          <h3 className="text-base font-bold text-[#EBDCC4] font-display mb-2.5 uppercase tracking-wide">Report Not Found</h3>
+          <p className="text-xs text-[#B6A596] mb-6 font-light">
             We could not retrieve any metrics or responses for this interview identifier.
           </p>
-          <button className="w-full flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer" onClick={() => router.push("/")}>
+          <button 
+            className="w-full flex items-center justify-center gap-1.5 border border-[#66473B] hover:border-[#DC9F85] hover:text-[#DC9F85] bg-transparent text-[#EBDCC4] py-2.5 rounded-[4px] text-xs font-bold transition-all duration-200 cursor-pointer font-mono uppercase tracking-widest" 
+            onClick={() => router.push("/")}
+          >
             <ArrowLeft size={13} /> Return to Dashboard
           </button>
         </div>
@@ -229,7 +223,7 @@ export default function Results({ params }) {
   };
 
   const renderHighlightedTranscript = (transcript) => {
-    if (!transcript) return <em className="text-slate-455">No transcript available.</em>;
+    if (!transcript) return <em className="text-[#66473B]">No transcript available.</em>;
     const words = transcript.split(/\s+/);
     const totalWords = words.length;
     const fillers = ["like", "um", "uh", "basically", "you know", "actually", "so"];
@@ -243,7 +237,7 @@ export default function Results({ params }) {
           <span 
             key={idx} 
             onClick={() => handleWordClick(idx, totalWords)}
-            className="inline-block px-2 py-0.5 rounded bg-rose-500/10 dark:bg-rose-500/15 border border-rose-500/20 text-rose-700 dark:text-rose-400 text-[10px] font-extrabold mx-1 leading-none uppercase tracking-wide cursor-pointer hover:scale-105 transition-transform font-mono"
+            className="inline-block px-2 py-0.5 rounded-[2px] bg-rose-500/10 border border-rose-500/25 text-rose-400 text-[9px] font-bold mx-1 leading-none uppercase tracking-wider cursor-pointer hover:scale-105 transition-transform font-mono"
             title="Click to skip video to this section"
           >
             {word}
@@ -254,7 +248,7 @@ export default function Results({ params }) {
         <span 
           key={idx} 
           onClick={() => handleWordClick(idx, totalWords)}
-          className="cursor-pointer hover:bg-[#06B6D4]/10 hover:text-[#06B6D4] transition-all rounded px-0.5"
+          className="cursor-pointer hover:bg-[#DC9F85]/15 hover:text-[#DC9F85] transition-all rounded px-0.5 font-light text-[#EBDCC4]"
           title="Click to skip video here"
         >
           {word}{" "}
@@ -264,15 +258,15 @@ export default function Results({ params }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-10 w-full flex-grow font-sans bg-grid relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-10 w-full flex-grow font-sans relative overflow-hidden select-none">
       
       {/* Soft backglow */}
-      <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-[#8B5CF6]/5 dark:bg-[#8B5CF6]/5 rounded-full filter blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-[#DC9F85]/5 rounded-full filter blur-[100px] pointer-events-none" />
 
       {/* Back to Dashboard & Header */}
-      <div className="flex flex-col gap-2 mb-10 relative z-10">
+      <div className="flex flex-col gap-2 mb-10 relative z-10 text-left">
         <button 
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-455 hover:text-[#8B5CF6] dark:text-slate-500 dark:hover:text-[#06B6D4] transition-colors duration-205 mb-4 w-fit cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-bold text-[#B6A596] hover:text-[#DC9F85] transition-colors duration-205 mb-4 w-fit cursor-pointer font-mono uppercase tracking-widest"
           onClick={() => router.push("/")}
         >
           <ArrowLeft size={13} /> Back to Dashboard
@@ -280,19 +274,19 @@ export default function Results({ params }) {
         
         <div className="flex justify-between items-start flex-wrap gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white font-display">Interview Diagnostics</h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Domain: <strong className="text-slate-700 dark:text-slate-305">{interview.role}</strong> &bull; Practice Session on {new Date(interview.created_at).toLocaleDateString()}</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-[#EBDCC4] font-display uppercase tracking-wider">Interview Diagnostics</h1>
+            <p className="text-xs text-[#B6A596] mt-1 font-light">Domain: <strong className="text-[#EBDCC4] font-bold">{interview.role}</strong> &bull; Practice Session on {new Date(interview.created_at).toLocaleDateString()}</p>
           </div>
-          <div className="flex items-center gap-1.5 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-500 shadow-sm animate-pulse-slow">
-            <CheckCircle2 size={14} className="flex-shrink-0 text-emerald-500" /> Complete Report
+          <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-[4px] text-xs font-bold text-emerald-450 shadow-sm animate-pulse-slow font-mono">
+            <CheckCircle2 size={14} className="flex-shrink-0 text-emerald-450" /> Complete Report
           </div>
         </div>
       </div>
 
       {/* Overall Performance Summary Scorecard */}
-      <section className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300 mb-8 flex flex-col md:flex-row gap-8 justify-between items-stretch animate-fade-in-up relative z-10">
+      <section className="bg-[#181818] border border-[#66473B] p-6 md:p-8 rounded-[4px] hover:border-[#DC9F85] transition-all duration-300 mb-8 flex flex-col md:flex-row gap-8 justify-between items-stretch relative z-10 text-left">
         {/* Left: Overall Score Circle Gauge */}
-        <div className="flex flex-row md:flex-col items-center justify-center gap-6 border-slate-200/40 dark:border-zinc-800/40 pr-0 md:pr-8 md:border-r border-b md:border-b-0 pb-6 md:pb-0">
+        <div className="flex flex-row md:flex-col items-center justify-center gap-6 border-[#35211A] pr-0 md:pr-8 md:border-r border-b md:border-b-0 pb-6 md:pb-0">
           <div className="relative flex items-center justify-center w-24 h-24 hover:scale-105 transition-transform duration-300">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 96 96">
               <circle
@@ -317,20 +311,20 @@ export default function Results({ params }) {
               />
             </svg>
             <div className="absolute flex flex-col items-center">
-              <span className={`text-xl font-black font-outfit ${getScoreColorClass(overallScore)}`}>
+              <span className={`text-xl font-bold font-mono ${getScoreColorClass(overallScore)}`}>
                 {overallScore}%
               </span>
-              <span className="text-[7.5px] uppercase tracking-widest font-black text-slate-400 dark:text-slate-500">
+              <span className="text-[7.5px] uppercase tracking-widest font-mono font-bold text-[#B6A596]">
                 OVERALL
               </span>
             </div>
           </div>
           
           <div className="flex flex-col items-start md:items-center text-left md:text-center">
-            <div className="text-xl font-black text-slate-900 dark:text-white font-outfit animate-pulse-slow">
+            <div className={`text-xl font-bold font-mono ${getScoreColorClass(overallScore)} animate-pulse`}>
               {hiringProbability}%
             </div>
-            <div className="text-[9px] uppercase tracking-widest font-extrabold text-slate-400 dark:text-slate-500">
+            <div className="text-[9px] uppercase tracking-widest font-mono font-bold text-[#B6A596]">
               Hiring Chance
             </div>
           </div>
@@ -340,49 +334,49 @@ export default function Results({ params }) {
         <div className="flex-grow flex flex-col justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5 mb-3 flex-wrap">
-              <span className={`px-3 py-1 rounded-lg text-xs font-black tracking-wide border ${verdictInfo.badgeColor}`}>
+              <span className={`px-3 py-1 rounded-[2px] text-xs font-bold tracking-wider font-mono border uppercase ${verdictInfo.badgeColor}`}>
                 {verdictInfo.verdict}
               </span>
-              <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider bg-slate-55/60 dark:bg-zinc-800/80 px-2.5 py-1 rounded-lg border border-slate-200/20">
+              <span className="text-[10px] font-mono font-bold text-[#B6A596] uppercase tracking-wider bg-[#35211A]/20 px-2.5 py-1 rounded-[2px] border border-[#66473B]/50">
                 {interview.responses.length} {interview.responses.length === 1 ? 'Question' : 'Questions'} Answered
               </span>
             </div>
             
-            <p className="text-sm font-bold text-slate-850 dark:text-slate-100 font-display">
+            <p className="text-sm font-bold text-[#EBDCC4] font-display uppercase tracking-wide">
               Hiring Probability Evaluation:
             </p>
-            <p className="text-xs text-slate-555 dark:text-slate-400 leading-relaxed font-medium mt-1">
+            <p className="text-xs text-[#B6A596] leading-relaxed font-light mt-1">
               {verdictInfo.description}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2 border-t border-slate-100 dark:border-zinc-850/40 pt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2 border-t border-[#35211A] pt-4 font-mono">
             <div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Avg Pacing</div>
-              <div className="text-sm font-extrabold text-slate-805 dark:text-slate-200 mt-0.5 font-outfit">{avgWpm} WPM</div>
+              <div className="text-[10px] text-[#66473B] font-bold uppercase tracking-wider">Avg Pacing</div>
+              <div className="text-sm font-bold text-[#EBDCC4] mt-0.5">{avgWpm} WPM</div>
             </div>
             <div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Avg Fillers</div>
-              <div className="text-sm font-extrabold text-slate-805 dark:text-slate-200 mt-0.5 font-outfit">{avgFillers} words</div>
+              <div className="text-[10px] text-[#66473B] font-bold uppercase tracking-wider">Avg Fillers</div>
+              <div className="text-sm font-bold text-[#EBDCC4] mt-0.5">{avgFillers} words</div>
             </div>
             <div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Interview Status</div>
-              <div className="text-sm font-extrabold text-slate-805 dark:text-slate-200 mt-0.5 font-outfit">{interview.status}</div>
+              <div className="text-[10px] text-[#66473B] font-bold uppercase tracking-wider">Interview Status</div>
+              <div className="text-sm font-bold text-[#EBDCC4] mt-0.5 uppercase tracking-wide">{interview.status}</div>
             </div>
             <div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Evaluated Role</div>
-              <div className="text-sm font-extrabold text-slate-805 dark:text-slate-200 mt-0.5 font-outfit truncate max-w-[120px]">{interview.role}</div>
+              <div className="text-[10px] text-[#66473B] font-bold uppercase tracking-wider">Evaluated Role</div>
+              <div className="text-sm font-bold text-[#EBDCC4] mt-0.5 truncate max-w-[120px]">{interview.role}</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Grid panels */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10 text-left">
         
         {/* Left Column: Questions List & Video Player */}
         <div className="lg:col-span-5 flex flex-col gap-6 w-full">
-          <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 border-b border-slate-200/40 dark:border-zinc-800/50 pb-2 mb-1 uppercase tracking-widest font-display">
+          <h3 className="text-[10px] font-mono font-bold text-[#66473B] border-b border-[#35211A] pb-2 mb-1 uppercase tracking-widest font-display">
             Questions Answered
           </h3>
           
@@ -394,25 +388,25 @@ export default function Results({ params }) {
               return (
                 <div
                   key={resp.id}
-                  className={`glass-panel border p-4.5 rounded-2xl cursor-pointer transition-all duration-300 flex flex-col gap-2 relative overflow-hidden ${
+                  className={`border p-4.5 rounded-[4px] cursor-pointer transition-all duration-300 flex flex-col gap-2 relative overflow-hidden ${
                     isActive 
-                      ? 'border-[#8B5CF6]/40 bg-[#8B5CF6]/5 dark:border-[#8B5CF6]/40 dark:bg-[#8B5CF6]/5 shadow-sm shadow-[#8B5CF6]/5' 
-                      : 'border-slate-200/50 dark:border-zinc-850/50 bg-white/70 dark:bg-zinc-900/55 hover:bg-white dark:hover:bg-zinc-900 hover:border-[#06B6D4]/30'
+                      ? 'border-[#DC9F85] bg-[#35211A]/25' 
+                      : 'border-[#66473B] bg-[#181818] hover:bg-[#35211A]/20 hover:border-[#DC9F85]'
                   }`}
                   onClick={() => setActiveIdx(index)}
                 >
                   {/* Left indicator stroke for active item */}
                   {isActive && (
-                    <div className="absolute left-0 inset-y-0 w-1 bg-[#8B5CF6] rounded-r-md" />
+                    <div className="absolute left-0 inset-y-0 w-1 bg-[#DC9F85]" />
                   )}
 
-                  <div className="flex justify-between items-center text-[9px] text-slate-455 dark:text-slate-500 font-extrabold font-outfit uppercase tracking-wider">
+                  <div className="flex justify-between items-center text-[9px] text-[#66473B] font-mono font-bold uppercase tracking-wider">
                     <span>Q{index + 1} &bull; {q.topic}</span>
-                    <span className="text-[#06B6D4] font-black">
+                    <span className="text-[#DC9F85] font-bold">
                       Score: {resp.metrics ? Math.round((resp.metrics.clarity_score + resp.metrics.relevance_score + resp.metrics.grammar_score) / 3) : 0}%
                     </span>
                   </div>
-                  <p className={`text-xs font-bold leading-relaxed ${isActive ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'} line-clamp-2`}>
+                  <p className={`text-xs font-bold leading-relaxed ${isActive ? 'text-[#EBDCC4]' : 'text-[#B6A596]'} line-clamp-2`}>
                     {q.text}
                   </p>
                 </div>
@@ -422,11 +416,11 @@ export default function Results({ params }) {
 
           {/* Video Player Box */}
           {activeResponse && (
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-5 rounded-3xl shadow-sm hover:shadow-md hover:border-[#8B5CF6]/20 transition-all duration-300 flex flex-col gap-3 w-full relative overflow-hidden">
-              <h4 className="text-[10px] font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-1.5 uppercase tracking-wider font-display">
-                <Play size={13} className="text-[#8B5CF6]" /> Play Back Video Response
+            <div className="bg-[#181818] border border-[#66473B] p-5 rounded-[4px] hover:border-[#DC9F85] transition-all flex flex-col gap-3 w-full relative overflow-hidden">
+              <h4 className="text-[10px] font-bold text-[#EBDCC4] flex items-center gap-1.5 uppercase tracking-wider font-display">
+                <Play size={13} className="text-[#DC9F85]" /> Play Back Video Response
               </h4>
-              <div className="relative rounded-xl overflow-hidden border border-slate-200/40 dark:border-zinc-800/50 bg-black aspect-[4/3] flex items-center justify-center shadow-inner">
+              <div className="relative rounded-[4px] overflow-hidden border border-[#66473B] bg-black aspect-[4/3] flex items-center justify-center">
                 <video
                   ref={videoRef}
                   src={`${API_BASE_URL}${activeResponse.video_url}`}
@@ -434,10 +428,10 @@ export default function Results({ params }) {
                   className="w-full h-full object-cover"
                 />
                 {/* Visual corners overlay */}
-                <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-[#06B6D4]/60 rounded-tl-sm pointer-events-none"></div>
-                <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-[#06B6D4]/60 rounded-tr-sm pointer-events-none"></div>
-                <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-[#06B6D4]/60 rounded-bl-sm pointer-events-none"></div>
-                <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-[#06B6D4]/60 rounded-br-sm pointer-events-none"></div>
+                <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-[#DC9F85]/60 rounded-tl-sm pointer-events-none"></div>
+                <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-[#DC9F85]/60 rounded-tr-sm pointer-events-none"></div>
+                <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-[#DC9F85]/60 rounded-bl-sm pointer-events-none"></div>
+                <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-[#DC9F85]/60 rounded-br-sm pointer-events-none"></div>
               </div>
             </div>
           )}
@@ -447,10 +441,10 @@ export default function Results({ params }) {
         <div className="lg:col-span-7 flex flex-col gap-6 w-full animate-fade-in-up">
           
           {/* Main Scorecard */}
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
-            <h3 className="text-[10px] font-black text-[#8B5CF6] uppercase tracking-widest font-display mb-6">AI Evaluation Diagnostics</h3>
+          <div className="bg-[#181818] border border-[#66473B] p-6 md:p-8 rounded-[4px] hover:border-[#DC9F85] transition-all duration-300">
+            <h3 className="text-[10px] font-bold text-[#DC9F85] uppercase tracking-widest font-mono mb-6">AI Evaluation Diagnostics</h3>
             
-            <div className="flex justify-around items-center border-b border-slate-100 dark:border-zinc-850/50 pb-6 mb-6">
+            <div className="flex justify-around items-center border-b border-[#35211A] pb-6 mb-6">
               <CircularGauge score={metrics?.relevance_score || 0} label="Relevance" />
               <CircularGauge score={metrics?.clarity_score || 0} label="Clarity" />
               <CircularGauge score={metrics?.grammar_score || 0} label="Grammar" />
@@ -458,33 +452,33 @@ export default function Results({ params }) {
 
             {/* Pacing Speed & Filler indicators */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3 bg-slate-50/50 dark:bg-zinc-850/30 border border-slate-150 dark:border-zinc-800/50 p-4 rounded-xl hover:border-cyan-500/20 transition-all duration-300">
-                <div className="w-9 h-9 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
+              <div className="flex items-center gap-3 bg-[#35211A]/20 border border-[#66473B] p-4 rounded-[4px] hover:border-[#DC9F85] transition-all duration-300">
+                <div className="w-9 h-9 rounded-[2px] bg-[#35211A]/30 border border-[#66473B]/50 flex items-center justify-center text-[#DC9F85]">
                   <Clock size={16} />
                 </div>
                 <div>
-                  <div className="text-base font-extrabold text-slate-900 dark:text-white font-outfit">{metrics?.words_per_minute}</div>
-                  <div className="text-[9px] text-slate-405 text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Words Per Minute</div>
+                  <div className="text-base font-bold text-[#EBDCC4] font-mono">{metrics?.words_per_minute}</div>
+                  <div className="text-[9px] text-[#B6A596] font-mono font-bold uppercase tracking-wider">Words Per Minute</div>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3 bg-slate-50/50 dark:bg-zinc-850/30 border border-slate-150 dark:border-zinc-800/50 p-4 rounded-xl hover:border-rose-500/20 transition-all duration-300">
-                <div className="w-9 h-9 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-600 dark:text-rose-455">
+              <div className="flex items-center gap-3 bg-[#35211A]/20 border border-[#66473B] p-4 rounded-[4px] hover:border-[#DC9F85] transition-all duration-300">
+                <div className="w-9 h-9 rounded-[2px] bg-[#35211A]/30 border border-[#66473B]/50 flex items-center justify-center text-[#DC9F85]">
                   <ShieldAlert size={16} />
                 </div>
                 <div>
-                  <div className="text-base font-extrabold text-slate-900 dark:text-white font-outfit">{metrics?.filler_words_count}</div>
-                  <div className="text-[9px] text-slate-405 text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider">Filler Word Counts</div>
+                  <div className="text-base font-bold text-[#EBDCC4] font-mono">{metrics?.filler_words_count}</div>
+                  <div className="text-[9px] text-[#B6A596] font-mono font-bold uppercase tracking-wider">Filler Word Counts</div>
                 </div>
               </div>
             </div>
             
             {/* Filler details list */}
             {metrics && metrics.filler_words_count > 0 && (
-              <div className="mt-4 pt-4 flex items-center gap-2 flex-wrap border-t border-slate-100 dark:border-zinc-850/40">
-                <span className="text-[9px] font-extrabold text-slate-455 dark:text-slate-500 uppercase tracking-wider">Breakdown:</span>
+              <div className="mt-4 pt-4 flex items-center gap-2 flex-wrap border-t border-[#35211A]">
+                <span className="text-[9px] font-mono font-bold text-[#66473B] uppercase tracking-wider">Breakdown:</span>
                 {Object.entries(metrics.filler_words_details).map(([word, count]) => (
-                  <span key={word} className="text-[10px] font-extrabold bg-rose-500/5 border border-rose-550/15 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded-md uppercase">
+                  <span key={word} className="text-[9px] font-mono font-bold bg-[#35211A]/20 border border-[#66473B]/30 text-[#B6A596] px-2 py-0.5 rounded-[2px] uppercase">
                     &ldquo;{word}&rdquo;: {count}x
                   </span>
                 ))}
@@ -494,18 +488,18 @@ export default function Results({ params }) {
 
           {/* Submitted Code Block */}
           {activeResponse && activeResponse.code && (
-            <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
+            <div className="bg-[#181818] border border-[#66473B] p-6 md:p-8 rounded-[4px] hover:border-[#DC9F85] transition-all duration-300">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 uppercase tracking-wider font-display">
-                  <Code2 size={15} className="text-[#8B5CF6]" />
+                <h3 className="text-xs font-bold text-[#EBDCC4] flex items-center gap-2 uppercase tracking-wider font-display">
+                  <Code2 size={15} className="text-[#DC9F85]" />
                   Submitted Coding Solution
                 </h3>
-                <span className="text-[9px] font-extrabold bg-slate-100 dark:bg-zinc-800/80 border border-slate-200/30 dark:border-zinc-800/40 text-slate-505 dark:text-slate-400 px-3 py-1 rounded-md uppercase tracking-wider font-outfit">
+                <span className="text-[9px] font-mono font-bold bg-[#35211A]/20 border border-[#66473B]/50 text-[#B6A596] px-3 py-1 rounded-[2px] uppercase tracking-wider">
                   {(activeResponse.code_language || "python").toUpperCase()}
                 </span>
               </div>
               
-              <div className="rounded-2xl overflow-hidden border border-slate-200/40 dark:border-zinc-800/50 h-[300px] relative">
+              <div className="rounded-[4px] overflow-hidden border border-[#66473B] h-[300px] relative">
                 <Editor
                   height="100%"
                   language={activeResponse.code_language === "cpp" ? "cpp" : activeResponse.code_language || "python"}
@@ -534,52 +528,52 @@ export default function Results({ params }) {
           )}
 
           {/* Transcript Box */}
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
-            <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-              <FileText size={15} className="text-[#8B5CF6]" /> 
+          <div className="bg-[#181818] border border-[#66473B] p-6 md:p-8 rounded-[4px] hover:border-[#DC9F85] transition-all duration-300">
+            <h3 className="text-xs font-bold text-[#EBDCC4] mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
+              <FileText size={15} className="text-[#DC9F85]" /> 
               Speech Transcript
             </h3>
-            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-200 bg-slate-50/50 dark:bg-zinc-950/40 p-5 rounded-2xl border border-slate-100/60 dark:border-zinc-850/20 font-medium leading-loose">
+            <p className="text-sm leading-relaxed text-[#B6A596] bg-[#35211A]/20 p-5 rounded-[4px] border border-[#66473B]/50 font-light leading-loose">
               {renderHighlightedTranscript(activeResponse.transcript)}
             </p>
           </div>
 
           {/* Qualitative AI Feedback */}
-          <div className="glass-panel bg-white/70 dark:bg-zinc-900/55 border border-slate-200/50 dark:border-zinc-800/50 p-6 md:p-8 rounded-3xl shadow-sm hover:border-[#8B5CF6]/20 transition-all duration-300">
-            <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-              <MessageSquare size={15} className="text-[#8B5CF6]" />
+          <div className="bg-[#181818] border border-[#66473B] p-6 md:p-8 rounded-[4px] hover:border-[#DC9F85] transition-all duration-300">
+            <h3 className="text-xs font-bold text-[#EBDCC4] mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
+              <MessageSquare size={15} className="text-[#DC9F85]" />
               AI Evaluator diagnostics
             </h3>
-            <div className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-200 flex flex-col gap-4">
+            <div className="text-xs md:text-sm leading-relaxed text-[#B6A596] flex flex-col gap-4">
               {metrics?.feedback_text.split('\n\n').map((para, i) => {
                 if (para.startsWith('**')) {
                   const match = para.match(/^\*\*(.*?)\*\*(.*)/);
                   if (match) {
                     return (
-                      <div key={i} className="pl-3 border-l-2 border-[#8B5CF6]/70">
-                        <strong className="text-slate-905 dark:text-white block text-xs md:text-sm font-bold mb-1 font-display" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[1]) }} />
-                        <p className="font-medium" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[2].trim()) }} />
+                      <div key={i} className="pl-3 border-l-2 border-[#DC9F85]/70">
+                        <strong className="text-[#EBDCC4] block text-xs md:text-sm font-bold mb-1 font-display uppercase tracking-wider" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[1]) }} />
+                        <p className="font-light text-xs" dangerouslySetInnerHTML={{ __html: formatMarkdown(match[2].trim()) }} />
                       </div>
                     );
                   }
                 }
-                return <p key={i} className="font-medium pl-3 border-l-2 border-transparent" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
+                return <p key={i} className="font-light text-xs pl-3 border-l-2 border-transparent" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
               })}
             </div>
           </div>
 
           {/* Model suggested answer */}
-          <div className="glass-panel bg-[#8B5CF6]/5 dark:bg-zinc-900/40 border border-dashed border-[#8B5CF6]/20 dark:border-zinc-800/60 p-6 md:p-8 rounded-3xl shadow-sm hover:border-dashed hover:border-[#8B5CF6]/40 transition-all duration-355">
-            <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
-              <Star size={15} className="text-[#8B5CF6] fill-[#8B5CF6]/15" />
+          <div className="bg-[#35211A]/10 border border-dashed border-[#66473B] p-6 md:p-8 rounded-[4px] hover:border-dashed hover:border-[#DC9F85] transition-all duration-355">
+            <h3 className="text-xs font-bold text-[#EBDCC4] mb-4 flex items-center gap-2 uppercase tracking-wider font-display">
+              <Star size={15} className="text-[#DC9F85] fill-[#DC9F85]/15" />
               Suggested Model Answer
             </h3>
-            <div className="text-xs md:text-sm leading-relaxed text-slate-555 dark:text-slate-200 bg-white/50 dark:bg-zinc-900/20 p-5 rounded-2xl border border-[#8B5CF6]/10 dark:border-zinc-900/15 animate-fade-in-up">
+            <div className="text-xs md:text-sm leading-relaxed text-[#B6A596] bg-[#181818]/60 p-5 rounded-[4px] border border-[#66473B]/40">
               {metrics?.suggested_answer.split('\n\n').map((para, i) => {
                 if (para.startsWith('**') || para.match(/^\d+\./)) {
-                  return <p key={i} className="mb-4 font-bold text-slate-805 dark:text-slate-200 font-display" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
+                  return <p key={i} className="mb-4 font-bold text-[#EBDCC4] font-display uppercase tracking-wider" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
                 }
-                return <p key={i} className="mb-3 font-medium" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
+                return <p key={i} className="mb-3 font-light text-xs" dangerouslySetInnerHTML={{ __html: formatMarkdown(para) }} />;
               })}
             </div>
           </div>
