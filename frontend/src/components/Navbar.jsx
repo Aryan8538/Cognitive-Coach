@@ -179,24 +179,24 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[672px] bg-[#0a0a0a]/75 border border-white/10 backdrop-blur-xl rounded-full transition-all duration-300 shadow-lg shadow-black/40">
-      <div className="px-4 h-12 flex items-center justify-between relative">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[720px] bg-[#0a0a0a]/75 border border-white/10 backdrop-blur-xl rounded-full transition-all duration-300 shadow-lg shadow-black/40">
+      <div className="px-5 h-14 flex items-center justify-between relative">
         
         {/* Left Logo */}
         <a href="/" className="flex items-center gap-2 group transition-transform duration-300 active:scale-95 flex-shrink-0">
           <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] shadow-md shadow-[#8B5CF6]/50 group-hover:scale-110 transition-transform duration-300" />
-          <span className="text-xs font-semibold tracking-tight font-serif-heading text-white">
+          <span className="text-[11px] font-black uppercase tracking-[0.12em] font-sans text-white">
             CognitiveCoach
           </span>
         </a>
 
         {/* Center Links */}
-        <nav className="flex items-center gap-3.5 md:gap-4.5 absolute left-1/2 -translate-x-1/2">
+        <nav className="flex items-center gap-4.5 md:gap-6 absolute left-1/2 -translate-x-1/2">
           {user || isGuestSandbox ? (
             <>
               <a 
                 href="/" 
-                className={`text-[9px] md:text-[10px] uppercase font-bold tracking-wider transition-colors duration-200 ${
+                className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
                   pathname === "/" ? "text-white" : "text-neutral-400 hover:text-white"
                 }`}
               >
@@ -204,7 +204,7 @@ export default function Navbar() {
               </a>
               <a 
                 href="/advisor" 
-                className={`text-[9px] md:text-[10px] uppercase font-bold tracking-wider transition-colors duration-200 ${
+                className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
                   pathname === "/advisor" ? "text-white" : "text-neutral-400 hover:text-white"
                 }`}
               >
@@ -212,7 +212,7 @@ export default function Navbar() {
               </a>
               <a 
                 href="/resume-checker" 
-                className={`text-[9px] md:text-[10px] uppercase font-bold tracking-wider transition-colors duration-200 ${
+                className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
                   pathname === "/resume-checker" ? "text-white" : "text-neutral-400 hover:text-white"
                 }`}
               >
@@ -223,19 +223,19 @@ export default function Navbar() {
             <>
               <a 
                 href="/#features" 
-                className="text-[9px] md:text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-400 hover:text-white transition-colors"
               >
                 Features
               </a>
               <a 
                 href="/#testimonials" 
-                className="text-[9px] md:text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-400 hover:text-white transition-colors"
               >
                 Testimonials
               </a>
               <a 
                 href="/#faq" 
-                className="text-[9px] md:text-[10px] uppercase font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-400 hover:text-white transition-colors"
               >
                 FAQ
               </a>
@@ -337,7 +337,7 @@ export default function Navbar() {
               )}
               <a 
                 href="/login"
-                className="bg-white hover:bg-neutral-200 text-black text-[9px] md:text-[10px] uppercase font-bold tracking-wider px-3.5 py-1.5 rounded-full transition-snappy active:scale-95 flex-shrink-0"
+                className="bg-white hover:bg-neutral-100 text-black font-mono text-[9.5px] md:text-[10px] uppercase tracking-[0.2em] px-4 py-2 rounded-full transition-snappy active:scale-95 flex-shrink-0 font-extrabold"
               >
                 Sign In
               </a>
