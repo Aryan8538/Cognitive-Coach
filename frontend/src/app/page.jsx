@@ -1,136 +1,240 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { 
+  Terminal, Users, Cpu, BarChart3, Activity, Cloud, Shield, Play 
+} from "lucide-react";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle, loading, success
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setStatus("loading");
-    setTimeout(() => {
-      setStatus("success");
-    }, 1000);
+  // Define practice mock interview focus roles
+  const roles = [
+    {
+      id: "Software Engineer",
+      title: "Software Engineer",
+      icon: <Terminal size={18} />,
+      desc: "Practice system architectural design and coding logic explanation. Standard questions cover scalability, cycle detection, and key/value caching.",
+      topics: ["System Design", "Coding Logic"]
+    },
+    {
+      id: "Product Manager",
+      title: "Product Manager",
+      icon: <Users size={18} />,
+      desc: "Refine product lifecycle strategy, market metrics, and user prioritization. Questions test pricing launches and driver metrics.",
+      topics: ["Product Strategy", "Growth Metrics"]
+    },
+    {
+      id: "Full Stack Web Developer",
+      title: "Full Stack Web Developer",
+      icon: <Terminal size={18} />,
+      desc: "Practice building full-stack REST APIs, state management, and database query optimization. Focuses on pagination, security protocols, and API latency.",
+      topics: ["REST APIs", "Pagination Logic"]
+    },
+    {
+      id: "AI Engineer",
+      title: "AI Engineer",
+      icon: <Cpu size={18} />,
+      desc: "Practice interviews focused on deep learning, neural network architectures, and LLMs. Questions cover transformer mechanisms, fine-tuning, and compute bounds.",
+      topics: ["Deep Learning", "LLM Fine-Tuning"]
+    },
+    {
+      id: "Data Scientist",
+      title: "Data Scientist",
+      icon: <BarChart3 size={18} />,
+      desc: "Practice statistical modeling, experimental design (A/B testing), and data pipelines. Questions test regression bounds, bias-variance, and SQL transforms.",
+      topics: ["A/B Testing", "Feature Engineering"]
+    },
+    {
+      id: "IoT Engineer",
+      title: "IoT Engineer",
+      icon: <Activity size={18} />,
+      desc: "Prepare for hardware-software integration, low-power edge computing, and protocols. Tests cover MQTT routing, sensor polling rates, and firmware design.",
+      topics: ["Firmware Design", "Edge Computing"]
+    },
+    {
+      id: "DevOps Engineer",
+      title: "DevOps Engineer",
+      icon: <Cloud size={18} />,
+      desc: "Master continuous integration, infrastructure as code (IaC), container orchestration, and cloud deployment pipelines. Practice Docker, Kubernetes, and Terraform.",
+      topics: ["Kubernetes", "CI/CD Pipelines"]
+    },
+    {
+      id: "Cybersecurity Engineer",
+      title: "Cybersecurity Engineer",
+      icon: <Shield size={18} />,
+      desc: "Evaluate network security protocol design, penetration testing methodology, threat modeling, and encryption standards. Practice cross-site security.",
+      topics: ["Threat Modeling", "Penetration Testing"]
+    }
+  ];
+
+  const handleStartSession = (roleName) => {
+    router.push(`/interview?role=${encodeURIComponent(roleName)}`);
   };
 
   return (
-    <div className="min-h-screen bg-[#181818] text-[#EBDCC4] font-sans flex flex-col justify-between p-6 md:p-12 relative overflow-hidden select-none">
+    <div className="min-h-screen bg-[#181818] text-[#EBDCC4] font-sans flex flex-col justify-between p-6 md:p-12 relative overflow-y-auto overflow-x-hidden select-none">
       
       {/* Header spacer to prevent overlay clashes with the floating menu box */}
       <div className="w-full h-16 md:h-20 flex-shrink-0" />
 
-      {/* 2. Central Hero Headline Section */}
-      <main className="flex-grow flex flex-col justify-center items-start my-20 md:my-0 z-10 relative">
+      {/* SECTION 1: Editorial Landing Fold */}
+      <div className="flex-grow flex flex-col justify-between min-h-[calc(100vh-160px)]">
         
-        {/* Early Access Tag */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-6 h-[1px] bg-[#DC9F85]" />
-          <span className="text-[10px] md:text-xs font-mono font-bold uppercase tracking-[0.3em] text-[#B6A596]">
-            Early Access Protocol
-          </span>
-        </div>
-
-        {/* Double-layered Depth Headline */}
-        <div className="relative w-full select-none select-none">
-          {/* Layer 1 (Back Outline) */}
-          <h1 className="absolute top-1 left-1 md:top-2 md:left-2 text-[15vw] md:text-[11.5vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-outlined select-none pointer-events-none opacity-60">
-            COGNITIVECOACH
-          </h1>
-          {/* Layer 2 (Front Solid) */}
-          <h1 className="relative text-[15vw] md:text-[11.5vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-[#EBDCC4] select-none">
-            COGNITIVECOACH
-          </h1>
-        </div>
-
-      </main>
-
-      {/* 3. Bottom Content Section (Divider + 12-Column Grid) */}
-      <footer className="w-full flex flex-col gap-8 md:gap-12 z-20">
-        
-        {/* Horizontal divider line */}
-        <div className="w-full h-[1px] bg-[#35211A]" />
-
-        {/* 12-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        {/* Central Hero Headline */}
+        <main className="flex-grow flex flex-col justify-center items-start my-20 md:my-0 z-10 relative">
           
-          {/* Columns 1-5: Value Proposition & Core Offerings */}
-          <div className="md:col-span-5 flex flex-col gap-6 text-left">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
-                <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
-                  <strong className="text-[#EBDCC4] font-semibold">AI Interview Practice</strong> — Face real-time conversational technical and behavioral mocks with immediate coding reviews.
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
-                <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
-                  <strong className="text-[#EBDCC4] font-semibold">Live Speech Analytics</strong> — Diagnose pacing (WPM), speech clarity, and track filler-word occurrences during responses.
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
-                <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
-                  <strong className="text-[#EBDCC4] font-semibold">ATS Resume Check</strong> — Scan and score your resume structure against target job rules to highlight critical skill gaps.
-                </p>
-              </div>
-            </div>
-            
-            {/* Status indicator */}
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-[#DC9F85] animate-pulse" />
-              <span className="text-[10px] md:text-xs font-mono font-extrabold uppercase tracking-widest text-[#B6A596]">
-                Batch 003 Filling
-              </span>
-            </div>
-          </div>
-
-          {/* Spacer Column 6 */}
-          <div className="hidden md:block md:col-span-1" />
-
-          {/* Columns 7-12: Email Waitlist Input Block */}
-          <div className="md:col-span-6 flex flex-col gap-3">
-            {status === "success" ? (
-              <div className="border border-[#DC9F85] p-5 rounded-[4px] bg-[#35211A]/10 text-left">
-                <h4 className="text-sm font-bold uppercase tracking-wider text-[#DC9F85] font-display mb-1">
-                  Access Requested
-                </h4>
-                <p className="text-xs text-[#B6A596] leading-relaxed">
-                  Your email has been added to the queue. We will send you an invite as soon as mock sandbox slots open.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex w-full items-stretch">
-                <input
-                  type="email"
-                  required
-                  disabled={status === "loading"}
-                  placeholder="ENTER EMAIL FOR EARLY ACCESS"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-grow bg-transparent border border-[#66473B] text-xs font-mono font-bold tracking-widest text-[#EBDCC4] placeholder-[#66473B] p-4 rounded-l-[4px] focus:outline-none focus:border-[#DC9F85] disabled:opacity-50 transition-colors uppercase"
-                />
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="editorial-btn-primary px-8 text-xs font-bold tracking-widest uppercase rounded-r-[4px] flex items-center justify-center min-w-[120px] disabled:opacity-50"
-                >
-                  {status === "loading" ? "QUEUING..." : "REQUEST"}
-                </button>
-              </form>
-            )}
-
-            {/* Sub-caption */}
-            <span className="text-[9.5px] font-mono text-[#35211A] text-left uppercase tracking-widest">
-              Zero spam. Pure utility.
+          {/* Early Access Tag */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-6 h-[1px] bg-[#DC9F85]" />
+            <span className="text-[10px] md:text-xs font-mono font-bold uppercase tracking-[0.3em] text-[#B6A596]">
+              Evaluation Sandbox
             </span>
           </div>
 
+          {/* Double-layered Depth Headline */}
+          <div className="relative w-full select-none">
+            {/* Layer 1 (Back Outline) */}
+            <h1 className="absolute top-1 left-1 md:top-2 md:left-2 text-[15vw] md:text-[11.5vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-outlined select-none pointer-events-none opacity-60">
+              COGNITIVECOACH
+            </h1>
+            {/* Layer 2 (Front Solid) */}
+            <h1 className="relative text-[15vw] md:text-[11.5vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-[#EBDCC4] select-none">
+              COGNITIVECOACH
+            </h1>
+          </div>
+
+        </main>
+
+        {/* Bottom Content Section (Divider + 12-Column Grid) */}
+        <footer className="w-full flex flex-col gap-8 md:gap-12 z-20">
+          
+          {/* Horizontal divider line */}
+          <div className="w-full h-[1px] bg-[#35211A]" />
+
+          {/* 12-Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            
+            {/* Columns 1-5: Value Proposition & Core Offerings */}
+            <div className="md:col-span-5 flex flex-col gap-6 text-left">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
+                  <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
+                    <strong className="text-[#EBDCC4] font-semibold">AI Interview Practice</strong> — Face real-time conversational technical and behavioral mocks with immediate coding reviews.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
+                  <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
+                    <strong className="text-[#EBDCC4] font-semibold">Live Speech Analytics</strong> — Diagnose pacing (WPM), speech clarity, and track filler-word occurrences during responses.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
+                  <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
+                    <strong className="text-[#EBDCC4] font-semibold">ATS Resume Check</strong> — Scan and score your resume structure against target job rules to highlight critical skill gaps.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Status indicator */}
+              <div className="flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-[#DC9F85] animate-pulse" />
+                <span className="text-[10px] md:text-xs font-mono font-extrabold uppercase tracking-widest text-[#B6A596]">
+                  Active Sandbox Mode
+                </span>
+              </div>
+            </div>
+
+            {/* Spacer Column 6 */}
+            <div className="hidden md:block md:col-span-1" />
+
+            {/* Columns 7-12: Action Launcher Call-to-Action */}
+            <div className="md:col-span-6 flex flex-col gap-3">
+              <button
+                onClick={() => document.getElementById("roles")?.scrollIntoView({ behavior: "smooth" })}
+                className="editorial-btn-primary w-full py-4.5 px-8 text-xs font-bold tracking-[0.25em] uppercase rounded-[4px] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                LAUNCH EVALUATION SANDBOX
+              </button>
+
+              {/* Sub-caption */}
+              <span className="text-[9.5px] font-mono text-[#35211A] text-left uppercase tracking-widest">
+                Zero configurations. Pure utility.
+              </span>
+            </div>
+
+          </div>
+
+        </footer>
+
+      </div>
+
+      {/* SECTION 2: Scroll-Down Role Practice Selection Grid */}
+      <section id="roles" className="w-full flex flex-col gap-10 py-20 mt-20 border-t border-[#35211A] scroll-mt-28 text-left z-20 relative">
+        
+        {/* Section Title */}
+        <div className="w-full flex flex-col gap-2.5">
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
+            Interactive Assessment Suite
+          </span>
+          <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-[#EBDCC4] pb-4 border-b border-[#35211A]">
+            Select Practice Interview Focus
+          </h2>
         </div>
 
-      </footer>
+        {/* Role Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+          {roles.map((role) => (
+            <div 
+              key={role.id}
+              className="editorial-card p-6 flex flex-col justify-between cursor-pointer transition-all duration-300"
+              onClick={() => handleStartSession(role.id)}
+            >
+              <div>
+                {/* Minimal Editorial Icon Badge */}
+                <div className="w-10 h-10 border border-[#66473B] rounded-[2px] text-[#DC9F85] flex items-center justify-center bg-[#35211A]/20 mb-5">
+                  {role.icon}
+                </div>
+                
+                {/* Role Title */}
+                <h3 className="text-sm font-bold text-[#EBDCC4] font-display mb-2 uppercase tracking-wider">
+                  {role.title}
+                </h3>
+                
+                {/* Role Description */}
+                <p className="text-[#B6A596] text-[11px] leading-relaxed mb-6 font-light">
+                  {role.desc}
+                </p>
+              </div>
+
+              <div>
+                {/* Topic Badges */}
+                <div className="flex flex-wrap gap-1.5 mb-6">
+                  {role.topics.map((t, i) => (
+                    <span key={i} className="text-[9px] font-mono font-bold bg-[#35211A]/25 border border-[#66473B]/30 text-[#B6A596] px-2 py-0.5 rounded-[2px] uppercase tracking-wider">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                
+                {/* Action button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleStartSession(role.id);
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 border border-[#66473B] hover:border-[#DC9F85] hover:text-[#DC9F85] bg-transparent text-[#EBDCC4] py-2.5 rounded-[4px] text-[10px] font-bold uppercase tracking-widest transition-all duration-300 active:scale-[0.98] cursor-pointer font-mono"
+                >
+                  <Play size={8} className="fill-current" /> Start Mock
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </section>
 
       {/* 4. Rotating Waitlist Badge in Bottom Right Corner */}
       <div className="fixed bottom-6 right-6 w-16 h-16 md:w-20 md:h-20 pointer-events-none z-50">
