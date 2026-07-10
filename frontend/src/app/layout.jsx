@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="antialiased bg-[#181818] text-[#EBDCC4] min-h-screen overflow-x-hidden relative font-sans select-none">
+      <body className="antialiased min-h-screen overflow-x-hidden relative font-sans select-none">
         
         {/* Global 3% fractal noise texture overlay */}
         <div className="noise-overlay" />

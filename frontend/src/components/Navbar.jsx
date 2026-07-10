@@ -178,13 +178,13 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[720px] bg-[#181818]/90 border border-[#66473B] backdrop-blur-md rounded-[4px] transition-all duration-300">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[720px] bg-white/90 dark:bg-[#181818]/90 border border-neutral-300 dark:border-[#66473B] backdrop-blur-md rounded-[4px] transition-all duration-300 shadow-sm dark:shadow-none">
       <div className="px-5 h-14 flex items-center justify-between relative">
         
         {/* Left Logo */}
         <a href="/" className="flex items-center gap-2 group transition-transform duration-300 active:scale-95 flex-shrink-0">
           <div className="w-2.5 h-2.5 rounded-[2px] bg-[#DC9F85] transition-transform duration-300 group-hover:scale-110" />
-          <span className="text-[11px] font-bold uppercase tracking-[0.15em] font-display text-[#EBDCC4]">
+          <span className="text-[11px] font-bold uppercase tracking-[0.15em] font-display text-neutral-900 dark:text-[#EBDCC4]">
             CognitiveCoach
           </span>
         </a>
@@ -196,7 +196,7 @@ export default function Navbar() {
               <a 
                 href="/" 
                 className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
-                  pathname === "/" ? "text-[#DC9F85]" : "text-[#B6A596] hover:text-[#DC9F85]"
+                  pathname === "/" ? "text-[#DC9F85]" : "text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85]"
                 }`}
               >
                 Dashboard
@@ -204,7 +204,7 @@ export default function Navbar() {
               <a 
                 href="/advisor" 
                 className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
-                  pathname === "/advisor" ? "text-[#DC9F85]" : "text-[#B6A596] hover:text-[#DC9F85]"
+                  pathname === "/advisor" ? "text-[#DC9F85]" : "text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85]"
                 }`}
               >
                 Advisor
@@ -212,7 +212,7 @@ export default function Navbar() {
               <a 
                 href="/resume-checker" 
                 className={`font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold transition-colors duration-200 ${
-                  pathname === "/resume-checker" ? "text-[#DC9F85]" : "text-[#B6A596] hover:text-[#DC9F85]"
+                  pathname === "/resume-checker" ? "text-[#DC9F85]" : "text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85]"
                 }`}
               >
                 Resume
@@ -222,19 +222,19 @@ export default function Navbar() {
             <>
               <a 
                 href="/#features" 
-                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-[#B6A596] hover:text-[#DC9F85] transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85] transition-colors"
               >
                 Features
               </a>
               <a 
                 href="/#testimonials" 
-                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-[#B6A596] hover:text-[#DC9F85] transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85] transition-colors"
               >
                 Testimonials
               </a>
               <a 
                 href="/#faq" 
-                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-[#B6A596] hover:text-[#DC9F85] transition-colors"
+                className="font-mono text-[9.5px] uppercase tracking-[0.2em] font-extrabold text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85] transition-colors"
               >
                 FAQ
               </a>
@@ -248,38 +248,38 @@ export default function Navbar() {
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-1.5 focus:outline-none group cursor-pointer bg-[#35211A]/20 hover:bg-[#35211A]/40 border border-[#66473B] px-2.5 py-1.5 rounded-[4px] text-[#EBDCC4] text-[10px] font-mono tracking-wider transition-all duration-300"
+                className="flex items-center gap-1.5 focus:outline-none group cursor-pointer bg-[#35211A]/10 hover:bg-[#35211A]/25 dark:bg-[#35211A]/20 dark:hover:bg-[#35211A]/40 border border-neutral-300 dark:border-[#66473B] px-2.5 py-1.5 rounded-[4px] text-neutral-900 dark:text-[#EBDCC4] text-[10px] font-mono tracking-wider transition-all duration-300"
               >
                 <div className="w-5 h-5 rounded-[2px] bg-[#DC9F85] text-[#181818] font-bold text-[9px] flex items-center justify-center">
                   {getInitials(user.name)}
                 </div>
-                <ChevronDown size={11} className="text-[#B6A596] group-hover:text-[#EBDCC4] transition-transform duration-300" />
+                <ChevronDown size={11} className="text-neutral-500 dark:text-[#B6A596] group-hover:text-neutral-900 dark:group-hover:text-[#EBDCC4] transition-transform duration-300" />
               </button>
 
               {/* Dropdown Menu */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-3 w-64 bg-[#181818] border border-[#66473B] shadow-2xl rounded-[4px] p-4 z-50 animate-fade-in-up font-sans">
+                <div className="absolute right-0 mt-3 w-64 bg-white dark:bg-[#181818] border border-neutral-300 dark:border-[#66473B] shadow-2xl rounded-[4px] p-4 z-50 animate-fade-in-up font-sans">
                   {/* User info */}
-                  <div className="flex items-center gap-3 pb-3 border-b border-[#35211A]">
+                  <div className="flex items-center gap-3 pb-3 border-b border-neutral-200 dark:border-[#35211A]">
                     <div className="w-8 h-8 rounded-[2px] bg-[#DC9F85] text-[#181818] font-bold text-xs flex items-center justify-center">
                       {getInitials(user.name)}
                     </div>
                     <div className="flex flex-col min-w-0 text-left">
-                      <span className="text-xs font-bold text-[#EBDCC4] truncate">{user.name}</span>
-                      <span className="text-[10px] text-[#B6A596] truncate">{user.email}</span>
+                      <span className="text-xs font-bold text-neutral-900 dark:text-[#EBDCC4] truncate">{user.name}</span>
+                      <span className="text-[10px] text-neutral-500 dark:text-[#B6A596] truncate">{user.email}</span>
                     </div>
                   </div>
 
                   {/* Overview Stats */}
-                  <div className="py-3 border-b border-[#35211A]">
-                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-[#66473B] block mb-2 text-left">My Overview</span>
-                    <div className="grid grid-cols-2 gap-2 bg-[#35211A]/20 p-2 rounded-[2px] border border-[#66473B]/50">
+                  <div className="py-3 border-b border-neutral-200 dark:border-[#35211A]">
+                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-[#66473B] block mb-2 text-left">My Overview</span>
+                    <div className="grid grid-cols-2 gap-2 bg-neutral-100 dark:bg-[#35211A]/20 p-2 rounded-[2px] border border-neutral-200 dark:border-[#66473B]/50">
                       <div className="flex flex-col text-left">
-                        <span className="text-[9px] text-[#B6A596] leading-none">Interviews</span>
-                        <span className="text-xs font-black text-[#EBDCC4] mt-1">{stats?.total_interviews || 0}</span>
+                        <span className="text-[9px] text-neutral-500 dark:text-[#B6A596] leading-none">Interviews</span>
+                        <span className="text-xs font-black text-neutral-900 dark:text-[#EBDCC4] mt-1">{stats?.total_interviews || 0}</span>
                       </div>
-                      <div className="flex flex-col border-l border-[#66473B] pl-2 text-left">
-                        <span className="text-[9px] text-[#B6A596] leading-none">Avg Clarity</span>
+                      <div className="flex flex-col border-l border-neutral-200 dark:border-[#66473B] pl-2 text-left">
+                        <span className="text-[9px] text-neutral-500 dark:text-[#B6A596] leading-none">Avg Clarity</span>
                         <span className="text-xs font-black text-[#DC9F85] mt-1">{stats?.average_clarity || 0}%</span>
                       </div>
                     </div>
@@ -292,9 +292,9 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/#roles");
                       }}
-                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-[#B6A596] hover:text-[#DC9F85] hover:bg-[#35211A]/30 rounded-[2px] transition-colors cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85] hover:bg-neutral-100 dark:hover:bg-[#35211A]/30 rounded-[2px] transition-colors cursor-pointer"
                     >
-                      <History size={12} className="text-[#66473B]" />
+                      <History size={12} className="text-neutral-400 dark:text-[#66473B]" />
                       <span>Start New Mock</span>
                     </button>
                     <button
@@ -302,14 +302,14 @@ export default function Navbar() {
                         setDropdownOpen(false);
                         router.push("/resume-checker");
                       }}
-                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-[#B6A596] hover:text-[#DC9F85] hover:bg-[#35211A]/30 rounded-[2px] transition-colors cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85] hover:bg-neutral-100 dark:hover:bg-[#35211A]/30 rounded-[2px] transition-colors cursor-pointer"
                     >
-                      <User size={12} className="text-[#66473B]" />
+                      <User size={12} className="text-neutral-400 dark:text-[#66473B]" />
                       <span>Resume Checker</span>
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-rose-500 hover:bg-rose-950/20 rounded-[2px] transition-colors mt-1 border-t border-[#35211A] pt-2 cursor-pointer"
+                      className="flex items-center gap-2 w-full text-left px-2.5 py-1.5 text-[10px] font-bold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-[2px] transition-colors mt-1 border-t border-neutral-200 dark:border-[#35211A] pt-2 cursor-pointer"
                     >
                       <LogOut size={12} />
                       <span>Sign Out</span>
@@ -329,7 +329,7 @@ export default function Navbar() {
                     router.push("/");
                     router.refresh();
                   }}
-                  className="text-[9.5px] font-mono uppercase font-bold tracking-wider text-[#B6A596] hover:text-[#DC9F85] transition-colors mr-1.5 cursor-pointer"
+                  className="text-[9.5px] font-mono uppercase font-bold tracking-wider text-neutral-600 dark:text-[#B6A596] hover:text-[#DC9F85] transition-colors mr-1.5 cursor-pointer"
                 >
                   Exit
                 </button>
@@ -346,7 +346,7 @@ export default function Navbar() {
           {/* Theme Toggle */}
           <button 
             onClick={toggleTheme}
-            className="p-1.5 rounded-[4px] bg-[#35211A]/20 hover:bg-[#35211A]/40 border border-[#66473B] text-[#B6A596] hover:text-[#DC9F85] transition-all cursor-pointer"
+            className="p-1.5 rounded-[4px] bg-[#35211A]/10 hover:bg-[#35211A]/25 dark:bg-[#35211A]/20 dark:hover:bg-[#35211A]/40 border border-neutral-300 dark:border-[#66473B] text-neutral-500 dark:text-[#B6A596] hover:text-[#DC9F85] dark:hover:text-[#DC9F85] transition-all cursor-pointer"
             aria-label="Toggle theme"
           >
             {isDark ? <Sun size={12} /> : <Moon size={12} />}

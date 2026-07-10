@@ -62,9 +62,15 @@
 
 /* Global Styles */
 body {
-  background-color: #181818;
-  color: #EBDCC4;
+  background-color: #F4EFE6; /* Cream book paper light mode background */
+  color: #181818;
   min-height: 100vh;
+  transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
+}
+
+.dark body {
+  background-color: #181818; /* Matte charcoal dark background */
+  color: #EBDCC4;
 }
 
 /* Fractal Noise Fixed Overlay (strictly 0.03 opacity) */
@@ -82,8 +88,11 @@ body {
 
 /* Outlined text for layering depth effect */
 .text-outlined {
-  -webkit-text-stroke: 1px #66473B;
+  -webkit-text-stroke: 1px rgba(102, 71, 59, 0.45);
   color: transparent;
+}
+.dark .text-outlined {
+  -webkit-text-stroke: 1px #66473B;
 }
 
 /* Typography Config */
@@ -115,9 +124,14 @@ code, pre, .font-mono {
 
 /* Base Editorial Card style matching specs: strictly max 4px radius, 1px solid deep earth border */
 .editorial-card {
-  background-color: #181818;
-  border: 1px solid #66473B;
+  background-color: #fff;
+  border: 1px solid rgba(102, 71, 59, 0.25);
   border-radius: 4px !important;
+  transition: all 0.25s ease-in-out;
+}
+.dark .editorial-card {
+  background-color: #181818;
+  border-color: #66473B;
 }
 .editorial-card:hover {
   border-color: #DC9F85;
@@ -135,6 +149,10 @@ code, pre, .font-mono {
   transition: all 0.25s ease-in-out !important;
 }
 .editorial-btn-primary:hover {
+  background-color: #181818 !important;
+  color: #EBDCC4 !important;
+}
+.dark .editorial-btn-primary:hover {
   background-color: #EBDCC4 !important;
   color: #181818 !important;
 }
@@ -142,13 +160,17 @@ code, pre, .font-mono {
 /* Base secondary button: transparent, deep earth border, beige text */
 .editorial-btn-secondary {
   background-color: transparent !important;
-  color: #EBDCC4 !important;
+  color: #181818 !important;
   font-family: 'Space Grotesk', sans-serif !important;
   font-weight: 500 !important;
   text-transform: uppercase !important;
   border-radius: 4px !important;
-  border: 1px solid #66473B !important;
+  border: 1px solid rgba(102, 71, 59, 0.45) !important;
   transition: all 0.25s ease-in-out !important;
+}
+.dark .editorial-btn-secondary {
+  color: #EBDCC4 !important;
+  border-color: #66473B !important;
 }
 .editorial-btn-secondary:hover {
   border-color: #DC9F85 !important;
