@@ -238,7 +238,7 @@ export default function AdvisorPage() {
   };
 
   return (
-    <div className="h-screen w-full flex pt-20 overflow-hidden bg-[#181818] font-sans relative select-none">
+    <div className="h-screen w-full flex pt-20 overflow-hidden bg-transparent text-neutral-900 dark:text-[#EBDCC4] font-sans relative select-none">
       
       {/* Sidebar Backdrop Overlay on Mobile */}
       {sidebarOpen && (
@@ -354,19 +354,19 @@ export default function AdvisorPage() {
       <main className="flex-grow flex flex-col justify-between h-full bg-transparent overflow-hidden relative">
         
         {/* Workspace Top Header bar */}
-        <header className="px-6 py-3 border-b border-[#35211A] bg-[#181818]/90 backdrop-blur-md flex items-center justify-between z-10">
+        <header className="px-6 py-3 border-b border-neutral-300 dark:border-[#35211A] bg-white/90 dark:bg-[#181818]/90 backdrop-blur-md flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             {/* Sidebar toggle button */}
             <button 
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-[#35211A]/35 rounded-[4px] text-[#B6A596] hover:text-[#DC9F85] transition-all cursor-pointer"
+              className="p-2 hover:bg-neutral-100 dark:hover:bg-[#35211A]/35 rounded-[4px] text-[#B6A596] hover:text-[#DC9F85] transition-all cursor-pointer"
               aria-label="Toggle Sidebar"
             >
               <Menu size={16} />
             </button>
             <div className="flex items-center gap-2">
               <Sparkles size={15} className="text-[#DC9F85]" />
-              <span className="text-xs font-bold text-[#EBDCC4] font-display uppercase tracking-wider">Advisor Workspace</span>
+              <span className="text-xs font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider">Advisor Workspace</span>
             </div>
           </div>
 
@@ -374,7 +374,7 @@ export default function AdvisorPage() {
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-[4px] border border-[#66473B] bg-[#181818] text-[10px] font-mono font-bold text-[#EBDCC4] hover:border-[#DC9F85] transition-all cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-[4px] border border-neutral-300 dark:border-[#66473B] bg-white dark:bg-[#181818] text-[10px] font-mono font-bold text-neutral-800 dark:text-[#EBDCC4] hover:border-[#DC9F85] transition-all cursor-pointer"
             >
               <Cpu size={12} className="text-[#DC9F85]" />
               <span>{selectedModel}</span>
@@ -382,13 +382,13 @@ export default function AdvisorPage() {
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-[4px] border border-[#66473B] bg-[#181818] shadow-xl py-1.5 z-50 text-left font-sans">
+              <div className="absolute right-0 mt-2 w-48 rounded-[4px] border border-neutral-300 dark:border-[#66473B] bg-white dark:bg-[#181818] shadow-xl py-1.5 z-50 text-left font-sans">
                 <button
                   onClick={() => {
                     setSelectedModel("Aura-V1 (Gemini Flash)");
                     setDropdownOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-xs font-bold hover:bg-[#35211A]/30 text-[#EBDCC4] transition-colors flex items-center gap-2 cursor-pointer"
+                  className="w-full text-left px-3 py-2 text-xs font-bold hover:bg-neutral-100 dark:hover:bg-[#35211A]/30 text-neutral-800 dark:text-[#EBDCC4] transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   Aura-V1 (Gemini Flash)
@@ -398,7 +398,7 @@ export default function AdvisorPage() {
                     setSelectedModel("Aura-Max (Deep Grading)");
                     setDropdownOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-xs font-bold hover:bg-[#35211A]/30 text-[#EBDCC4] transition-colors flex items-center gap-2 cursor-pointer"
+                  className="w-full text-left px-3 py-2 text-xs font-bold hover:bg-neutral-100 dark:hover:bg-[#35211A]/30 text-neutral-800 dark:text-[#EBDCC4] transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                   Aura-Max (Deep Grading)
@@ -496,7 +496,7 @@ export default function AdvisorPage() {
         </div>
 
         {/* 4. Chat Input footer form */}
-        <footer className="p-4 border-t border-[#35211A] bg-[#181818]/90 backdrop-blur-md">
+        <footer className="p-4 border-t border-neutral-300 dark:border-[#35211A] bg-white/90 dark:bg-[#181818]/90 backdrop-blur-md">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -504,7 +504,7 @@ export default function AdvisorPage() {
             }}
             className="max-w-3xl mx-auto w-full flex flex-col gap-2 font-sans"
           >
-            <div className="relative flex items-center bg-[#181818] border border-[#66473B] rounded-[4px] px-4 py-3 focus-within:border-[#DC9F85] transition-all duration-300">
+            <div className="relative flex items-center bg-white dark:bg-[#181818] border border-neutral-300 dark:border-[#66473B] rounded-[4px] px-4 py-3 focus-within:border-[#DC9F85] transition-all duration-300">
               <MessageSquare size={15} className="text-[#66473B] mr-3 flex-shrink-0" />
               <input
                 type="text"
@@ -512,7 +512,7 @@ export default function AdvisorPage() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a career or study query (e.g. 'Generate technical OOP interview prompts')"
                 disabled={loading}
-                className="flex-grow bg-transparent border-none text-xs focus:outline-none text-[#EBDCC4] placeholder-[#66473B] mr-3 uppercase font-mono tracking-wider"
+                className="flex-grow bg-transparent border-none text-xs focus:outline-none text-neutral-800 dark:text-[#EBDCC4] placeholder-[#66473B] mr-3 uppercase font-mono tracking-wider"
               />
               <button
                 type="submit"

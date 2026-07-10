@@ -260,7 +260,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#181818] text-[#EBDCC4] font-sans flex flex-col justify-between p-6 md:p-12 relative overflow-y-auto overflow-x-hidden select-none">
+    <div className="min-h-screen bg-transparent text-neutral-900 dark:text-[#EBDCC4] font-sans flex flex-col justify-between p-6 md:p-12 relative overflow-y-auto overflow-x-hidden select-none">
       
       {/* Header spacer to prevent overlay clashes with the floating menu box */}
       <div className="w-full h-16 md:h-20 flex-shrink-0" />
