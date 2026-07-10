@@ -584,6 +584,121 @@ export default function Home() {
         </section>
       )}
 
+      {/* SECTION 3: Features Overview */}
+      <section id="features" className="w-full flex flex-col gap-10 py-20 mt-20 border-t border-neutral-300 dark:border-[#35211A] scroll-mt-28 text-left z-20 relative">
+        <div className="w-full flex flex-col gap-2.5">
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
+            01 / Platform Capabilities
+          </span>
+          <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-neutral-900 dark:text-[#EBDCC4] pb-4 border-b border-neutral-300 dark:border-[#35211A]">
+            Engineered for Fluent Performance
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          <div className="editorial-card p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+            <div>
+              <span className="text-xs font-mono font-extrabold text-[#DC9F85] block mb-4">[01. REAL-TIME DIAGNOSTICS]</span>
+              <h3 className="text-sm font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider mb-2">Webcam & Audio Scans</h3>
+              <p className="text-neutral-600 dark:text-[#B6A596] text-[11px] leading-relaxed font-light">
+                Face realistic mock questions. Our frontend client extracts speech patterns, pacing rate (WPM), and spoken syntax to calibrate your conversational scorecards.
+              </p>
+            </div>
+          </div>
+          <div className="editorial-card p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+            <div>
+              <span className="text-xs font-mono font-extrabold text-[#DC9F85] block mb-4">[02. CV SCORE SCAN]</span>
+              <h3 className="text-sm font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider mb-2">ATS Resume Checker</h3>
+              <p className="text-neutral-600 dark:text-[#B6A596] text-[11px] leading-relaxed font-light">
+                Scan your PDF structures directly in the browser sandbox. Highlights missing technical keyword metrics, formatting issues, and compliance scores.
+              </p>
+            </div>
+          </div>
+          <div className="editorial-card p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+            <div>
+              <span className="text-xs font-mono font-extrabold text-[#DC9F85] block mb-4">[03. AI CAREER COACH]</span>
+              <h3 className="text-sm font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider mb-2">Interactive Advisor</h3>
+              <p className="text-neutral-600 dark:text-[#B6A596] text-[11px] leading-relaxed font-light">
+                Leverage a dedicated chatbot terminal to dissect previous transcript responses, obtain optimized sample answers, or plan application strategy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4: Testimonials */}
+      <section id="testimonials" className="w-full flex flex-col gap-10 py-20 mt-20 border-t border-neutral-300 dark:border-[#35211A] scroll-mt-28 text-left z-20 relative">
+        <div className="w-full flex flex-col gap-2.5">
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
+            02 / Calibrated Trust
+          </span>
+          <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-neutral-900 dark:text-[#EBDCC4] pb-4 border-b border-neutral-300 dark:border-[#35211A]">
+            Validated by Modern Engineers
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          <div className="editorial-card p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+            <p className="text-neutral-600 dark:text-[#B6A596] text-[11px] italic leading-relaxed font-light mb-6">
+              "The speech analytics highlighted that I was using over 15 filler words per minute. Calibrating my pacing rate down to 125 WPM made my system design reviews sound significantly more authoritative."
+            </p>
+            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#DC9F85]">— Staff Engineer, FinTech Sandbox</span>
+          </div>
+          <div className="editorial-card p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+            <p className="text-neutral-600 dark:text-[#B6A596] text-[11px] italic leading-relaxed font-light mb-6">
+              "CognitiveCoach gave me a realistic sandbox to prepare for my DevOps mock interview. The dynamic Kubernetes scenarios matched exactly what the interviewers tested."
+            </p>
+            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#DC9F85]">— Site Reliability Engineer</span>
+          </div>
+          <div className="editorial-card p-6 flex flex-col justify-between hover:border-[#DC9F85] transition-all duration-300">
+            <p className="text-neutral-600 dark:text-[#B6A596] text-[11px] italic leading-relaxed font-light mb-6">
+              "The resume parser scans are brutally honest. It caught three critical missing tech stack keywords that were causing my applications to fail ATS screens."
+            </p>
+            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#DC9F85]">— Full Stack Web Developer</span>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5: FAQ */}
+      <section id="faq" className="w-full flex flex-col gap-10 py-20 mt-20 border-t border-neutral-300 dark:border-[#35211A] scroll-mt-28 text-left z-20 relative">
+        <div className="w-full flex flex-col gap-2.5">
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#DC9F85] uppercase">
+            03 / Frequently Asked
+          </span>
+          <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-wide text-neutral-900 dark:text-[#EBDCC4] pb-4 border-b border-neutral-300 dark:border-[#35211A]">
+            Platform Clarifications
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-xs">
+          <div className="border border-neutral-300 dark:border-[#35211A] p-6 rounded-[4px] bg-white dark:bg-transparent">
+            <h4 className="font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider mb-2">How do webcam diagnostics work?</h4>
+            <p className="text-neutral-600 dark:text-[#B6A596] leading-relaxed font-light text-[11px]">
+              We utilize real-time browser streams to analyze audio frequencies and transcription structures. All video frames remain local and private, only extracting pacing counts and spoken text to compute analytics.
+            </p>
+          </div>
+          <div className="border border-neutral-300 dark:border-[#35211A] p-6 rounded-[4px] bg-white dark:bg-transparent">
+            <h4 className="font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider mb-2">Is there any waitlist fee?</h4>
+            <p className="text-neutral-600 dark:text-[#B6A596] leading-relaxed font-light text-[11px]">
+              No. The Evaluation Sandbox is fully accessible. Entering our waiting list grants early access to premium offline training simulations and deep resume updates.
+            </p>
+          </div>
+          <div className="border border-neutral-300 dark:border-[#35211A] p-6 rounded-[4px] bg-white dark:bg-transparent">
+            <h4 className="font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider mb-2">What roles are supported?</h4>
+            <p className="text-neutral-600 dark:text-[#B6A596] leading-relaxed font-light text-[11px]">
+              We seed specialized default questions for Software Engineering, Product Management, Full Stack Web Developer, AI Engineer, Data Scientist, IoT Engineer, DevOps, Cybersecurity, and behavioral HR interviews.
+            </p>
+          </div>
+          <div className="border border-neutral-300 dark:border-[#35211A] p-6 rounded-[4px] bg-white dark:bg-transparent">
+            <h4 className="font-bold text-neutral-900 dark:text-[#EBDCC4] font-display uppercase tracking-wider mb-2">Can I view past results?</h4>
+            <p className="text-neutral-600 dark:text-[#B6A596] leading-relaxed font-light text-[11px]">
+              Yes. When authenticated, your dashboard automatically preserves your full performance history with custom quantitative metrics scorecards.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
       {/* 4. Rotating Waitlist Badge in Bottom Right Corner */}
       <div className="fixed bottom-6 right-6 w-16 h-16 md:w-20 md:h-20 pointer-events-none z-50">
         <div className="w-full h-full relative flex items-center justify-center">
