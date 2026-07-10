@@ -77,7 +77,7 @@ function CircularGauge({ score, label }) {
           <circle
             className="text-slate-100 dark:text-zinc-800/60"
             strokeWidth={stroke}
-            stroke="currentColor"
+            stroke="transparent"
             fill="transparent"
             r={normalizedRadius}
             cx={radius}
@@ -298,7 +298,7 @@ export default function Results({ params }) {
               <circle
                 className="text-slate-100 dark:text-zinc-800/60"
                 strokeWidth="7"
-                stroke="currentColor"
+                stroke="transparent"
                 fill="transparent"
                 r="38"
                 cx="48"

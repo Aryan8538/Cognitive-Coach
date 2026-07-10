@@ -67,7 +67,7 @@ function CircularProgress({ score, label }) {
     >
       <div className="relative flex items-center justify-center w-14 h-14">
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 64 64">
-          <circle className="text-slate-100 dark:text-zinc-800/40" strokeWidth={stroke} stroke="currentColor" fill="transparent" r={normalizedRadius} cx={radius} cy={radius} />
+          <circle className="text-slate-100 dark:text-zinc-800/40" strokeWidth={stroke} stroke="transparent" fill="transparent" r={normalizedRadius} cx={radius} cy={radius} />
           <circle className={getScoreStrokeColor(score)} strokeWidth={stroke} strokeDasharray={`${circumference} ${circumference}`} style={{ strokeDashoffset }} strokeLinecap="round" fill="transparent" r={normalizedRadius} cx={radius} cy={radius} />
         </svg>
         <span className={`absolute text-xs font-black font-outfit ${getScoreColorClass(score)}`}>{score}%</span>
@@ -357,7 +357,7 @@ export default function ResumeCheckerPage() {
               {/* Big circular progress gauge */}
               <div className="relative flex items-center justify-center w-28 h-28 hover:scale-105 transition-transform duration-300">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 96 96">
-                  <circle className="text-slate-100 dark:text-zinc-800/60" strokeWidth="7.5" stroke="currentColor" fill="transparent" r="38" cx="48" cy="48" />
+                   <circle className="text-slate-100 dark:text-zinc-800/60" strokeWidth="7.5" stroke="transparent" fill="transparent" r="38" cx="48" cy="48" />
                   <circle
                     className={`${getScoreStrokeColor(result.score)} progress-ring-circle`}
                     strokeWidth="7.5"

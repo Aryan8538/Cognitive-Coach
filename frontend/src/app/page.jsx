@@ -24,9 +24,9 @@ const CircularGauge = ({ score, label, color }) => {
         <svg className="w-full h-full" viewBox="0 0 80 80">
           {/* Background ring */}
           <circle
-            className="text-slate-100 dark:text-zinc-850"
+            className="text-slate-100 dark:text-zinc-855"
             strokeWidth={stroke}
-            stroke="currentColor"
+            stroke="transparent"
             fill="transparent"
             r={normalizedRadius}
             cx="40"
@@ -352,6 +352,19 @@ export default function Dashboard() {
           ? "Slightly under conversational standard — try speaking faster."
           : "Slightly above conversational standard — try speaking slower."
       };
+
+  // If loading, show a clean loading spinner to prevent layout flashing
+  if (loading) {
+    return (
+      <div className="flex-grow flex flex-col items-center justify-center min-h-screen bg-[#030303] text-white font-sans bg-grid">
+        <div className="relative flex items-center justify-center mb-6">
+          <div className="w-12 h-12 rounded-full border-4 border-transparent border-t-[#8B5CF6] animate-spin" />
+        </div>
+        <h3 className="text-base font-bold text-white font-display">Initializing Workspace...</h3>
+        <p className="text-xs text-slate-500 mt-2">Loading statistics and diagnostics</p>
+      </div>
+    );
+  }
 
   // --- RENDER VISITOR LANDING PAGE ---
   if (!inSandbox) {
