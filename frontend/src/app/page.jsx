@@ -282,11 +282,11 @@ export default function Home() {
           {/* Double-layered Depth Headline */}
           <div className="relative w-full select-none">
             {/* Layer 1 (Back Outline) */}
-            <h1 className="absolute top-1 left-1 md:top-2 md:left-2 text-[15vw] md:text-[11.5vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-outlined select-none pointer-events-none opacity-60">
+            <h1 className="absolute top-1 left-1 md:top-2 md:left-2 text-[6.8vw] sm:text-[7vw] md:text-[7.2vw] lg:text-[7.8vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-outlined select-none pointer-events-none opacity-60">
               COGNITIVECOACH
             </h1>
             {/* Layer 2 (Front Solid) */}
-            <h1 className="relative text-[15vw] md:text-[11.5vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-[#EBDCC4] select-none">
+            <h1 className="relative text-[6.8vw] sm:text-[7vw] md:text-[7.2vw] lg:text-[7.8vw] font-display font-bold uppercase tracking-tighter leading-[0.82] text-neutral-900 dark:text-[#EBDCC4] select-none">
               COGNITIVECOACH
             </h1>
           </div>
