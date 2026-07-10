@@ -55,11 +55,28 @@ export default function Home() {
         {/* 12-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           
-          {/* Columns 1-5: Exclusivity Statement & Indicator */}
+          {/* Columns 1-5: Value Proposition & Core Offerings */}
           <div className="md:col-span-5 flex flex-col gap-6 text-left">
-            <p className="text-base md:text-lg font-light leading-relaxed text-[#B6A596] tracking-wide">
-              We design custom, low-latency evaluation pipelines for speech fluency calibration. Strictly waitlisted access for technical teams and system architects.
-            </p>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
+                <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
+                  <strong className="text-[#EBDCC4] font-semibold">AI Interview Practice</strong> — Face real-time conversational technical and behavioral mocks with immediate coding reviews.
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
+                <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
+                  <strong className="text-[#EBDCC4] font-semibold">Live Speech Analytics</strong> — Diagnose pacing (WPM), speech clarity, and track filler-word occurrences during responses.
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 bg-[#DC9F85] rounded-[1px] mt-2 flex-shrink-0" />
+                <p className="text-sm md:text-base font-light text-[#B6A596] tracking-wide leading-relaxed">
+                  <strong className="text-[#EBDCC4] font-semibold">ATS Resume Check</strong> — Scan and score your resume structure against target job rules to highlight critical skill gaps.
+                </p>
+              </div>
+            </div>
             
             {/* Status indicator */}
             <div className="flex items-center gap-3">
@@ -78,10 +95,10 @@ export default function Home() {
             {status === "success" ? (
               <div className="border border-[#DC9F85] p-5 rounded-[4px] bg-[#35211A]/10 text-left">
                 <h4 className="text-sm font-bold uppercase tracking-wider text-[#DC9F85] font-display mb-1">
-                  Access Granted
+                  Access Requested
                 </h4>
                 <p className="text-xs text-[#B6A596] leading-relaxed">
-                  Your profile has been queued under Batch 003 protocols. We will reach out as capacity slots unlock.
+                  Your email has been added to the queue. We will send you an invite as soon as mock sandbox slots open.
                 </p>
               </div>
             ) : (
@@ -90,7 +107,7 @@ export default function Home() {
                   type="email"
                   required
                   disabled={status === "loading"}
-                  placeholder="ENTER ACCESS ACCESS KEY / EMAIL"
+                  placeholder="ENTER EMAIL FOR EARLY ACCESS"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="flex-grow bg-transparent border border-[#66473B] text-xs font-mono font-bold tracking-widest text-[#EBDCC4] placeholder-[#66473B] p-4 rounded-l-[4px] focus:outline-none focus:border-[#DC9F85] disabled:opacity-50 transition-colors uppercase"
