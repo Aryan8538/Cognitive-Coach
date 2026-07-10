@@ -13,7 +13,7 @@ const formatMarkdown = (text) => {
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
     .replace(/`(.*?)`/g, "<code class='bg-slate-100 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded text-[10.5px] font-semibold text-amber-505'>$1</code>")
-    .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-[#D4AF37] hover:underline font-semibold'>$1</a>");
+    .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' target='_blank' rel='noopener noreferrer' class='text-[#06B6D4] hover:underline font-semibold'>$1</a>");
 };
 
 const getScoreColorClass = (score) => {
@@ -167,8 +167,8 @@ export default function Results({ params }) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center py-24 px-6 bg-grid font-sans">
         <div className="relative flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-[#D4AF37] animate-spin" />
-          <div className="absolute w-16 h-16 rounded-full border border-[#D4AF37]/10 animate-pulse-slow" />
+          <div className="w-12 h-12 rounded-full border-4 border-slate-200/25 border-t-[#8B5CF6] animate-spin" />
+          <div className="absolute w-16 h-16 rounded-full border border-[#8B5CF6]/10 animate-pulse-slow" />
         </div>
         <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 font-display">Compiling AI Diagnostics...</h3>
         <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 text-center max-w-[280px]">Analyzing speech velocity indexes and calculating metric scorecards</p>
@@ -254,7 +254,7 @@ export default function Results({ params }) {
         <span 
           key={idx} 
           onClick={() => handleWordClick(idx, totalWords)}
-          className="cursor-pointer hover:bg-[#D4AF37]/10 hover:text-[#D4AF37] transition-all rounded px-0.5"
+          className="cursor-pointer hover:bg-[#06B6D4]/10 hover:text-[#06B6D4] transition-all rounded px-0.5"
           title="Click to skip video here"
         >
           {word}{" "}

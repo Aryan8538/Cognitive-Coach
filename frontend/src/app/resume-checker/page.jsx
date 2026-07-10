@@ -58,7 +58,7 @@ function CircularProgress({ score, label }) {
 
   return (
     <div 
-      className="flex items-center gap-4 bg-slate-50/60 dark:bg-zinc-850/30 border border-slate-200/50 dark:border-zinc-800/40 p-4.5 rounded-2xl transition-all hover:border-[#D4AF37]/15"
+      className="flex items-center gap-4 bg-slate-50/60 dark:bg-zinc-850/30 border border-slate-200/50 dark:border-zinc-800/40 p-4.5 rounded-2xl transition-all hover:border-[#8B5CF6]/20"
       role="progressbar"
       aria-valuenow={score}
       aria-valuemin="0"

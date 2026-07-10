@@ -9,7 +9,6 @@ import {
   MessageSquare, Flame
 } from "lucide-react";
 import { API_BASE_URL } from "@/utils/config";
-import HeroAnimation from "@/components/HeroAnimation";
 
 // Redesign circular gauge rings
 const CircularGauge = ({ score, label, color }) => {
@@ -178,7 +177,7 @@ export default function Dashboard() {
       title: "Software Engineer",
       icon: <Terminal size={18} />,
       desc: "Practice system architectural design and coding logic explanation. Standard questions cover scalability, cycle detection, and key/value caching.",
-      gradient: "from-[#6366f1] to-blue-500 dark:from-[#D4AF37] dark:to-[#FFE492]",
+      gradient: "from-[#6366f1] to-blue-500 dark:from-[#8B5CF6] dark:to-[#06B6D4]",
       topics: ["System Design", "Coding Logic"]
     },
     {
@@ -202,7 +201,7 @@ export default function Dashboard() {
       title: "AI Engineer",
       icon: <Cpu size={18} />,
       desc: "Practice interviews focused on deep learning, neural network architectures, and LLMs. Questions cover transformer mechanisms, fine-tuning, and compute bounds.",
-      gradient: "from-purple-500 to-[#6366f1] dark:from-[#D4AF37] dark:to-[#FFE492]",
+      gradient: "from-purple-500 to-[#6366f1] dark:from-[#8B5CF6] dark:to-[#06B6D4]",
       topics: ["Deep Learning", "LLM Fine-Tuning"]
     },
     {
@@ -226,7 +225,7 @@ export default function Dashboard() {
       title: "DevOps Engineer",
       icon: <Cloud size={18} />,
       desc: "Master continuous integration, infrastructure as code (IaC), container orchestration, and cloud deployment pipelines. Practice Docker, Kubernetes, and Terraform.",
-      gradient: "from-blue-500 to-cyan-500 dark:from-[#D4AF37] dark:to-[#FFE492]",
+      gradient: "from-blue-500 to-cyan-500 dark:from-[#8B5CF6] dark:to-[#06B6D4]",
       topics: ["Kubernetes", "CI/CD Pipelines"]
     },
     {
@@ -347,8 +346,8 @@ export default function Dashboard() {
         text: "Speech rate meets professional fluency benchmarks."
       }
     : {
-        style: "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-[#D4AF37]",
-        iconClass: "text-[#D4AF37]",
+        style: "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-[#F59E0B]",
+        iconClass: "text-[#F59E0B]",
         text: pacingWpm < 110
           ? "Slightly under conversational standard — try speaking faster."
           : "Slightly above conversational standard — try speaking slower."
@@ -1023,7 +1022,7 @@ export default function Dashboard() {
                         </td>
                         <td className="py-4 px-6">
                           {avgScore > 0 ? (
-                            <span className="inline-flex items-center gap-1.5 font-bold text-[#D4AF37]">
+                            <span className="inline-flex items-center gap-1.5 font-bold text-[#06B6D4]">
                               ✦ {avgScore}%
                             </span>
                           ) : (
@@ -1034,7 +1033,7 @@ export default function Dashboard() {
                           <button
                             onClick={() => router.push(`/results/${interview.id}`)}
                             aria-label={`View report for ${interview.role} interview`}
-                            className="px-4 py-1.5 bg-slate-50 hover:bg-[#D4AF37] hover:text-black dark:bg-zinc-900/55 dark:hover:bg-[#D4AF37] text-slate-700 dark:text-slate-450 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent rounded-lg font-bold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/50"
+                            className="px-4 py-1.5 bg-slate-50 hover:bg-[#8B5CF6] hover:text-white dark:bg-zinc-900/55 dark:hover:bg-[#8B5CF6] dark:hover:text-white text-slate-700 dark:text-slate-450 border border-slate-200/60 dark:border-zinc-800/80 hover:border-transparent rounded-lg font-bold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50"
                           >
                             View Report
                           </button>
