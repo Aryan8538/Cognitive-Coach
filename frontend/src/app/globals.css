@@ -4,21 +4,21 @@
 
 @layer base {
   :root {
-    --background: 24 24 24;      /* #181818 (Matte Charcoal) */
-    --foreground: 235 220 196;   /* #EBDCC4 (Warm Beige) */
+    --background: 244 239 230;   /* #F4EFE6 (Cream Book Paper) */
+    --foreground: 24 24 24;      /* #181818 (Ink Charcoal) */
     
-    --card-bg: rgba(24, 24, 24, 0.95);
-    --card-border: rgba(102, 71, 59, 0.65); /* #66473B (Deep Earth) */
-    --card-border-hover: #DC9F85;           /* #DC9F85 (Coral Rust) */
+    --card-bg: #FFFFFF;          /* Pure White */
+    --card-border: #D4CDC5;      /* Muted Earth Gray */
+    --card-border-hover: #C05C3E;/* Plum Rust */
     
-    --text-primary: #EBDCC4;     /* Warm Beige */
-    --text-secondary: #B6A596;   /* Muted Sage */
-    --text-muted: #66473B;       /* Deep Earth */
+    --text-primary: #1C1917;     /* Dark Charcoal */
+    --text-secondary: #57534E;   /* Warm Gray */
+    --text-muted: #8E857B;       /* Earth Sage Muted */
     
-    --accent-purple: #DC9F85;    /* Coral Rust */
-    --accent-purple-glow: rgba(220, 159, 133, 0.08);
-    --accent-cyan: #B6A596;      /* Muted Sage */
-    --accent-cyan-glow: rgba(182, 165, 150, 0.08);
+    --accent-purple: #C05C3E;    /* Plum Rust accent */
+    --accent-purple-glow: rgba(192, 92, 62, 0.08);
+    --accent-cyan: #8E857B;
+    --accent-cyan-glow: rgba(142, 133, 123, 0.08);
     
     --color-success: #10B981;
     --color-danger: #EF4444;
@@ -29,8 +29,8 @@
     --background: 24 24 24;      /* #181818 */
     --foreground: 235 220 196;   /* #EBDCC4 */
     
-    --card-bg: rgba(24, 24, 24, 0.95);
-    --card-border: rgba(102, 71, 59, 0.65);
+    --card-bg: #181818;
+    --card-border: #66473B;
     --card-border-hover: #DC9F85;
     
     --text-primary: #EBDCC4;
@@ -175,4 +175,45 @@ code, pre, .font-mono {
 .editorial-btn-secondary:hover {
   border-color: #DC9F85 !important;
   color: #DC9F85 !important;
+}
+
+@layer utilities {
+  /* Dynamic Earth theme overrides for hardcoded Tailwind hex classes */
+  .bg-\[\#181818\] {
+    background-color: var(--card-bg) !important;
+  }
+  .border-\[\#66473B\] {
+    border-color: var(--card-border) !important;
+  }
+  .text-\[\#EBDCC4\] {
+    color: var(--text-primary) !important;
+  }
+  .text-\[\#B6A596\] {
+    color: var(--text-secondary) !important;
+  }
+  .text-\[\#66473B\] {
+    color: var(--text-muted) !important;
+  }
+  .bg-\[\#35211A\]\/20 {
+    background-color: var(--badge-bg) !important;
+  }
+  .border-\[\#66473B\]\/30 {
+    border-color: var(--card-border-muted) !important;
+  }
+  .border-\[\#66473B\]\/50 {
+    border-color: var(--card-border-muted) !important;
+  }
+  
+  .text-\[\#DC9F85\] {
+    color: var(--accent-purple) !important;
+  }
+  .bg-\[\#DC9F85\] {
+    background-color: var(--accent-purple) !important;
+  }
+  .hover\:border-\[\#DC9F85\]:hover {
+    border-color: var(--accent-purple) !important;
+  }
+  .hover\:text-\[\#DC9F85\]:hover {
+    color: var(--accent-purple) !important;
+  }
 }
